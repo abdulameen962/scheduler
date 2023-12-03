@@ -25,7 +25,7 @@ export const trim = name => {
 };
 
 export const getRandom = () => {
-    const num = Math.random() * 20;
+    const num = Math.floor(Math.random() * 10);
 
     return num;
 }

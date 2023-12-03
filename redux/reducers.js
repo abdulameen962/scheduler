@@ -33,7 +33,7 @@ const userReducer = (state = {}, action) => {
         return merge(state,{...action.payload})
 
       case LOGOUT_USER:
-        return merge(state,{accessToken:null,refreshToken:null,onboardDone:false,errMessage:`${getRandom()}.${action.payload}`,successMessage:null});
+        return merge({},{accessToken:null,refreshToken:null,onboardDone:false,...action.payload});
   
       case UPDATE_CAROUSEL:
         return merge(state,{carouselCheck:action.payload})    

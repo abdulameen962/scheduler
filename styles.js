@@ -18,7 +18,17 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
-      marginVertical: Constants.statusBarHeight,
+      marginTop: Constants.statusBarHeight,
+    },
+    orContainer:{
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },  
+    greyLine:{
+      width: "45%",
+      height: 2,
+      backgroundColor: "rgba(0,0,0,.05)"
     },
     blueText:{
       color:blue
@@ -27,8 +37,31 @@ const styles = StyleSheet.create({
     greyBack:{
       backgroundColor:greyBackground
     },
+    googleBtn:{
+      justifyContent:"center",
+      alignItems:"center",
+      paddingHorizontal:30,
+      paddingVertical: 5,
+      borderRadius: 30,
+      borderColor: "rgba(0,0,0,.3)",
+      borderStyle: "solid",
+      borderWidth:1,
+      marginBottom: 5,
+    },
+    googleText:{
+      fontSize: 14,
+      fontWeight: 500,
+      paddingLeft: 5
+    },
+    googleImg:{
+        maxWidth:25
+    },
     textBg:{
       color: btnColor
+    },
+    boxContainer:{
+      marginTop: 20,
+      // paddingHorizontal: 0,
     },
     homestyle:{
       width: 320,
@@ -79,7 +112,7 @@ const styles = StyleSheet.create({
       marginTop: 0,
     },
     p:{
-      fontSize: 14,
+      fontSize: 13,
       color: "rgba(0,0,0,.35)",
       paddingVertical: 9,
       lineHeight: 20

@@ -87,6 +87,15 @@ export default class App extends React.Component {
           initialRouteName: link !== null ? link : this.state.initialRouteName
         })
       }
+
+      else{
+        this.setState({
+          userAuth: false,
+          registerDone: false,
+          hasCheckedCarousel: false,
+          initialRouteName: link !== null ? link : this.state.initialRouteName
+        }) 
+      }
     }
     catch(error){
         
@@ -143,7 +152,7 @@ export default class App extends React.Component {
                     }
                     </>
                 ):(
-                  <HomeScreen/>
+                  <HomeScreen updateState={this.updateState}/>
                 )
               }
             </NavigationContainer>

@@ -1,5 +1,6 @@
 import { login,register,confirmOtp,resendOtp,resetPassword,confirmPasswordOtp,changeNewPassword } from '../api';
 import { getToken } from '../storeapis';
+import { getRandom } from '../helpfulFunc';
 
 // action types
 export const UPDATE_USER = 'UPDATE_USER'
@@ -143,6 +144,14 @@ export const changePassword = (store,password,changeFunc=changeNewPassword) => a
     }
 }
 
+export const logUserOut = () => dispatch => {
+    dispatch({
+        type: LOGOUT_USER,
+        payload: {successMessage:`${getRandom()}.${"Logout sucessful"}`,errMessage:null},
+    })
+}
+
+
 /**
  * To change the access token in the global state
  * just pass the string token
@@ -156,7 +165,7 @@ export const resetAcessToken = token => ({
 
 export const logoutUser = message => ({
     type: LOGOUT_USER,
-    payload: message,
+    payload: {errMessage:`${getRandom()}.${message}`,successMessage:null},
 })
 
 export const clearMessages = () => ({

@@ -3,7 +3,7 @@ import * as WebBrowser from "expo-web-browser"
 import * as Google from "expo-auth-session/providers/google"
 import {EXPO_PUBLIC_GOOGLE_ANDROID_AUTH,EXPO_PUBLIC_GOOGLE_ISO_AUTH} from "@env"
 // import AsyncStorage from '@react-native-async-storage/async-storage';
-import {TouchableOpacity,Text,View} from "react-native"
+import {TouchableOpacity,Text,View,Image} from "react-native"
 import styles from "../styles";
 import { store } from "../redux/store"
 import { googleDetails } from "../redux/actions"
@@ -16,12 +16,12 @@ import { googleDetails } from "../redux/actions"
 WebBrowser.maybeCompleteAuthSession();
 
 const GoogleComponent = props => {
-    const GOOGLE_ANDROID_AUTH = process.env.EXPO_PUBLIC_GOOGLE_ANDROID_AUTH;
-    const GOOGLE_ISO_AUTH = process.env.EXPO_PUBLIC_GOOGLE_ISO_AUTH;
+    const GOOGLE_ANDROID_AUTH = EXPO_PUBLIC_GOOGLE_ANDROID_AUTH;
+    const GOOGLE_ISO_AUTH = EXPO_PUBLIC_GOOGLE_ISO_AUTH;
     const [userInfo,setUserInfo] = React.useState(null)
     const [request,response,promptAsync] = Google.useAuthRequest({
         androidClientId: `${GOOGLE_ANDROID_AUTH}`,
-        iosClientId: `${GOOGLE_ISO_AUTH}`,
+        // iosClientId: `${GOOGLE_ISO_AUTH}`,
     })
     
     React.useEffect(() => {
@@ -65,8 +65,12 @@ const GoogleComponent = props => {
         <View>
             <Text>{JSON.stringify(userInfo,null,2)}</Text>
             {/* <A href="https://google.com">Go to Google</A> */}
-            <TouchableOpacity onPress={() => promptAsync()} style={{flexDirection:"row"}}>
-                <Text style={styles.p}>Sign in with Google</Text>
+            <TouchableOpacity onPress={() => promptAsync()} style={[styles.googleBtn,{flexDirection:"row"}]}>
+                <Image source={require("../assets/google.png")}
+                    resizeMode="contain"
+                    style={styles.googleImg}
+                />
+                <Text style={[styles.googleText]}>Sign in with Google</Text>
             </TouchableOpacity>
         </View>
     )

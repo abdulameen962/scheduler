@@ -13,7 +13,7 @@ import GoogleComponent from '../components/googleSignin';
 class Login extends Component{
     static propTypes = {
         err: Proptypes.string,
-        onboardDone: Proptypes.string,
+        onboardDone: Proptypes.bool.isRequired,
         loginUser: Proptypes.func.isRequired,
         updateState: Proptypes.func.isRequired,
     }
@@ -162,11 +162,20 @@ class Login extends Component{
                         <Form {...this.state.formArr} />
                     )
                 }
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('Signup')} style={{flexDirection:"row"}}>
-                    <Text style={styles.p}>Don't don't have an account?</Text>
-                    <Text style={[styles.p,styles.textBg,{paddingLeft:6}]}>Create an account</Text>
-                </TouchableOpacity>
-                <GoogleComponent />
+                <View style={{marginTop:30}}>
+                    <View style={[styles.orContainer]}>
+                        <View style={[styles.greyLine]}></View>
+                        <Text style={[styles.p,{paddingVertical:0,lineHeight:15}]}>Or</Text>
+                        <View style={[styles.greyLine]}></View>
+                    </View>
+                    <View style={[styles.boxContainer]}>
+                        <GoogleComponent />
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Signup')} style={{flexDirection:"row",justifyContent:"center"}}>
+                            <Text style={styles.p}>Don't have an account?</Text>
+                            <Text style={[styles.p,styles.textBg,{paddingLeft:6}]}>Create an account</Text>
+                        </TouchableOpacity>
+                    </View>
+                    </View>
             </FormLayout>
         )
     }
@@ -175,7 +184,7 @@ class Login extends Component{
 const mapStateToProps = (state,ownProps) => ({
     err: state.user.errMessage || null,
     updateState: ownProps.updateState,
-    onboardDone: state.user.onboardDone || null,
+    onboardDone: state.user.onboardDone || false,
 })
 
 export default connect(mapStateToProps,{loginUser})(Login)
