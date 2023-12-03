@@ -46,7 +46,8 @@ const styles = StyleSheet.create({
       borderColor: "rgba(0,0,0,.3)",
       borderStyle: "solid",
       borderWidth:1,
-      marginBottom: 5,
+      marginVertical: 15,
+      marginBottom: 10,
     },
     googleText:{
       fontSize: 14,
@@ -66,6 +67,7 @@ const styles = StyleSheet.create({
     homestyle:{
       width: 320,
       maxWidth: "90%",
+      marginBottom: 35,
     },
     primaryBtn:{
       backgroundColor: btnColor,
