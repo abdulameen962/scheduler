@@ -12,8 +12,8 @@ import Toast from "react-native-toast-message"
  * @param props
  * @returns {object}
  */
-const Form = props => {
-    const showToast = (type,msg) => {
+class Form extends React.Component {
+    showToast = (type,msg) => {
         Toast.show({
             type: `${type.toLowerCase()}`,
             text1:type,
@@ -24,41 +24,60 @@ const Form = props => {
         })
     }
 
-    if (props.error) {
-        showToast("Error",props.error)
+    checkMessage = () => {
+        const props = this.props;
+        if (props.error) {
+            this.showToast("Error",props.error)
+        }
+    
+        if (props.sucess) {
+            this.showToast("Success",props.sucess)
+        }
     }
 
-    if (props.sucess) {
-        showToast("Success",props.sucess)
+    componentDidMount(){
+        this.checkMessage();
     }
 
-    return (
-        <KeyboardAvoidingView behavior={props.boardType?props.boardType:"height"} style={styles.formContainer}> 
-            {
-                props.form && props.form.length > 0 && (
-                    <>
-                        {
-                            props.form.map((input,index) => <FormSingle input={input} key={index} /> )
-                        }
-                    </>
-                )
-            }
-            {
-                props.extras && props.extras.length > 0 ? (
-                    <>
-                        {
-                            props.extras.map((extra,index) => <ExtraForm key={index}>
-                                {extra}
-                            </ExtraForm> )
-                        }
-                    </>
-                ):null
-            }
-            <SubmitBtn
-                submit={props.submit} err={props.error}
-            />
-        </KeyboardAvoidingView>
-    )
+    componentDidUpdate(prevProps,prevState){
+        if (prevProps.error !== this.props.error) {
+            this.showToast("Error",this.props.error)
+        }
+        else if(prevProps.sucess !== this.props.sucess){
+            this.showToast("Success",this.props.sucess)
+        }
+    }
+
+    render() {
+        const props = this.props;
+        return (
+            <KeyboardAvoidingView behavior={props.boardType?props.boardType:"height"} style={styles.formContainer}> 
+                {
+                    props.form && props.form.length > 0 && (
+                        <>
+                            {
+                                props.form.map((input,index) => <FormSingle input={input} key={index} /> )
+                            }
+                        </>
+                    )
+                }
+                {
+                    props.extras && props.extras.length > 0 ? (
+                        <>
+                            {
+                                props.extras.map((extra,index) => <ExtraForm key={index}>
+                                    {extra}
+                                </ExtraForm> )
+                            }
+                        </>
+                    ):null
+                }
+                <SubmitBtn
+                    submit={props.submit} err={props.error}
+                />
+            </KeyboardAvoidingView>
+        )
+    }
 }
 
 Form.propTypes = {

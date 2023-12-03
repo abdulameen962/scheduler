@@ -1,0 +1,45 @@
+{
+  "cli": {
+    "version": ">= 5.4.0"
+  },
+  "build": {
+    "development": {
+      "distribution": "internal",
+      "android": {
+        "gradleCommand": ":app:assembleDebug"
+      },
+      "ios": {
+        "buildConfiguration": "Debug"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_KEY": "raoZTJk6.5zRMWdGXHq7VjW96EjjvvwXUoyNuZDsr",
+        "EXPO_PUBLIC_BASE_URL": "https://suited-touched-mammoth.ngrok-free.app/api/v1/",
+        "EXPO_PUBLIC_GOOGLE_ANDROID_AUTH": "266934796958-u2frfhlvidc8f58qu7i9spcv6jpkflnq.apps.googleusercontent.com",
+        "EXPO_PUBLIC_GOOGLE_ISO_AUTH": "266934796958-iquamj7kmmttesdr4i78pkfe2i5uqiua.apps.googleusercontent.com"
+      },
+      "channel": "development"
+    },
+    "preview": {
+      "channel": "staging",
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_API_KEY": "raoZTJk6.5zRMWdGXHq7VjW96EjjvvwXUoyNuZDsr",
+        "EXPO_PUBLIC_BASE_URL": "https://suited-touched-mammoth.ngrok-free.app/api/v1/",
+        "EXPO_PUBLIC_GOOGLE_ANDROID_AUTH": "266934796958-u2frfhlvidc8f58qu7i9spcv6jpkflnq.apps.googleusercontent.com",
+        "EXPO_PUBLIC_GOOGLE_ISO_AUTH": "266934796958-iquamj7kmmttesdr4i78pkfe2i5uqiua.apps.googleusercontent.com"
+      }
+    },
+    "production": {
+      "channel": "production",
+      "env": {
+        "EXPO_PUBLIC_API_KEY": "wBJukpbP.7vVO145faKH4Y7nYUOxhDq6RAV4YFXIM",
+        "EXPO_PUBLIC_BASE_URL": "https://suited-touched-mammoth.ngrok-free.app/api/v1/",
+        "EXPO_PUBLIC_GOOGLE_ANDROID_AUTH": "266934796958-u2frfhlvidc8f58qu7i9spcv6jpkflnq.apps.googleusercontent.com",
+        "EXPO_PUBLIC_GOOGLE_ISO_AUTH": "266934796958-iquamj7kmmttesdr4i78pkfe2i5uqiua.apps.googleusercontent.com"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

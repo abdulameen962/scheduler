@@ -1,130 +1,145 @@
-import {API_KEY,BASE_URL} from "@env"
-// import { getToken } from "./storeapis";
+// import {EXPO_PUBLIC_API_KEY,EXPO_PUBLIC_BASE_URL} from "@env"
+
+const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL
+const API_KEY = process.env.EXPO_PUBLIC_API_KEY
+// console.log(process.env.EXPO_PUBLIC_API_KEY)
+// console.log(API_KEY)
+// console.log(BASE_URL)
+// console.log(API_KEY)
+const BASE_FUNCTION = async(url,method,fetchBody=null,extraHeaders={},handleChange=false) => {
+    try{
+        let response;
+        if (method.toLowerCase() === "get") {
+            response = await fetch(`${BASE_URL}${url}`,{
+                method: `${method}`,
+                headers: {
+                    'content-type': 'application/json',
+                    "X-Api-Key": API_KEY,
+                    ...extraHeaders,
+                },
+            })
+        }
+        else{
+            response = await fetch(`${BASE_URL}${url}`,{
+                method: `${method}`,
+                headers: {
+                    'content-type': 'application/json',
+                    "X-Api-Key": API_KEY,
+                    ...extraHeaders,
+                },
+                body: JSON.stringify(fetchBody)
+        
+            })
+        }
+        const result = await response.json();
+        if (response.ok) {
+            if (handleChange) {
+                return result;
+            }
+            return true;
+        }
+        
+        const {message} = result;
+        throw new Error(message);
+    }
+    catch(err){
+        throw new Error(err.message);
+    }
+}
 
 export const login = async (username,password) => {
-    const response = await fetch(`${BASE_URL}users/login/`,{
-        method: 'POST',
-        body:JSON.stringify({
-            username,password
-        }),
-        headers: {
-            'content-type': 'application/json',
-            "X-Api-Key": API_KEY,
-        }
-    })
-    const result = await response.json();
-    if (response.ok) {
-        const {data} = result;
-        return data;
-        
+    const url = "users/login/";
+    const method = "POST";
+    const body = {
+        username,password
     }
-
-    const {message} = result;
-    throw new Error(message);
+    const header = {}
+    const result = await BASE_FUNCTION(url,method,body,header,true);
+    const {data} = result;
+    return data;
 }
 
 export const register = async (username,email,password1,password2) => {
-    const response = await fetch(`${BASE_URL}users/registration/`,{
-        method: 'POST',
-        body:JSON.stringify({
-            username,
-            email,
-            password1,
-            password2
-        }),
-        headers: {
-            'content-type': 'application/json',
-            "X-Api-Key": API_KEY,
-            // "Authorization":""
+    try{
+        const response = await fetch(`${BASE_URL}users/registration/`,{
+            method: 'POST',
+            body:JSON.stringify({
+                username,
+                email,
+                password1,
+                password2
+            }),
+            headers: {
+                'content-type': 'application/json',
+                "X-Api-Key": API_KEY,
+            }
+        })
+        const result = await response.json();
+        if (response.ok) {
+            const {access,refresh} = result;
+            accessTokenName = access;
+            refreshTokenName = refresh;
+            return result;
+            
         }
-    })
-    const result = await response.json();
-    if (response.ok) {
-        const {access,refresh} = result;
-        accessTokenName = access;
-        refreshTokenName = refresh;
-        return result;
-        
-    }
-
-    let message = '';
-    const valueErrors = Object.values(result);
-    for (let i = 0; i < valueErrors.length; i++) {
-        const element = valueErrors[i];
-        for (let i = 0; i < element.length; i++) {
-            const error = element[i];
-            message = `${message} ${error}`;
+    
+        let message = '';
+        const valueErrors = Object.values(result);
+        for (let i = 0; i < valueErrors.length; i++) {
+            const element = valueErrors[i];
+            for (let i = 0; i < element.length; i++) {
+                const error = element[i];
+                message = `${message} ${error}`;
+            }
+            
         }
-        
+        if (message.length < 10) {
+            message = "Something went wrong,check your inputs and try again";
+        }
+        throw new Error(message);
     }
-    // let emailErr = result.email !== undefined ? result.email[0] :"";
-    // let password1Err = result.password1 !== undefined ? result.password1[0]:"";
-    // let password2Err = result.password2 !== undefined ?result.password2[0] :"";
-    // let message = `${emailErr} ${password1Err} ${password2Err}`;
-    if (message.length < 10) {
-        message = "Something went wrong,check your inputs and try again";
+    catch(err){
+        throw new Error(err.message);
     }
-    throw new Error(message);
 }
 
 export const resetPassword = async email => {
-    const response = await fetch(`${BASE_URL}users/password/reset/`,{
-        method: 'POST',
-        body:JSON.stringify({
-            email:email,
-        }),
-        headers: {
-            'content-type': 'application/json',
-            "X-Api-Key": API_KEY,
-            "Authorization":`Bearer ${await getToken()}`
-        }
-    })
-    const result = await response.json();
-    if (response.ok) {
-        return result;
-        
-    }
-
-    const {message} = result;
-    throw new Error(message);
+    const url = "users/password/reset/";
+    const method = "POST";
+    const body = {email,}
+    const header = {}
+    return await BASE_FUNCTION(url,method,body,header,true);
 }
 
 export const confirmOtp = async (otp,authCode) => {
-    const response = await fetch(`${BASE_URL}generate-registration-otp/`,{
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json',
-            "X-Api-Key": API_KEY,
-            "Authorization":`Bearer ${authCode}`
-        },
-
-        body:JSON.stringify({otp})
-    })
-    const result = await response.json();
-    if (response.ok) {
-        return result;
+    const url = "generate-registration-otp/";
+    const method = "POST";
+    const body = {otp}
+    const header = {
+        "Authorization":`Bearer ${authCode}`
     }
-
-    const {message} = result;
-    throw new Error(message);
-
+    return await BASE_FUNCTION(url,method,body,header,true);
 }
 
 export const resendOtp = async authCode => {
-    const response = await fetch(`${BASE_URL}generate-registration-otp/`,{
-        method: 'GET',
-        headers: {
-            'content-type': 'application/json',
-            "X-Api-Key": API_KEY,
-            "Authorization":`Bearer ${authCode}`
-        },
-
-    })
-    const result = await response.json();
-    if (response.ok) {
-        return true;
+    const url = "generate-registration-otp/";
+    const method = "GET";
+    const header = {
+        "Authorization":`Bearer ${authCode}`
     }
+    return await BASE_FUNCTION(url,method,null,header);
+}
 
-    const {message} = result;
-    throw new Error(message);
+export const confirmPasswordOtp = async otp => {
+    const url = "users/password/reset/";
+    const method = "PUT";
+    const body = {otp,}
+    return await BASE_FUNCTION(url,method,body);
+}
+
+export const changeNewPassword = async (password,email) => {
+    const url = "users/password/reset/change/";
+    const method = "POST";
+    const body = {password,email,}
+    return await BASE_FUNCTION(url,method,body);
 }

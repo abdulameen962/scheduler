@@ -4,6 +4,10 @@ import LoginHeader from '../components/loginHeader';
 import FormLayout from '../layouts/formLayout';
 import { Instagram } from 'react-content-loader/native'
 import { validEmailInput } from '../helpfulFunc';
+import { connect } from 'react-redux';
+import { sendForgotPasswordOtp } from '../redux/actions';
+import { trim } from '../helpfulFunc';
+
 const MyLoader = () => <Instagram animate={true} />
 
 class ForgotPassword extends Component{
@@ -28,6 +32,12 @@ class ForgotPassword extends Component{
             }
         }
 
+        if (this.props.err !== this.state.err) {
+            this.setState({
+                err: this.props.err,
+            })
+        }
+
         if (prevState.disabled !== this.state.disabled || 
             prevState.err !== this.state.err || 
             prevState.successMessage !== this.state.successMessage
@@ -39,8 +49,11 @@ class ForgotPassword extends Component{
     }
 
     forgotPasswordFunc = async () => {
-
-    }
+        if (this.state.disabled == false) {
+            const result = await this.props.sendForgotPasswordOtp(trim(this.state.email));
+            if (result) this.props.navigation.navigate('ForgotOtp')
+        };
+    }   
 
     getForm = () => {
         let formArr = {
@@ -99,4 +112,9 @@ class ForgotPassword extends Component{
     }
 }
 
-export default ForgotPassword
+const mapStateToProps = (state,ownProps) => ({
+    err: state.user.errMessage || null,
+    successMessage: state.user.successMessage || null,
+})
+
+export default connect(mapStateToProps,{sendForgotPasswordOtp})(ForgotPassword)

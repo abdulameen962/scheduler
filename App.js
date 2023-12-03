@@ -10,9 +10,11 @@ import Carousel from './screens/carousel';
 import HomeScreen from './screens/HomeScreen';
 import Signup from './screens/signup';
 import ForgotPassword from './screens/forgotPassword';
+import ForgotPasswordEmail from './screens/ForgotPasswordEmail';
 import VerifyOtp from './screens/verifyotp';
 import ForgotOtp from './screens/ForgotOtp';
-import Toast from "react-native-toast-message"
+import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
+import { clearMessages } from './redux/actions';
 
 
 // import {LogBox} from "react-native";
@@ -24,6 +26,30 @@ import Toast from "react-native-toast-message"
 
 const Stack = createNativeStackNavigator();
 
+const toastConfig = {
+  success: (props) => (
+    <BaseToast
+      {...props}
+      // style={styles.style}
+      // contentContainerStyle={styles.contentContainerStyle}
+      // text1Style={styles.text1Style}
+      text1NumberOfLines={1}
+      // text2Style={styles.text2Style}
+      text2NumberOfLines={2}
+    />
+  ),
+  error: (props) => (
+    <ErrorToast
+      {...props}
+      // style={[styles.style, styles.errorStyle]}
+      // contentContainerStyle={styles.contentContainerStyle}
+      // text1Style={styles.text1Style}
+      text1NumberOfLines={1}
+      // text2Style={styles.text2Style}
+      text2NumberOfLines={2}
+    />
+  ),
+};
 
 export default class App extends React.Component {
   state = {
@@ -68,6 +94,8 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+    store.dispatch(clearMessages());
+    Toast.hide();
     this.updateState();
   }
 
@@ -108,6 +136,7 @@ export default class App extends React.Component {
                           }
                           <Stack.Screen name="Forgot" component={ForgotPassword} />
                           <Stack.Screen name="ForgotOtp" component={ForgotOtp} />
+                          <Stack.Screen name="ForgotPasswordEmail" component={ForgotPasswordEmail} />
                         </Stack.Navigator>
 
                       )
@@ -120,7 +149,7 @@ export default class App extends React.Component {
             </NavigationContainer>
           </PersistGate>
         </Provider>
-        <Toast />
+        <Toast config={toastConfig} />
       </>
     )
   }

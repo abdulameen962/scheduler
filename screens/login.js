@@ -3,11 +3,12 @@ import {View,Text,TouchableOpacity,Switch} from 'react-native';
 import styles from '../styles';
 import Proptypes from 'prop-types';
 import { loginUser } from '../redux/actions';
-// import { store } from '../redux/store';
 import { connect } from 'react-redux';
 import Form from '../form';
 import FormLayout from '../layouts/formLayout';
 import LoginHeader from '../components/loginHeader';
+import { trim } from '../helpfulFunc';
+import GoogleComponent from '../components/googleSignin';
 
 class Login extends Component{
     static propTypes = {
@@ -28,8 +29,9 @@ class Login extends Component{
             src: require("../assets/eye-cancel.png"),
         }
     }
+
     submitForm = async () => {
-        if (this.state.disabled == false) this.props.loginUser(this.state.username,this.state.password);
+        if (this.state.disabled == false) await this.props.loginUser(trim(this.state.username),trim(this.state.password));
     }
 
     showPassword = () => {
@@ -102,7 +104,7 @@ class Login extends Component{
 
     componentDidUpdate = (prevProps,prevState) => {
         if (prevState.username !== this.state.username || prevState.password !== this.state.password) {
-            if (this.state.username.length > 1 && this.state.password.length > 1) {
+            if (trim(this.state.username).length > 4 && trim(this.state.password).length > 8) {
                 this.setState({
                     disabled: false,
                 })   
@@ -164,13 +166,14 @@ class Login extends Component{
                     <Text style={styles.p}>Don't don't have an account?</Text>
                     <Text style={[styles.p,styles.textBg,{paddingLeft:6}]}>Create an account</Text>
                 </TouchableOpacity>
+                <GoogleComponent />
             </FormLayout>
         )
     }
 }
 
 const mapStateToProps = (state,ownProps) => ({
-    err: state.user.loginErr || null,
+    err: state.user.errMessage || null,
     updateState: ownProps.updateState,
     onboardDone: state.user.onboardDone || null,
 })

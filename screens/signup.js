@@ -8,6 +8,7 @@ import { validEmailInput } from '../helpfulFunc';
 import Form from '../form';
 import LoginHeader from '../components/loginHeader';
 import FormLayout from '../layouts/formLayout';
+import { trim } from '../helpfulFunc';
 import ContentLoader, { Facebook,Instagram } from 'react-content-loader/native'
 const MyLoader = () => <Instagram animate={true} />
 
@@ -40,12 +41,11 @@ class Signup extends Component{
             this.state.password2 !== prevState.password2
             ) {
             // console.log("it is here")
-            if (this.state.username.length > 1 && 
-                this.state.password.length > 1 && 
-                this.state.password.length == this.state.password2.length &&
-                validEmailInput(this.state.email)
+            if (trim(this.state.username).length > 4 && 
+                trim(this.state.password).length > 7 && 
+                this.state.password === this.state.password2 &&
+                validEmailInput(trim(this.state.email))
                 ) {
-                    // console.log("it is validated");
                 this.setState({
                     disabled: false
                 })
@@ -78,7 +78,7 @@ class Signup extends Component{
     }
 
     startReg = async () => {
-        if (this.state.disabled == false) this.props.registerUser(this.state.username,this.state.email,this.state.password,this.state.password2);
+        if (this.state.disabled == false) this.props.registerUser(trim(this.state.username),trim(this.state.email),trim(this.state.password),trim(this.state.password2));
     }
 
     static getDerivedStateFromProps(nextProps,state){

@@ -1,19 +1,31 @@
-import {API_KEY,BASE_URL} from "@env"
+// import {EXPO_PUBLIC_API_KEY,EXPO_PUBLIC_BASE_URL} from "@env"
+
+const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL
+const API_KEY = process.env.EXPO_PUBLIC_API_KEY
 
 /**
  * It takes a store as an argument, and returns a promise that resolves to the access token
  * @param {*} store changeFunc
  * @returns accessToken
  */
-export const getToken = async (store,changeFunc) => {
+export const getToken = async (store,changeFunc,logoutUser=null) => {
     // check if access token is still valid,or else refresh the token
     let mainStore = store.getState();
     let {accessToken, refreshToken} = mainStore.user;
     let tokenation = await checkTokenExpired(accessToken);
     if (tokenation) {
-        accessToken = await refreshTokenFunc(refreshToken);
-        //reset the token in the store
-        store.dispatch(changeFunc(accessToken))
+        try{
+            accessToken = await refreshTokenFunc(refreshToken);
+            //reset the token in the store
+            store.dispatch(changeFunc(accessToken))
+        }
+        catch(error){
+            if (logoutUser) {
+                store.dispatch(logoutUser())
+                const message = "Your session has expired,kindly login again"
+                throw new Error(message);
+            }
+        }
     }
 
     return accessToken;
@@ -39,6 +51,7 @@ const refreshTokenFunc = async token => {
     }
 
     const {message} = result;
+    // console.log(message);
     throw new Error(message);
 }
 

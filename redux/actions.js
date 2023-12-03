@@ -1,4 +1,4 @@
-import { login,register,confirmOtp,resendOtp } from '../api';
+import { login,register,confirmOtp,resendOtp,resetPassword,confirmPasswordOtp,changeNewPassword } from '../api';
 import { getToken } from '../storeapis';
 
 // action types
@@ -15,6 +15,15 @@ export const OTP_CONFIRM_SENT = "OTP_CONFIRM_SENT"
 export const OTP_CONFIRM_FULFILLED = "OTP_CONFIRM_FULFILLED"
 export const OTP_REJECTED = "OTP_REJECTED"
 export const OTP_RESEND = "OTP_RESEND"
+export const LOGOUT_USER = "LOGOUT_USER"
+export const OTP_SUCCESS = "OTP_SUCCESS"
+export const RESET_PASSWORD_SENT = "RESET_PASSWORD_SENT"
+export const RESET_PASSWORD_FULFILLED = "RESET_PASSWORD_FULFILLED"
+export const RESET_PASSWORD_REJECTED = "RESET_PASSWORD_REJECTED"
+export const OTP_FORGOT_CONFIRM_SENT = "OTP FORGOT CONFIRM SENT"
+export const OTP_FORGOT_CONFIRM_FULFILLED = "OTP FORGOT CONFIRM FULFILLED"
+export const CLEAR_MESSSAGES = "CLEAR_MESSSAGES"
+export const GOOGLE_DETAILS = "GOOGLE_DETAILS"
 
 // action creators
 export const updateUser = update => ({
@@ -64,7 +73,7 @@ export const registerUser = (username,email,password1,password2,registerFn=regis
 export const confirmRegisterOtp = (store,otp,otpFunc=confirmOtp) => async dispatch => {
     dispatch({type:OTP_CONFIRM_SENT,payload:""})
     try{
-        const authCode = await getToken(store,resetAcessToken);
+        const authCode = await getToken(store,resetAcessToken,logoutUser);
         await otpFunc(otp,authCode);
         dispatch({type:OTP_CONFIRM_FULFILLED,payload:""})
     }
@@ -78,7 +87,7 @@ export const confirmRegisterOtp = (store,otp,otpFunc=confirmOtp) => async dispat
 export const resendOtpVerification = (store,resendFunc=resendOtp) => async dispatch => {
     dispatch({type:OTP_CONFIRM_SENT,payload:""})
     try{
-        const authCode = await getToken(store,resetAcessToken);
+        const authCode = await getToken(store,resetAcessToken,logoutUser);
         await resendFunc(authCode);
         dispatch({type:OTP_RESEND,payload:"Otp resent sucessfully,enter the otp sent to your mail"})
     }
@@ -86,6 +95,51 @@ export const resendOtpVerification = (store,resendFunc=resendOtp) => async dispa
         // const {messages} = error.message[0];
         // const {message} = messages;
         dispatch({type:OTP_REJECTED,payload:error.message})
+    }
+}
+
+export const sendForgotPasswordOtp = (email,store=null,forgotFunc=resetPassword) => async dispatch => {
+    if (!email && store) {
+        email = store.getState().user.email;
+    }
+    dispatch({type:OTP_CONFIRM_SENT,payload:""})
+    try{
+        await forgotFunc(email);
+        dispatch({type:OTP_SUCCESS,payload:{message:"Otp resent sucessfully,enter the otp sent to your mail",email,}});
+        return true;
+    }
+    catch(error){
+        dispatch({type:OTP_REJECTED,payload:error.message});
+        return false;
+    }
+}
+
+export const confirmForgotPasswordOtp = (otp,confirmFunc=confirmPasswordOtp) => async dispatch => {
+    dispatch({type:OTP_FORGOT_CONFIRM_SENT,payload:""})
+    try{
+        await confirmFunc(otp);
+        dispatch({type:OTP_FORGOT_CONFIRM_FULFILLED,payload:""})
+
+        return true;
+    }
+    catch(error){
+        dispatch({type:OTP_REJECTED,payload:error.message})
+        return false;
+    }
+}
+
+export const changePassword = (store,password,changeFunc=changeNewPassword) => async dispatch => {
+    // get the email from the store
+    const {email} = store.getState().user;
+    dispatch({type:RESET_PASSWORD_SENT,payload:""})
+    try{
+        await changeFunc(password,email);
+        dispatch({type:RESET_PASSWORD_FULFILLED,payload:"Password changed sucessfully,you can proceed to login"});
+        return true;
+    }
+    catch(error){
+        dispatch({type:RESET_PASSWORD_REJECTED,payload:error.message})
+        return false;
     }
 }
 
@@ -99,3 +153,18 @@ export const resetAcessToken = token => ({
     payload: token,
 })
 
+
+export const logoutUser = message => ({
+    type: LOGOUT_USER,
+    payload: message,
+})
+
+export const clearMessages = () => ({
+    type: CLEAR_MESSSAGES,
+    payload: null
+})
+
+export const googleDetails = message => ({
+    type: GOOGLE_DETAILS,
+    payload: message
+})
