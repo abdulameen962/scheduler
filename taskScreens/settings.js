@@ -3,7 +3,8 @@ import { TouchableOpacity,Text,View } from "react-native";
 import styles from "../styles";
 import { connect } from "react-redux";
 import { logUserOut } from "../redux/actions";
-import PropTypes from "prop-types"
+import PropTypes from "prop-types";
+import PageLayout from "../layouts/pageLayout";
 
 class Setting extends React.Component {
     static propTypes = {
@@ -36,11 +37,11 @@ class Setting extends React.Component {
     render(){
         // console.log(this.props)
         return (
-            <View style={styles.container}>
+            <PageLayout>
                 <TouchableOpacity onPress={this.removeUser}>
                     <Text>Logout</Text>
                 </TouchableOpacity>
-            </View>
+            </PageLayout>
         )
     }
 }

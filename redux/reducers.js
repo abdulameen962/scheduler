@@ -16,7 +16,8 @@ import {UPDATE_USER,
   RESET_PASSWORD_SENT,
   OTP_FORGOT_CONFIRM_FULFILLED,
   CLEAR_MESSSAGES,
-  GOOGLE_DETAILS
+  GOOGLE_DETAILS,
+  SET_NOTIFICATION_TOKEN
 
 } from './actions'
 import { getRandom } from '../helpfulFunc'
@@ -33,7 +34,7 @@ const userReducer = (state = {}, action) => {
         return merge(state,{...action.payload})
 
       case LOGOUT_USER:
-        return merge({},{accessToken:null,refreshToken:null,onboardDone:false,...action.payload});
+        return merge({},{accessToken:null,refreshToken:null,onboardDone:false,...action.payload,carouselCheck:true,notificationToken:state.notificationToken});
   
       case UPDATE_CAROUSEL:
         return merge(state,{carouselCheck:action.payload})    
@@ -88,6 +89,9 @@ const userReducer = (state = {}, action) => {
 
       case GOOGLE_DETAILS:
         return merge(state,action.payload)
+
+      case SET_NOTIFICATION_TOKEN:
+        return merge(state,{notificationToken:action.payload})
   
       default:
           return state

@@ -25,6 +25,7 @@ export const OTP_FORGOT_CONFIRM_SENT = "OTP FORGOT CONFIRM SENT"
 export const OTP_FORGOT_CONFIRM_FULFILLED = "OTP FORGOT CONFIRM FULFILLED"
 export const CLEAR_MESSSAGES = "CLEAR_MESSSAGES"
 export const GOOGLE_DETAILS = "GOOGLE_DETAILS"
+export const SET_NOTIFICATION_TOKEN = "SET_NOTIFICATION_TOKEN"
 
 // action creators
 export const updateUser = update => ({
@@ -176,4 +177,9 @@ export const clearMessages = () => ({
 export const googleDetails = message => ({
     type: GOOGLE_DETAILS,
     payload: message
+})
+
+export const setNotificationToken = token => ({
+    type: SET_NOTIFICATION_TOKEN,
+    payload:token
 })

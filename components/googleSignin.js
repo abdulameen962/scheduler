@@ -21,7 +21,7 @@ const GoogleComponent = props => {
     const [userInfo,setUserInfo] = React.useState(null)
     const [request,response,promptAsync] = Google.useAuthRequest({
         androidClientId: `${GOOGLE_ANDROID_AUTH}`,
-        // iosClientId: `${GOOGLE_ISO_AUTH}`,
+        iosClientId: `${GOOGLE_ISO_AUTH}`,
     })
     
     React.useEffect(() => {

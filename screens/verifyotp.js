@@ -10,6 +10,7 @@ class VerifyOtp extends React.Component{
         confirmRegisterOtp: PropTypes.func.isRequired,
         onboardDone: PropTypes.bool,
         resendOtpVerification: PropTypes.func.isRequired,
+        sendNotification: PropTypes.func.isRequired,
     }
 
     state = {}
@@ -17,6 +18,11 @@ class VerifyOtp extends React.Component{
     static getDerivedStateFromProps(nextProps,state){
         try{
             if (nextProps.onboardDone || nextProps.onboardDone == false) {
+                if (nextProps.onboardDone) {
+                    let header = "Thanks for signing up";
+                    let body = "Congrats on signing up,awesome awaits 🙌🎉🙌🎉";
+                    nextProps.sendNotification(header,body,{url:"Setting"});
+                }
                 nextProps.updateState();
             }
             return null;
@@ -40,6 +46,7 @@ class VerifyOtp extends React.Component{
 const mapStateToProps = (state,ownProps) => ({
     onboardDone: state.user.onboardDone || null,
     updateState: ownProps.updateState,
+    sendNotification: ownProps.sendNotification,
 })
 
 export default connect(mapStateToProps,{confirmRegisterOtp,resendOtpVerification})(VerifyOtp)

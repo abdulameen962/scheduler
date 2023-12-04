@@ -9,6 +9,7 @@ import FormLayout from '../layouts/formLayout';
 import LoginHeader from '../components/loginHeader';
 import { trim } from '../helpfulFunc';
 import GoogleComponent from '../components/googleSignin';
+import FormFooter from '../components/bottomForm';
 
 class Login extends Component{
     static propTypes = {
@@ -162,12 +163,7 @@ class Login extends Component{
                         <Form {...this.state.formArr} />
                     )
                 }
-                <View style={{marginTop:30}}>
-                    <View style={[styles.orContainer]}>
-                        <View style={[styles.greyLine]}></View>
-                        <Text style={[styles.p,{paddingVertical:0,lineHeight:15}]}>Or</Text>
-                        <View style={[styles.greyLine]}></View>
-                    </View>
+                <FormFooter>
                     <View style={[styles.boxContainer]}>
                         <GoogleComponent />
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Signup')} style={{flexDirection:"row",justifyContent:"center"}}>
@@ -175,7 +171,7 @@ class Login extends Component{
                             <Text style={[styles.p,styles.textBg,{paddingLeft:6}]}>Create an account</Text>
                         </TouchableOpacity>
                     </View>
-                    </View>
+                </FormFooter>
             </FormLayout>
         )
     }

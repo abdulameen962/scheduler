@@ -33,6 +33,7 @@ const BASE_FUNCTION = async(url,method,fetchBody=null,extraHeaders={},handleChan
         }
         const result = await response.json();
         if (response.ok) {
+            // console.log(result);
             if (handleChange) {
                 return result;
             }

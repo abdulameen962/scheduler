@@ -26,11 +26,11 @@ class Form extends React.Component {
 
     checkMessage = () => {
         const props = this.props;
-        if (props.error) {
+        if (props.error && props.error !== null) {
             this.showToast("Error",props.error)
         }
     
-        if (props.sucess) {
+        if (props.sucess && props.sucess !== null) {
             this.showToast("Success",props.sucess)
         }
     }

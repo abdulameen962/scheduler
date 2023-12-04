@@ -9,7 +9,9 @@ import Form from '../form';
 import LoginHeader from '../components/loginHeader';
 import FormLayout from '../layouts/formLayout';
 import { trim } from '../helpfulFunc';
-import ContentLoader, { Facebook,Instagram } from 'react-content-loader/native'
+import ContentLoader, { Facebook,Instagram } from 'react-content-loader/native';
+import FormFooter from '../components/bottomForm';
+
 const MyLoader = () => <Instagram animate={true} />
 
 class Signup extends Component{
@@ -219,12 +221,14 @@ class Signup extends Component{
                         <Form {...this.state.formArr} />
                     )
                 }
-                <View style={styles.actionContainer}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')} style={{flexDirection:"row"}}>
-                        <Text style={styles.p}>Already own an account?</Text>
-                        <Text style={[styles.p,styles.textBg,{paddingLeft:6}]}>Login</Text>
-                    </TouchableOpacity>
-                </View>
+                <FormFooter>
+                    <View style={styles.boxContainer}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')} style={{flexDirection:"row",justifyContent:"center"}}>
+                            <Text style={styles.p}>Already own an account?</Text>
+                            <Text style={[styles.p,styles.textBg,{paddingLeft:6}]}>Login</Text>
+                        </TouchableOpacity>
+                    </View>
+                </FormFooter>
             </FormLayout>
         )
     }

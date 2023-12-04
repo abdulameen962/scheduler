@@ -108,6 +108,8 @@ class FormSingle extends React.Component{
                     onBlur={() => {
                         this.toggleState(false)
                     }}
+                    // multiline={true}
+                    // numberOfLines={4}
                     // onPressIn={this.toggleState(true)}
                     // onPressOut={this.toggleState(false)}
                 />

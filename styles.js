@@ -93,6 +93,16 @@ const styles = StyleSheet.create({
       fontSize: 40,
       fontWeight: "bold",
     },
+    header3:{
+      fontSize: 25,
+      fontWeight: "bold",
+    },
+    headerImg:{
+      maxWidth: 60,
+      // borderWidth:1,
+      // borderColor:"black",
+      // borderStyle:"dashed"
+    },
     input: {
       paddingHorizontal: 20,
       paddingVertical: 15,

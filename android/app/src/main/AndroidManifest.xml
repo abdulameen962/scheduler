@@ -28,6 +28,7 @@
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="com.abdulameen.schedulerMobile"/>
         <data android:scheme="scheduler"/>
+        <data android:scheme="com.abdulameen.schedulerMobile"/>
       </intent-filter>
     </activity>
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" android:exported="false"/>

@@ -46,7 +46,7 @@ const data = [
           // borderWidth:2,
           // borderStyle:"solid"
         }}>
-        <Text style={{marginVertical: 10, fontSize: 32, fontWeight: 'bold',textAlign:"center"}}>
+        <Text style={{ fontSize: 32, fontWeight: 'bold',textAlign:"center"}}>
           {item.name}
         </Text>
         <LottieView
@@ -102,6 +102,10 @@ class CarouselScreen extends React.Component {
     render() {
       return (
           <View style={[styles.container,styles.greyBack]}>
+              <View style={{flexDirection:"row",alignItems:"center",paddingTop:15}}>
+                <Image source={require("../assets/logo.png")} resizeMode="contain" style={styles.headerImg} />
+                <Text style={[styles.header3]}>Scheduler</Text>
+              </View>
               <Carousel
               // layout={'tinder'}
               ref={this.state.isCarousel}
