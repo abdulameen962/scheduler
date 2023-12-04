@@ -31,7 +31,7 @@ from dj_rest_auth.app_settings import api_settings
 from dj_rest_auth.models import TokenModel
 from dj_rest_auth.utils import jwt_encode
 
-otp_time_limit = settings.OTP_TIME_LIMIT
+otp_time_limit = int(settings.OTP_TIME_LIMIT)
 sensitive_post_parameters_m = method_decorator(
     sensitive_post_parameters('password1', 'password2'),
 )

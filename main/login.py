@@ -79,7 +79,6 @@ class PasswordResetView(APIView):
             plain_message = strip_tags(html_message)   
             send_mail(message=plain_message, from_email=f"Scheduler <{settings.EMAIL_HOST_USER}>",subject=header,recipient_list=[user.email],fail_silently=False,html_message=html_message)
             
-            print("it came here to the end")
             return Response({"message":"otp sent successfully"},status=status.HTTP_200_OK)
         
         except User.DoesNotExist:
