@@ -80,7 +80,7 @@ def send_mail_comparison(date_joined,difference_time:int,header:str,html_message
     if just_created(date_joined,difference_time):
         #send email
         plain_message = strip_tags(html_message)
-        send_mail(message=plain_message, from_email=f"Handyman <{settings.EMAIL_HOST_USER}>",subject=header,recipient_list=recipient_list,fail_silently=False,html_message=html_message)
+        send_mail(message=plain_message, from_email=f"Scheduler <{settings.EMAIL_HOST_USER}>",subject=header,recipient_list=recipient_list,fail_silently=False,html_message=html_message)
 
         if send_notify:
             notification = Notification(user=user,header=notify_header,body=body)
