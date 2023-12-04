@@ -5,6 +5,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from dj_rest_auth.views import LogoutView
+
 # from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [

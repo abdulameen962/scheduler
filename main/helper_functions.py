@@ -50,7 +50,6 @@ def just_created(date,difference_time:int):
     
     return False
 
-
 def compare_dates(date1,date2,difference:int):
     """
         Compares 2 dates whether they have the difference specified
