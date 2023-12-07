@@ -1,11 +1,12 @@
 {
   "expo": {
-    "name": "schedulerMobile",
-    "slug": "schedulerMobile",
+    "name": "schedulermobile",
+    "slug": "schedulermobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "scheme": "com.abdulameen.schedulermobile",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -16,7 +17,6 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.abdulameen.schedulerMobile",
       "runtimeVersion": {
         "policy": "appVersion"
       }
@@ -26,20 +26,30 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.abdulameen.schedulerMobile",
-      "runtimeVersion": "1.0.0"
+      "runtimeVersion": "1.0.0",
+      "googleServicesFile": "./google-services.json",
+      "package": "com.abdulameen.schedulermobile"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "scheme": "com.abdulameen.schedulerMobile",
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#ffffff",
+          "sounds": []
+        }
+      ]
+    ],
     "extra": {
       "eas": {
-        "projectId": "f65676ae-9361-4b36-860a-f65a50f7074c"
+        "projectId": "d79b1004-c21b-489b-ba3a-3bd8d745d98b"
       }
     },
     "updates": {
-      "url": "https://u.expo.dev/f65676ae-9361-4b36-860a-f65a50f7074c"
+      "url": "https://u.expo.dev/d79b1004-c21b-489b-ba3a-3bd8d745d98b"
     }
   }
 }

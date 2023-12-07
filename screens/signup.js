@@ -11,6 +11,7 @@ import FormLayout from '../layouts/formLayout';
 import { trim } from '../helpfulFunc';
 import ContentLoader, { Facebook,Instagram } from 'react-content-loader/native';
 import FormFooter from '../components/bottomForm';
+import GoogleComponent from '../components/googleSignin';
 
 const MyLoader = () => <Instagram animate={true} />
 
@@ -30,10 +31,6 @@ class Signup extends Component{
         disabled: true,
         err: null,
         formArr: null,
-        showPassword: {
-            show: true,
-            src: require("../assets/eye-cancel.png"),
-        }
     }
 
     componentDidUpdate = (prevProps,prevState) => {
@@ -103,15 +100,6 @@ class Signup extends Component{
         })
     }
 
-    showPassword = () => {
-        this.setState(prevState => ({
-            showPassword:{
-                show: !prevState.showPassword.show,
-                src: prevState.showPassword.src == require("../assets/eye.png") ? require("../assets/eye-cancel.png"): require("../assets/eye.png"),
-            }
-        }))
-    }
-
     getForm = () => {
         let formArr = {
             form : [
@@ -156,7 +144,7 @@ class Signup extends Component{
                         placeholder:"password" ,
                         autoCapitalize:'none' ,
                         autoComplete:'off' ,
-                        secureTextEntry:this.state.showPassword.show,
+                        // secureTextEntry:this.state.showPassword.show,
                         onChangeText:this.handleChange('password')
                     },
                     leftIcon:{
@@ -167,10 +155,11 @@ class Signup extends Component{
                     },
                     rightIcon:{
                         clickable: true,
-                        src: this.state.showPassword.src,
-                        activeSrc: this.state.showPassword.src,
+                        src: require("../assets/eye-cancel.png"),
+                        activeSrc: require("../assets/eye-cancel.png"),
                         attributes:{},
-                        onClick: this.showPassword
+                        onClick: "showpassword",
+                        clickedImg: require("../assets/eye.png"),
                     }
                 },
                 {
@@ -178,7 +167,7 @@ class Signup extends Component{
                         placeholder:"confirm password", 
                         autoCapitalize:'none' ,
                         autoComplete:'off', 
-                        secureTextEntry:true,
+                        // secureTextEntry:true,
                         onChangeText:this.handleChange('password2')
                     },
                     leftIcon:{
@@ -187,12 +176,14 @@ class Signup extends Component{
                         activeSrc: require("../assets/password-active.png"),
                         attributes:{}
                     },
-                    // rightIcon:{
-                    //     clickable: true,
-                    //     src: "",
-                    //     attributes:{},
-                    //     onClick: ""
-                    // }
+                    rightIcon:{
+                        clickable: true,
+                        src: require("../assets/eye-cancel.png"),
+                        activeSrc: require("../assets/eye-cancel.png"),
+                        attributes:{},
+                        onClick: "showpassword",
+                        clickedImg: require("../assets/eye.png"),
+                    }
                 },
             ],
             submit: {
@@ -223,6 +214,7 @@ class Signup extends Component{
                 }
                 <FormFooter>
                     <View style={styles.boxContainer}>
+                        <GoogleComponent name="Signup" />
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')} style={{flexDirection:"row",justifyContent:"center"}}>
                             <Text style={styles.p}>Already own an account?</Text>
                             <Text style={[styles.p,styles.textBg,{paddingLeft:6}]}>Login</Text>

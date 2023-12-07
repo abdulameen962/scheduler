@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "271634076247",
+    "project_id": "scheduler-a81f6",
+    "storage_bucket": "scheduler-a81f6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:271634076247:android:bac681601218416dfd0912",
+        "android_client_info": {
+          "package_name": "com.abdulameen.schedulerMobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChwW_LZEVb_wpTQXufnpaPdtMPIp4yC80"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:271634076247:android:785cb6d23c6fb5c3fd0912",
+        "android_client_info": {
+          "package_name": "com.abdulameen.schedulermobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChwW_LZEVb_wpTQXufnpaPdtMPIp4yC80"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

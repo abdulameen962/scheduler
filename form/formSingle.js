@@ -1,27 +1,59 @@
-import React from "react";
+import React,{useState} from "react";
 import {TextInput,Pressable,Image,View} from "react-native"
 import PropTypes from "prop-types";
 import styles from "./formstyles";
 import { Asset } from 'expo-asset';
 
 const Icon = props => {
+    let src;
     if (props.abled && props.icon.activeSrc) {
         src = props.icon.activeSrc;
     }
     else{
         src = props.icon.src;
     }
+    // const [img,changImg] = useState(src);
+    // const [state,changeState] = useState(true);
+    // const changeVisibility = () => {
+    //     const {clickedImg} = props.icon;
+    //     if (clickedImg) {
+    //         changImg(img === src ? clickedImg:src);
+    //         changeState(!state);
+    //         // this.setState(prevState => ({
+    //         //     showPassword:{
+    //         //         show: !prevState.showPassword.show,
+    //         //         src: prevState.showPassword.src == require("../assets/eye.png") ? require("../assets/eye-cancel.png"): require("../assets/eye.png"),
+    //         //     }
+    //         // }))
+    //     }
+    // }
+
     return (
         <>
             {
                 props.icon.clickable ? (
-                    <Pressable onPress={props.icon.onClick}>
-                        <Image
-                            style = {styles.inputIcon}
-                            source={src}
-                            {...props.icon.attributes}
-                        />                        
-                    </Pressable>
+                    <>
+                        {
+                            props.icon.onClick == "showpassword" ? (
+                                <Pressable onPress={() => props.click()}>
+                                    <Image
+                                        style = {styles.inputIcon}
+                                        source={props.img}
+                                        {...props.icon.attributes}
+                                    />                        
+                                </Pressable>
+                            ):
+                            (
+                                <Pressable onPress={props.icon.onClick}>
+                                    <Image
+                                        style = {styles.inputIcon}
+                                        source={src}
+                                        {...props.icon.attributes}
+                                    />                        
+                                </Pressable>
+                            )
+                        }
+                    </>
                 ):(
                     <Image
                         style = {styles.inputIcon}
@@ -47,6 +79,7 @@ Icon.propTypes = {
 class FormSingle extends React.Component{
     state = {
         abled: false,
+        showPassword:null
     }
 
     toggleState = abled => {
@@ -88,6 +121,37 @@ class FormSingle extends React.Component{
         this.loadAssetsAsync();
     }
 
+    initializePassword = () => {
+        if (this.props.input.rightIcon) {
+            // console.log(this.props.input.rightIcon)
+            if (this.props.input.rightIcon.onClick == "showpassword") {
+                const {src,clickedImg} = this.props.input.rightIcon;
+                if (!this.state.showPassword) {
+                    this.setState({
+                        showPassword: {
+                            show: true,
+                            src,
+                        }
+                    })       
+                }
+                else{
+                    this.setState(prevState => ({
+                        showPassword:{
+                            show: !prevState.showPassword.show,
+                            src: prevState.showPassword.src == src ? clickedImg: src,
+                        }
+                    }))
+                }
+            }
+        }
+
+    }
+
+    componentDidMount(){
+        // console.log(this.props.rightIcon)
+        this.initializePassword();
+    }
+
     render(){
         return (
             <View style={this.getStyle()}>
@@ -98,26 +162,75 @@ class FormSingle extends React.Component{
                         />
                     )
                 }
-                <TextInput
-                    style={styles.inputArea}
-                    {...this.props.input.attributes}
-                    // onKeyPress={this.toggleState(true)}
-                    onFocus={() => {
-                       this.toggleState(true)
-                    }}
-                    onBlur={() => {
-                        this.toggleState(false)
-                    }}
-                    // multiline={true}
-                    // numberOfLines={4}
-                    // onPressIn={this.toggleState(true)}
-                    // onPressOut={this.toggleState(false)}
-                />
+                {
+                    this.props.input.rightIcon ? (
+                        <>
+                            {
+                                this.props.input.rightIcon.onClick == "showpassword" && this.state.showPassword ? (
+                                    <TextInput
+                                        style={styles.inputArea}
+                                        {...this.props.input.attributes}
+                                        // onKeyPress={this.toggleState(true)}
+                                        onFocus={() => {
+                                        this.toggleState(true)
+                                        }}
+                                        onBlur={() => {
+                                            this.toggleState(false)
+                                        }}
+                                        secureTextEntry = {this.state.showPassword.show}
+                                        // multiline={true}
+                                        // numberOfLines={4}
+                                        // onPressIn={this.toggleState(true)}
+                                        // onPressOut={this.toggleState(false)}
+                                    />
+                                ):
+                                (
+                                    <TextInput
+                                        style={styles.inputArea}
+                                        {...this.props.input.attributes}
+                                        onFocus={() => {
+                                        this.toggleState(true)
+                                        }}
+                                        onBlur={() => {
+                                            this.toggleState(false)
+                                        }}
+                                    />
+                                )
+                            }
+                        </>
+                    ):
+                    (
+                        <TextInput
+                            style={styles.inputArea}
+                            {...this.props.input.attributes}
+                            onFocus={() => {
+                            this.toggleState(true)
+                            }}
+                            onBlur={() => {
+                                this.toggleState(false)
+                            }}
+                        />
+                    )
+                }
                 {
                     this.props.input.rightIcon && (
-                        <Icon
-                            icon={this.props.input.rightIcon} {...this.state}
-                        />
+                        <>
+                            {
+                                this.props.input.rightIcon.onClick == "showpassword" && this.state.showPassword ? (
+                                    <Icon
+                                        icon={this.props.input.rightIcon} 
+                                        {...this.state}
+                                        img={this.state.showPassword.src} 
+                                        click={this.initializePassword}
+                                    />
+                                ):
+                                (
+                                    <Icon
+                                        icon={this.props.input.rightIcon} {...this.state}
+                                    />
+                                )
+                            }
+                        </>
                     )
                 }
             </View>
@@ -131,4 +244,3 @@ FormSingle.propTypes = {
 
 
 export default FormSingle
-

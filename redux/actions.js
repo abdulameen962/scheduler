@@ -1,4 +1,12 @@
-import { login,register,confirmOtp,resendOtp,resetPassword,confirmPasswordOtp,changeNewPassword } from '../api';
+import { login,
+    register,
+    confirmOtp,
+    resendOtp,
+    resetPassword,
+    confirmPasswordOtp,
+    changeNewPassword,
+    googleEntry
+} from '../api';
 import { getToken } from '../storeapis';
 import { getRandom } from '../helpfulFunc';
 
@@ -24,7 +32,6 @@ export const RESET_PASSWORD_REJECTED = "RESET_PASSWORD_REJECTED"
 export const OTP_FORGOT_CONFIRM_SENT = "OTP FORGOT CONFIRM SENT"
 export const OTP_FORGOT_CONFIRM_FULFILLED = "OTP FORGOT CONFIRM FULFILLED"
 export const CLEAR_MESSSAGES = "CLEAR_MESSSAGES"
-export const GOOGLE_DETAILS = "GOOGLE_DETAILS"
 export const SET_NOTIFICATION_TOKEN = "SET_NOTIFICATION_TOKEN"
 
 // action creators
@@ -58,6 +65,24 @@ export const loginUser = (username,password,loginFn=login) => async dispatch => 
     }
   
     // return 
+}
+
+export const googleApi = (token,googleFunc=googleEntry) => async dispatch => {
+    dispatch({type:LOG_IN_SENT,payload:""})
+    try{
+        const response = await googleFunc(token);
+        const {access_token,refresh_token} = response;
+        let accessToken = access_token;
+        let refreshToken = refresh_token;
+        const onboardDone = true;
+        const registerDone = true;
+        const successMessage = "Logged in sucessfully"
+        const payload = {accessToken,refreshToken,registerDone,onboardDone,errMessage:null,successMessage}
+        dispatch({type:LOG_IN_FULFILLED,payload})
+    }
+    catch(error){
+        dispatch({type:LOG_IN_REJECTED,payload:error.message})
+    }
 }
 
 export const registerUser = (username,email,password1,password2,registerFn=register) => async dispatch => {
@@ -152,7 +177,6 @@ export const logUserOut = () => dispatch => {
     })
 }
 
-
 /**
  * To change the access token in the global state
  * just pass the string token
@@ -172,11 +196,6 @@ export const logoutUser = message => ({
 export const clearMessages = () => ({
     type: CLEAR_MESSSAGES,
     payload: null
-})
-
-export const googleDetails = message => ({
-    type: GOOGLE_DETAILS,
-    payload: message
 })
 
 export const setNotificationToken = token => ({

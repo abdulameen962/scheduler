@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { View } from "react-native";
+import { View,ScrollView } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 import styles from "../styles";
 
@@ -26,8 +26,10 @@ const FormLayout = props => {
 
     return(
         <View style={[styles.container,styles.greyBack,styles.formContainer]}>
-            {props.children}
-            <StatusBar style="auto" />
+            <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
+                {props.children}
+                <StatusBar style="auto" />
+            </ScrollView>
         </View>
     )
 }

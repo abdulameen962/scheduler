@@ -17,7 +17,6 @@ import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
 import { clearMessages,setNotificationToken } from './redux/actions';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
-import ContentLoader from 'react-content-loader/native'
 import Constants from 'expo-constants'
 import GetNav from './layouts/appLayout';
 // import GetNav from './layouts/appLayout';
@@ -28,8 +27,6 @@ import GetNav from './layouts/appLayout';
 // "ViewPropTypes will be removed",
 // "ColorPropType will be removed",
 // ])
-
-const MyLoader = () => <ContentLoader animate={true} />
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -225,12 +222,6 @@ class App extends React.Component {
   }
 
   render(){
-    if (!this.state.token) {
-      return (
-          <MyLoader/>
-      )
-    }
-
     return(
       <>
         <Provider store={store}>
@@ -277,7 +268,11 @@ class App extends React.Component {
                   <HomeScreen updateState={this.updateState}/>
                 )
               }
-              <GetNav setNavigation={this.setNavigation}/>
+              {
+                this.state.token && this.state.notification && (
+                  <GetNav setNavigation={this.setNavigation}/>
+                )
+              }
             </NavigationContainer>
           </PersistGate>
         </Provider>

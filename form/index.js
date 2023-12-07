@@ -40,10 +40,12 @@ class Form extends React.Component {
     }
 
     componentDidUpdate(prevProps,prevState){
-        if (prevProps.error !== this.props.error) {
+        if (prevProps.error !== this.props.error && this.props.error !== null 
+            && this.props.error !== undefined
+        ) {
             this.showToast("Error",this.props.error)
         }
-        else if(prevProps.sucess !== this.props.sucess){
+        else if(prevProps.sucess !== this.props.sucess && this.props.sucess !== null && this.props.sucess !== undefined){
             this.showToast("Success",this.props.sucess)
         }
     }

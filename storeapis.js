@@ -2,7 +2,6 @@ import {EXPO_PUBLIC_API_KEY,EXPO_PUBLIC_BASE_URL} from "@env"
 
 const BASE_URL = EXPO_PUBLIC_BASE_URL
 const API_KEY = EXPO_PUBLIC_API_KEY
-
 /**
  * It takes a store as an argument, and returns a promise that resolves to the access token
  * @param {*} store changeFunc

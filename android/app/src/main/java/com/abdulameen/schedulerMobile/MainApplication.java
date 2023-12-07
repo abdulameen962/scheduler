@@ -1,4 +1,4 @@
-package com.abdulameen.schedulerMobile;
+package com.abdulameen.schedulermobile;
 
 import android.app.Application;
 import android.content.res.Configuration;

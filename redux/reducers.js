@@ -16,7 +16,6 @@ import {UPDATE_USER,
   RESET_PASSWORD_SENT,
   OTP_FORGOT_CONFIRM_FULFILLED,
   CLEAR_MESSSAGES,
-  GOOGLE_DETAILS,
   SET_NOTIFICATION_TOKEN
 
 } from './actions'
@@ -86,9 +85,6 @@ const userReducer = (state = {}, action) => {
 
       case CLEAR_MESSSAGES:
         return merge(state,{errMessage:null,successMessage:null})
-
-      case GOOGLE_DETAILS:
-        return merge(state,action.payload)
 
       case SET_NOTIFICATION_TOKEN:
         return merge(state,{notificationToken:action.payload})

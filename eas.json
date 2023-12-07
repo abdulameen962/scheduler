@@ -12,7 +12,8 @@
         "buildConfiguration": "Debug"
       },
       "env": {
-        "EXPO_PUBLIC_API_KEY": "raoZTJk6.5zRMWdGXHq7VjW96EjjvvwXUoyNuZDsr",
+        "EXPO_PUBLIC_GOOGLE_WEB_AUTH": "266934796958-q67l9pudemq16mgptr8oug372uev7vr1.apps.googleusercontent.com",
+        "EXPO_PUBLIC_API_KEY": "b5WH7XWr.x7EpnrVU4IW0i2cewtnLOdeF9dDQNMAz",
         "EXPO_PUBLIC_BASE_URL": "https://suited-touched-mammoth.ngrok-free.app/api/v1/",
         "EXPO_PUBLIC_GOOGLE_ANDROID_AUTH": "266934796958-u2frfhlvidc8f58qu7i9spcv6jpkflnq.apps.googleusercontent.com",
         "EXPO_PUBLIC_GOOGLE_ISO_AUTH": "266934796958-iquamj7kmmttesdr4i78pkfe2i5uqiua.apps.googleusercontent.com"
@@ -23,8 +24,9 @@
       "channel": "staging",
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_API_KEY": "raoZTJk6.5zRMWdGXHq7VjW96EjjvvwXUoyNuZDsr",
-        "EXPO_PUBLIC_BASE_URL": "https://suited-touched-mammoth.ngrok-free.app/api/v1/",
+        "EXPO_PUBLIC_GOOGLE_WEB_AUTH": "266934796958-q67l9pudemq16mgptr8oug372uev7vr1.apps.googleusercontent.com",
+        "EXPO_PUBLIC_API_KEY": "b5WH7XWr.x7EpnrVU4IW0i2cewtnLOdeF9dDQNMAz",
+        "EXPO_PUBLIC_BASE_URL": "https://scheduler-eight-sigma.vercel.app//api/v1/",
         "EXPO_PUBLIC_GOOGLE_ANDROID_AUTH": "266934796958-u2frfhlvidc8f58qu7i9spcv6jpkflnq.apps.googleusercontent.com",
         "EXPO_PUBLIC_GOOGLE_ISO_AUTH": "266934796958-iquamj7kmmttesdr4i78pkfe2i5uqiua.apps.googleusercontent.com"
       }
@@ -32,8 +34,9 @@
     "production": {
       "channel": "production",
       "env": {
-        "EXPO_PUBLIC_API_KEY": "wBJukpbP.7vVO145faKH4Y7nYUOxhDq6RAV4YFXIM",
-        "EXPO_PUBLIC_BASE_URL": "https://suited-touched-mammoth.ngrok-free.app/api/v1/",
+        "EXPO_PUBLIC_GOOGLE_WEB_AUTH": "266934796958-q67l9pudemq16mgptr8oug372uev7vr1.apps.googleusercontent.com",
+        "EXPO_PUBLIC_API_KEY": "b5WH7XWr.x7EpnrVU4IW0i2cewtnLOdeF9dDQNMAz",
+        "EXPO_PUBLIC_BASE_URL": "https://scheduler-eight-sigma.vercel.app//api/v1/",
         "EXPO_PUBLIC_GOOGLE_ANDROID_AUTH": "266934796958-u2frfhlvidc8f58qu7i9spcv6jpkflnq.apps.googleusercontent.com",
         "EXPO_PUBLIC_GOOGLE_ISO_AUTH": "266934796958-iquamj7kmmttesdr4i78pkfe2i5uqiua.apps.googleusercontent.com"
       }

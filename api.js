@@ -3,7 +3,6 @@ import {EXPO_PUBLIC_API_KEY,EXPO_PUBLIC_BASE_URL} from "@env"
 const BASE_URL = EXPO_PUBLIC_BASE_URL
 const API_KEY = EXPO_PUBLIC_API_KEY
 // console.log(process.env.EXPO_PUBLIC_API_KEY)
-// console.log(API_KEY)
 // console.log(BASE_URL)
 // console.log(API_KEY)
 const BASE_FUNCTION = async(url,method,fetchBody=null,extraHeaders={},handleChange=false) => {
@@ -32,6 +31,7 @@ const BASE_FUNCTION = async(url,method,fetchBody=null,extraHeaders={},handleChan
             })
         }
         const result = await response.json();
+        // console.log(result);
         if (response.ok) {
             // console.log(result);
             if (handleChange) {
@@ -53,6 +53,18 @@ export const login = async (username,password) => {
     const method = "POST";
     const body = {
         username,password
+    }
+    const header = {}
+    const result = await BASE_FUNCTION(url,method,body,header,true);
+    const {data} = result;
+    return data;
+}
+
+export const googleEntry = async token => {
+    const url = "users/google/";
+    const method = "POST";
+    const body = {
+        token,
     }
     const header = {}
     const result = await BASE_FUNCTION(url,method,body,header,true);

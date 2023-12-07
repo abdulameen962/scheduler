@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import {View,Text,TouchableOpacity,Switch} from 'react-native';
+import {View,Text,TouchableOpacity,Switch, ScrollView} from 'react-native';
 import styles from '../styles';
 import Proptypes from 'prop-types';
 import { loginUser } from '../redux/actions';
@@ -25,23 +25,10 @@ class Login extends Component{
         disabled: true,
         formArr: null,
         err: null,
-        showPassword: {
-            show: true,
-            src: require("../assets/eye-cancel.png"),
-        }
     }
 
     submitForm = async () => {
         if (this.state.disabled == false) await this.props.loginUser(trim(this.state.username),trim(this.state.password));
-    }
-
-    showPassword = () => {
-        this.setState(prevState => ({
-            showPassword:{
-                show: !prevState.showPassword.show,
-                src: prevState.showPassword.src == require("../assets/eye.png") ? require("../assets/eye-cancel.png"): require("../assets/eye.png"),
-            }
-        }))
     }
 
     getForm = () => {
@@ -66,7 +53,7 @@ class Login extends Component{
                         placeholder:"password" ,
                         autoCapitalize:'none' ,
                         autoComplete:'off' ,
-                        secureTextEntry:this.state.showPassword.show,
+                        // secureTextEntry:this.state.showPassword.show,
                         onChangeText:this.handleChange('password')
                     },
                     leftIcon:{
@@ -77,10 +64,11 @@ class Login extends Component{
                     },
                     rightIcon:{
                         clickable: true,
-                        src: this.state.showPassword.src,
-                        activeSrc: this.state.showPassword.src,
+                        src: require("../assets/eye-cancel.png"),
+                        activeSrc: require("../assets/eye-cancel.png"),
                         attributes:{},
-                        onClick: this.showPassword
+                        onClick: "showpassword",
+                        clickedImg: require("../assets/eye.png"),
                     }
                 },
             ],
@@ -165,7 +153,7 @@ class Login extends Component{
                 }
                 <FormFooter>
                     <View style={[styles.boxContainer]}>
-                        <GoogleComponent />
+                        <GoogleComponent name="Login" />
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Signup')} style={{flexDirection:"row",justifyContent:"center"}}>
                             <Text style={styles.p}>Don't have an account?</Text>
                             <Text style={[styles.p,styles.textBg,{paddingLeft:6}]}>Create an account</Text>

@@ -97,10 +97,10 @@ class ForgotPasswordEmail extends Component{
             form : [
                 {
                     attributes:{
-                        placeholder:"enter new password" ,
+                        placeholder:"enter a new password" ,
                         autoCapitalize:'none' ,
                         autoComplete:'off' ,
-                        secureTextEntry:this.state.showPassword.show,
+                        // secureTextEntry:this.state.showPassword.show,
                         onChangeText:this.handleChange('password')
                     },
                     leftIcon:{
@@ -111,19 +111,20 @@ class ForgotPasswordEmail extends Component{
                     },
                     rightIcon:{
                         clickable: true,
-                        src: this.state.showPassword.src,
-                        activeSrc: this.state.showPassword.src,
+                        src: require("../assets/eye-cancel.png"),
+                        activeSrc: require("../assets/eye-cancel.png"),
                         attributes:{},
-                        onClick: this.showPassword
+                        onClick: "showpassword",
+                        clickedImg: require("../assets/eye.png"),
                     }
                 },
                 {
                     attributes:{
-                        placeholder:"confirm new password", 
+                        placeholder:"confirm new password" ,
                         autoCapitalize:'none' ,
-                        autoComplete:'off', 
-                        secureTextEntry:true,
-                        onChangeText:this.handleChange('password2')
+                        autoComplete:'off' ,
+                        // secureTextEntry:this.state.showPassword.show,
+                        onChangeText:this.handleChange('password')
                     },
                     leftIcon:{
                         clickable: false,
@@ -131,12 +132,14 @@ class ForgotPasswordEmail extends Component{
                         activeSrc: require("../assets/password-active.png"),
                         attributes:{}
                     },
-                    // rightIcon:{
-                    //     clickable: true,
-                    //     src: "",
-                    //     attributes:{},
-                    //     onClick: ""
-                    // }
+                    rightIcon:{
+                        clickable: true,
+                        src: require("../assets/eye-cancel.png"),
+                        activeSrc: require("../assets/eye-cancel.png"),
+                        attributes:{},
+                        onClick: "showpassword",
+                        clickedImg: require("../assets/eye.png"),
+                    }
                 },
             ],
             submit: {
