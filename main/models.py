@@ -45,3 +45,62 @@ class Notification(models.Model):
         verbose_name_plural = "Notifications"
         ordering = ("-creation_time",)
         unique_together = ["header","body","user","creation_time"]
+        
+        
+class Goal(models.Model):
+    
+    id = models.UUIDField(primary_key=True,editable=False,default=uuid.uuid4)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="user_goals")
+    image = CloudinaryField("image",null=True,blank=True,default=None)
+    title = models.CharField(_("Title of goal"),max_length=100)
+    description = models.TextField(_("Description of goal"),max_length=500)
+    creation_time = models.DateTimeField(_("Date of goal creation"),auto_now_add=False,editable=False,default=timezone.now)
+    deadline = models.DateTimeField(_("Deadline of goal"),auto_now_add=False,editable=False,default=timezone.now)
+    is_completed = models.BooleanField(_("Completion state of goal"),default=False)
+    
+    def __str__(self):
+        return f"{self.user.username} has a goal titled {self.title}"
+    
+    class Meta:
+        verbose_name = "Goal"
+        verbose_name_plural = "Goals"
+        ordering = ("-creation_time",)    
+        
+    @property
+    def goal_image(self):
+        return self.image.url if self.image else "#"
+        
+class Task(models.Model):
+    
+    id = models.UUIDField(primary_key=True,editable=False,default=uuid.uuid4)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="user_tasks")
+    goal = models.ForeignKey(Goal,on_delete=models.CASCADE,related_name="goal_tasks")
+    title = models.CharField(_("Title of task"),max_length=100)
+    description = models.TextField(_("Description of task"),max_length=500)
+    creation_time = models.DateTimeField(_("Date of task creation"),auto_now_add=False,editable=False,default=timezone.now)
+    deadline = models.DateTimeField(_("Deadline of task"),auto_now_add=False,editable=False,default=timezone.now)
+    labels = models.ManyToManyField("main.Label", null=True,related_name="task_labels")
+    is_completed = models.BooleanField(_("Completion state of task"),default=False)
+    
+    def __str__(self):
+        return f"{self.user.username} has a task titled {self.title}"
+    
+    class Meta:
+        verbose_name = "Task"
+        verbose_name_plural = "Tasks"
+        ordering = ("-creation_time",)
+        
+        
+class Label(models.Model):
+    
+    id = models.UUIDField(primary_key=True,editable=False,default=uuid.uuid4)
+    name = models.CharField(_("Name of label"),max_length=100)
+    color = models.CharField(_("Color of label"),max_length=7)
+    
+    def __str__(self):
+        return f"{self.name}"
+    
+    class Meta:
+        verbose_name = "Label"
+        verbose_name_plural = "Labels"
+    

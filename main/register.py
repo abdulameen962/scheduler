@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.views import APIView
 # from django.core.management.utils import get_random_secret_key
-from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+# from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from dj_rest_auth.registration.views import SocialLoginView
 from main.otp_generator import Otp_manager
 from main.models import *
@@ -21,7 +21,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from django.conf import settings
 from rest_framework.permissions import IsAuthenticated
-from main.helper_functions import verified_mail
+from main.helper_functions import verified_mail,get_google_login
 from django.utils.html import strip_tags
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
@@ -30,6 +30,8 @@ from allauth.account.models import EmailAddress
 from dj_rest_auth.app_settings import api_settings
 from dj_rest_auth.models import TokenModel
 from dj_rest_auth.utils import jwt_encode
+from django.contrib.auth import login
+from django.contrib.auth.models import User
 
 otp_time_limit = int(settings.OTP_TIME_LIMIT)
 sensitive_post_parameters_m = method_decorator(
@@ -114,10 +116,43 @@ class RegisterView(CreateAPIView):
         except Exception:
             return Response({"message":"Something went wrong,otp couldn't be sent"},status=status.HTTP_201_CREATED)
         
+class GoogleLogin(APIView):
+    permission_classes = (HasAPIKey,)
+    authentication_classes = ()
+    www_authenticate_realm = "api"
+    
+    def post(self,request):
+        data = request.data
+        token = data.get("token",None)
+        if token is None:
+            return Response({"message":"Token is required"},status=status.HTTP_400_BAD_REQUEST)
+        
+        #get google details from token and create user if not exists and login user
+        # global google_details
+        google_details = get_google_login(token)
+        
+        if google_details is None:
+            return Response({"message":"Something went wrong,google details couldn't be fetched"},status=status.HTTP_400_BAD_REQUEST)
+        
+        #create user if not exists and login user
+        if google_details['verified_email'] == False :
+            return Response({"message":"Email not verified"},status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            user = User.objects.get(email=google_details['email'])
+            login(request,user)
+            return Response({"message":"Login successful"},status=status.HTTP_200_OK)
 
-
-class GoogleLogin(SocialLoginView):
-    adapter_class = GoogleOAuth2Adapter
+        except User.DoesNotExist:
+            user = User.objects.create_user(username=google_details['given_name'],email=google_details['email'])
+            user.first_name = google_details['given_name']
+            user.last_name = google_details['family_name']
+            user.save()
+            
+            #login user
+            login(request,user)
+            
+            return Response({"message":"Registration sucessful"},status=status.HTTP_200_OK)
 
 from rest_framework_simplejwt.authentication import JWTAuthentication
 

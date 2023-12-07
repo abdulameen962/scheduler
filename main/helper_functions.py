@@ -12,6 +12,7 @@ import cloudinary.uploader
 from django.contrib.auth.models import Group
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
+import requests
 
 
 def verified_mail(user):
@@ -86,3 +87,27 @@ def send_mail_comparison(date_joined,difference_time:int,header:str,html_message
             notification.save()
 
     #send notification
+    
+    
+def get_google_login(token:str) -> object:
+    """
+       Gets a token and returns the google api login results
+
+    Args:
+        token (str): token passed from google
+
+    Returns:
+        object: {email,username}
+    """
+    
+    headers = {"Authorization": f"Bearer {token}"}
+    url = "https://www.googleapis.com/userinfo/v2/me"
+    
+    response = requests.get(url,headers=headers)
+
+    if not response.ok:
+        return None
+    
+    result = response.json()
+    
+    return result
