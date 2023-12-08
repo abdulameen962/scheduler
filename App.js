@@ -19,6 +19,7 @@ import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import Constants from 'expo-constants'
 import GetNav from './layouts/appLayout';
+import * as Updates from 'expo-updates';
 // import GetNav from './layouts/appLayout';
 
 // import {LogBox} from "react-native";
@@ -214,11 +215,27 @@ class App extends React.Component {
     };
   }
 
+  
   componentDidMount() {
     store.dispatch(clearMessages());
     Toast.hide();
     this.updateState();
     this.startNotification();
+    this.onFetchUpdateAsync();
+  }
+
+  onFetchUpdateAsync = async () => {
+    try {
+      const update = await Updates.checkForUpdateAsync();
+
+      if (update.isAvailable) {
+        await Updates.fetchUpdateAsync();
+        await Updates.reloadAsync();
+      }
+    } catch (error) {
+      // You can also add an alert() to see the error message in case of an error when fetching updates.
+      alert(`Error fetching latest Expo update: ${error}`);
+    }
   }
 
   render(){
