@@ -9,6 +9,9 @@ from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 class User(AbstractUser,models.Model):
+    """
+        User model
+    """
     id = models.UUIDField(primary_key=True,editable=False,default=uuid.uuid4)
     
     def __str__(self):

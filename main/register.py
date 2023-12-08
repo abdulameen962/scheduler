@@ -31,7 +31,8 @@ from dj_rest_auth.app_settings import api_settings
 from dj_rest_auth.models import TokenModel
 from dj_rest_auth.utils import jwt_encode
 from django.contrib.auth import login
-from django.contrib.auth.models import User
+from rest_framework_simplejwt.tokens import RefreshToken
+from .models import User
 
 otp_time_limit = int(settings.OTP_TIME_LIMIT)
 sensitive_post_parameters_m = method_decorator(
@@ -141,7 +142,6 @@ class GoogleLogin(APIView):
         try:
             user = User.objects.get(email=google_details['email'])
             login(request,user)
-            return Response({"message":"Login successful"},status=status.HTTP_200_OK)
 
         except User.DoesNotExist:
             user = User.objects.create_user(username=google_details['given_name'],email=google_details['email'])
@@ -152,7 +152,17 @@ class GoogleLogin(APIView):
             #login user
             login(request,user)
             
-            return Response({"message":"Registration sucessful"},status=status.HTTP_200_OK)
+        refresh = RefreshToken.for_user(user)
+        response_data = {
+            "status": "success",
+            "message": "Login successful",
+            "data": {
+                "access_token": str(refresh.access_token),
+                "refresh_token": str(refresh),
+            }
+        }
+    
+        return Response(response_data,status=status.HTTP_200_OK)
 
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
