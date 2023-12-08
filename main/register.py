@@ -146,10 +146,14 @@ class GoogleLogin(APIView):
             user = User.objects.get(email=google_details['email'],login_method=User.LoginMethod.GOOGLE)
 
         except User.DoesNotExist:
-            user = User.objects.create_user(username=google_details['given_name'],email=google_details['email'],login_method=User.LoginMethod.GOOGLE)
-            user.first_name = google_details['given_name']
-            user.last_name = google_details['family_name']
-            user.save()
+            try:
+                user = User.objects.create_user(username=google_details['given_name'],email=google_details['email'],login_method=User.LoginMethod.GOOGLE)
+                user.first_name = google_details['given_name']
+                user.last_name = google_details['family_name']
+                user.save()
+                
+            except Exception:
+                return Response({"message":"Something went wrong,user couldn't be created or user created account with another method"},status=status.HTTP_400_BAD_REQUEST)
             
         #login user
         # user = authenticate(request, username=user.username, password='')

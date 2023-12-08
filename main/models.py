@@ -30,6 +30,9 @@ class User(AbstractUser,models.Model):
     def __str__(self):
         return f"{self.username}"
     
+    class Meta:
+        unique_together = ["email"]
+    
     
 class Userprofile(models.Model):
     
