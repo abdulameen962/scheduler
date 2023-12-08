@@ -155,8 +155,8 @@ class GoogleLogin(APIView):
             user.save()
             
         #login user
-        user = authenticate(request, username=user.username, password='')
-        login(request,user)
+        # user = authenticate(request, username=user.username, password='')
+        login(request,user,backend='django.contrib.auth.backends.ModelBackend')
         
         refresh = RefreshToken.for_user(user)
         response_data = {
