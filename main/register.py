@@ -146,10 +146,10 @@ class GoogleLogin(APIView):
             user = User.objects.get(email=google_details['email'])
             if user.password is not None and len(user.password) > 0:
                 #login user
-                login(request,user)
+                return Response({"message":"User didn't register through google signin,use password instead"},status=status.HTTP_400_BAD_REQUEST)
                 
             else:
-                return Response({"message":"User didn't register through google signin,use password instead"},status=status.HTTP_400_BAD_REQUEST)
+                login(request,user)
 
         except User.DoesNotExist:
             user = User.objects.create_user(username=google_details['given_name'],email=google_details['email'])
