@@ -30,7 +30,7 @@ from allauth.account.models import EmailAddress
 from dj_rest_auth.app_settings import api_settings
 from dj_rest_auth.models import TokenModel
 from dj_rest_auth.utils import jwt_encode
-from django.contrib.auth import login
+from django.contrib.auth import login,authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from main.models import *
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -147,9 +147,6 @@ class GoogleLogin(APIView):
             if user.password is not None and len(user.password) > 0:
                 #login user
                 return Response({"message":"User didn't register through google signin,use password instead"},status=status.HTTP_400_BAD_REQUEST)
-                
-            else:
-                login(request,user)
 
         except User.DoesNotExist:
             user = User.objects.create_user(username=google_details['given_name'],email=google_details['email'])
@@ -157,9 +154,10 @@ class GoogleLogin(APIView):
             user.last_name = google_details['family_name']
             user.save()
             
-            #login user
-            login(request,user)
-            
+        #login user
+        user = authenticate(request, username=user.username, password='')
+        login(request,user)
+        
         refresh = RefreshToken.for_user(user)
         response_data = {
             "status": "success",
