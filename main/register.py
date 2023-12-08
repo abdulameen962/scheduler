@@ -33,6 +33,7 @@ from dj_rest_auth.utils import jwt_encode
 from django.contrib.auth import login
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 otp_time_limit = int(settings.OTP_TIME_LIMIT)
 sensitive_post_parameters_m = method_decorator(
@@ -119,7 +120,7 @@ class RegisterView(CreateAPIView):
         
 class GoogleLogin(APIView):
     permission_classes = (HasAPIKey,)
-    authentication_classes = ()
+    authentication_classes = [JWTAuthentication]
     www_authenticate_realm = "api"
     
     def post(self,request):
