@@ -144,6 +144,8 @@ class GoogleLogin(APIView):
         
         try:
             user = User.objects.get(email=google_details['email'])
+            print(user)
+            #login user
             login(request,user)
 
         except User.DoesNotExist:
