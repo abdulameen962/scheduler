@@ -32,7 +32,7 @@ from dj_rest_auth.models import TokenModel
 from dj_rest_auth.utils import jwt_encode
 from django.contrib.auth import login
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import User
+from main.models import *
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 otp_time_limit = int(settings.OTP_TIME_LIMIT)
@@ -119,9 +119,11 @@ class RegisterView(CreateAPIView):
             return Response({"message":"Something went wrong,otp couldn't be sent"},status=status.HTTP_201_CREATED)
         
 class GoogleLogin(APIView):
-    permission_classes = (HasAPIKey,)
-    authentication_classes = [JWTAuthentication]
+    permission_classes = [HasAPIKey]
+    authentication_classes = ()
     www_authenticate_realm = "api"
+
+    throttle_scope = 'important'
     
     def post(self,request):
         data = request.data
