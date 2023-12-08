@@ -12,7 +12,20 @@ class User(AbstractUser,models.Model):
     """
         User model
     """
+    class LoginMethod(models.TextChoices):
+        EMAIL = "email"
+        GOOGLE = "google"
+        FACEBOOK = "facebook"
+        TWITTER = "twitter"
+        GITHUB = "github"
+        LINKEDIN = "linkedin"
+        WEIBO = "weibo"
+        QQ = "qq"
+        WECHAT = "wechat"
+        OTHER = "other"
+    
     id = models.UUIDField(primary_key=True,editable=False,default=uuid.uuid4)
+    login_method = models.CharField(_("Login method"),max_length=20,choices=LoginMethod.choices,default=LoginMethod.EMAIL)
     
     def __str__(self):
         return f"{self.username}"

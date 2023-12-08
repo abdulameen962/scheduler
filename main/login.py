@@ -30,7 +30,7 @@ class Login(APIView):
         password = request.data.get("password")
 
         user = authenticate(request, username=username, password=password)
-        if user is not None:
+        if user is not None and user.login_method == User.LoginMethod.EMAIL:
             refresh = RefreshToken.for_user(user)
 
             response_data = {

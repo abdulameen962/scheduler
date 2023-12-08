@@ -143,13 +143,10 @@ class GoogleLogin(APIView):
             return Response({"message":"Email not verified"},status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            user = User.objects.get(email=google_details['email'])
-            if user.password is not None and len(user.password) > 0:
-                #login user
-                return Response({"message":"User didn't register through google signin,use password instead"},status=status.HTTP_400_BAD_REQUEST)
+            user = User.objects.get(email=google_details['email'],login_method=User.LoginMethod.GOOGLE)
 
         except User.DoesNotExist:
-            user = User.objects.create_user(username=google_details['given_name'],email=google_details['email'])
+            user = User.objects.create_user(username=google_details['given_name'],email=google_details['email'],login_method=User.LoginMethod.GOOGLE)
             user.first_name = google_details['given_name']
             user.last_name = google_details['family_name']
             user.save()
