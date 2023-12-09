@@ -92,13 +92,13 @@ class Goal(models.Model):
 class Task(models.Model):
     
     id = models.UUIDField(primary_key=True,editable=False,default=uuid.uuid4)
-    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="user_tasks")
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="user_tasks",default=None,null=True)
     goal = models.ForeignKey(Goal,on_delete=models.CASCADE,related_name="goal_tasks")
     title = models.CharField(_("Title of task"),max_length=100)
     description = models.TextField(_("Description of task"),max_length=500)
     creation_time = models.DateTimeField(_("Date of task creation"),auto_now_add=False,editable=False,default=timezone.now)
     deadline = models.DateTimeField(_("Deadline of task"),auto_now_add=False,editable=False,default=timezone.now)
-    labels = models.ManyToManyField("main.Label", null=True,related_name="task_labels")
+    labels = models.ManyToManyField("main.Label",related_name="task_labels")
     is_completed = models.BooleanField(_("Completion state of task"),default=False)
     
     def __str__(self):

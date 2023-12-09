@@ -1,6 +1,6 @@
 import datetime
 from rest_framework import serializers
-from .models import User
+from .models import *
 
 #-----------------------------------------------------------------------------#
 #New UserSerializer with more security  to validate input
@@ -28,3 +28,34 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+    
+    
+class UserInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name']
+    
+#-----------------------------------------------------------------------------#
+# Goal serializer
+class GoalSerializer(serializers.ModelSerializer):
+    user = UserInfoSerializer(many=False,read_only=True)
+    class Meta:
+        model = Goal
+        fields = ['id','user', 'goal_image', 'title', 'description', 'creation_time', 'deadline']
+        
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ['id','header', 'body', 'creation_time','is_read']
+        
+class LabelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Label
+        fields = ['id','name','color']        
+
+class TaskSerializer(serializers.ModelSerializer):
+    labels = LabelSerializer(many=True,read_only=True)
+    
+    class Meta:
+        model = Task
+        fields = ['id','title','description','creation_time','deadline','is_completed','labels']

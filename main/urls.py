@@ -19,4 +19,7 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('check-token/',views.CheckVerificationToken.as_view()),
     path('generate-registration-otp/',views.generate_registration_otp.as_view(),name="generate_registration_otp"),
+    path('goals/',views.goal_info.as_view(),name="goal_info"),
+    path('tasks/',views.task_api.as_view(),name="task_info"),
+    path('notification/',views.Notification_api.as_view(),name="notification"),
 ]
