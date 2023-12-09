@@ -1,4 +1,4 @@
-from django.urls import reverse
+# from django.urls import reverse
 from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework import status
 from rest_framework.views import APIView
@@ -34,7 +34,7 @@ class goal_info(APIView):
         data = request.data
         num = data.get("num",None)
         num = num if num is None else int(num)
-        is_completed = int(data.get("is_completed",False))
+        is_completed = int(data.get("is_completed",None))
         goals = Goal.objects.filter(user=user,is_completed=is_completed).order_by("-creation_time") if is_completed is not None else Goal.objects.filter(user=user).order_by("-creation_time")
         goals = goals[:num] if num is not None else goals
         goals = GoalSerializer(goals,many=True).data

@@ -22,4 +22,5 @@ urlpatterns = [
     path('goals/',views.goal_info.as_view(),name="goal_info"),
     path('tasks/',views.task_api.as_view(),name="task_info"),
     path('notification/',views.Notification_api.as_view(),name="notification"),
+    path('profile/',views.Profile.as_view(),name="profile"),
 ]
