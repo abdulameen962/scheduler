@@ -5,7 +5,9 @@ import { login,
     resetPassword,
     confirmPasswordOtp,
     changeNewPassword,
-    googleEntry
+    googleEntry,
+    getGoals,
+    getProfile,
 } from '../api';
 import { getToken } from '../storeapis';
 import { getRandom } from '../helpfulFunc';
@@ -33,6 +35,7 @@ export const OTP_FORGOT_CONFIRM_SENT = "OTP FORGOT CONFIRM SENT"
 export const OTP_FORGOT_CONFIRM_FULFILLED = "OTP FORGOT CONFIRM FULFILLED"
 export const CLEAR_MESSSAGES = "CLEAR_MESSSAGES"
 export const SET_NOTIFICATION_TOKEN = "SET_NOTIFICATION_TOKEN"
+export const USER_DETAILS = "USER_DETAILS"
 
 // action creators
 export const updateUser = update => ({
@@ -126,6 +129,49 @@ export const resendOtpVerification = (store,resendFunc=resendOtp) => async dispa
         // const {messages} = error.message[0];
         // const {message} = messages;
         dispatch({type:OTP_REJECTED,payload:error.message})
+    }
+}
+
+export const userProfile = (store,profileFunc=getProfile) => async dispatch =>  {
+    // dispatch({type:OTP_CONFIRM_SENT,payload:""})
+    const mainStore = store.getState();
+    const {profile} = mainStore.userProfile;
+    if (profile) {
+        return profile;
+    }
+
+    try{
+        const authCode = await getToken(store,resetAcessToken,logoutUser);
+        const result = await profileFunc(authCode);
+        const {email,first_name,last_name,username} = result;
+        const data = {email,first_name,last_name,username}
+
+        dispatch({type:USER_DETAILS,payload:data});
+        return;
+    }
+    catch(error){
+        console.log(error.message)
+        // const {messages} = error.message[0];
+        // const {message} = messages;
+        dispatch({type:OTP_REJECTED,payload:error.message});
+        return;
+    }
+}
+
+export const userGoals = async (store,goalFunc=getGoals) => {
+    // dispatch({type:OTP_CONFIRM_SENT,payload:""})
+    try{
+        const authCode = await getToken(store,resetAcessToken,logoutUser);
+        const result = await goalFunc(authCode,true,3);
+
+        // console.log(result);
+
+        return result;
+        // dispatch({type:OTP_RESEND,payload:"Otp resent sucessfully,enter the otp sent to your mail"})
+    }
+    catch(error){
+        console.log(error.message)
+        // dispatch({type:OTP_REJECTED,payload:error.message})
     }
 }
 

@@ -1,4 +1,3 @@
-// import {EXPO_PUBLIC_API_KEY,EXPO_PUBLIC_BASE_URL} from "@env"
 import {EXPO_PUBLIC_API_KEY,EXPO_PUBLIC_BASE_URL} from "@env"
 
 const BASE_URL = EXPO_PUBLIC_BASE_URL
@@ -69,6 +68,31 @@ export const googleEntry = async token => {
     const result = await BASE_FUNCTION(url,method,body,header,true);
     const {data} = result;
     return data;
+}
+
+export const getProfile = async authCode => {
+    const url = "profile/";
+    const method = "POST";
+    const header = {
+        "Authorization":`Bearer ${authCode}`
+    }
+    return await BASE_FUNCTION(url,method,null,header,true);
+}
+
+export const getGoals = async (authCode,is_completed=null,num=null) => {
+    const url = "goals/";
+    const method = "POST";
+    const header = {
+        "Authorization":`Bearer ${authCode}`
+    }
+
+    const body = {
+        num,is_completed
+    }
+
+    const result = await BASE_FUNCTION(url,method,body,header,true);
+    // console.log(result);
+    return result;
 }
 
 export const register = async (username,email,password1,password2) => {

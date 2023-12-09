@@ -3,6 +3,7 @@ import Constants from 'expo-constants';
 
 const btnColor = "#3E4ADE";
 const blue = "#0094DC"
+// const blue = "##059669"
 const greyBackground = "rgba(243, 245, 247,.4)";
 const button = {
   pillRadius: 30,
@@ -19,6 +20,11 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       marginTop: Constants.statusBarHeight,
+    },
+    border:{
+      borderWidth:1,
+      borderColor:"black",
+      borderStyle:"dashed"
     },
     orContainer:{
       flexDirection: "row",

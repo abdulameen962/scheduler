@@ -6,24 +6,6 @@ import styles from "../styles";
 import Alerter from "../components/alerter";
 
 const FormLayout = props => {
-    const showToast = (type,msg) => {
-        Toast.show({
-            type: `${type.toLowerCase()}`,
-            text1:type,
-            text2: msg,
-            position:"top",
-            // visibilityTime: 7000
-            // topOffset: 30,
-        })
-    }
-
-    if (props.error) {
-        showToast("Error",props.error)
-    }
-
-    if (props.sucess) {
-        showToast("Success",props.sucess)
-    }
 
     return(
         <Alerter>

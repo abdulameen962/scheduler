@@ -16,7 +16,8 @@ import {UPDATE_USER,
   RESET_PASSWORD_SENT,
   OTP_FORGOT_CONFIRM_FULFILLED,
   CLEAR_MESSSAGES,
-  SET_NOTIFICATION_TOKEN
+  SET_NOTIFICATION_TOKEN,
+  USER_DETAILS,
 
 } from './actions'
 import { getRandom } from '../helpfulFunc'
@@ -94,8 +95,20 @@ const userReducer = (state = {}, action) => {
     } 
 }
 
+const userProfile = (state={},action) => {
+  switch (action.type) {
+    case USER_DETAILS:
+
+      return merge(state,{profile:action.payload});
+  
+    default:
+      return state;
+  }
+}
+
 const reducers = combineReducers({
-    user:userReducer
+    user:userReducer,
+    userProfile,
 })
 
 
