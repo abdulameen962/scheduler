@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { updateCarousel } from "../redux/actions";
 import Proptypes from "prop-types";
 import LottieView from "lottie-react-native";
-import { store } from "../redux/store";
+import Alerter from "../components/alerter";
 // import ContentLoader, { Facebook } from 'react-content-loader/native'
 
 // const MyLoader = () => <ContentLoader animate={true} />
@@ -101,6 +101,7 @@ class CarouselScreen extends React.Component {
     
     render() {
       return (
+        <Alerter>
           <View style={[styles.container,styles.greyBack]}>
               <View style={{flexDirection:"row",alignItems:"center",paddingTop:15}}>
                 <Image source={require("../assets/logo.png")} resizeMode="contain" style={styles.headerImg} />
@@ -146,6 +147,7 @@ class CarouselScreen extends React.Component {
                 <StatusBar style="auto" />
               </View>
           </View>
+        </Alerter>
       );
     }
 }

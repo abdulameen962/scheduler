@@ -3,16 +3,20 @@ import PropTypes from "prop-types"
 import { View,ScrollView } from "react-native";
 import styles from "../styles";
 import { StatusBar } from 'expo-status-bar';
+import Alerter from "../components/alerter";
 
 const PageLayout = props => {
     const {children} = props;
 
     return (
-        <ScrollView contentContainerStyle={[styles.container,styles.greyBack,styles.formContainer]}>
-            
-            {children}
-            <StatusBar style="auto" />
-        </ScrollView>
+        <Alerter>
+            <View style={[styles.container,styles.greyBack,styles.formContainer]}>
+                <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
+                    {children}
+                    <StatusBar style="auto" />
+                </ScrollView>
+            </View>
+        </Alerter>
     )
 }
 

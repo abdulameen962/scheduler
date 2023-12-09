@@ -93,7 +93,7 @@ class Login extends Component{
 
     componentDidUpdate = (prevProps,prevState) => {
         if (prevState.username !== this.state.username || prevState.password !== this.state.password) {
-            if (trim(this.state.username).length > 4 && trim(this.state.password).length > 8) {
+            if (trim(this.state.username).length >= 4 && trim(this.state.password).length >= 8) {
                 this.setState({
                     disabled: false,
                 })   

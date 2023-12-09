@@ -60,7 +60,7 @@ const userReducer = (state = {}, action) => {
         return merge(state,{onboardDone:true,errMessage:null,successMessage:`${getRandom()}.Otp verified sucessfully`})
 
       case OTP_FORGOT_CONFIRM_FULFILLED:
-        return merge(state,{errMessage:null,successMessage:`${getRandom}.Otp verified sucessfully,you can change your password now`})
+        return merge(state,{errMessage:null,successMessage:`${getRandom()}.Otp verified sucessfully,you can change your password now`})
 
       case OTP_RESEND:
         let otpNum = state.otpNum || 0;

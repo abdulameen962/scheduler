@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { logUserOut } from "../redux/actions";
 import PropTypes from "prop-types";
 import PageLayout from "../layouts/pageLayout";
+import PopUp from "../components/popUp";
 
 class Setting extends React.Component {
     static propTypes = {
@@ -14,7 +15,7 @@ class Setting extends React.Component {
     }
 
     state = {
-
+        // state: false
     }
 
     removeUser = () => {
@@ -35,12 +36,19 @@ class Setting extends React.Component {
     }
 
     render(){
-        // console.log(this.props)
         return (
             <PageLayout>
-                <TouchableOpacity onPress={this.removeUser}>
+                <PopUp
+                    header={"Logout"}
+                    text={"Are you sure you want to logout?"}
+                    action={"Logout"}
+                    onSubmit={this.removeUser}
+                    triggerElement={<Text style={{color:"white"}}>Logout</Text>}
+                    positive={false}
+                />
+                {/* <TouchableOpacity onPress={() => this.setState({state:true})}>
                     <Text>Logout</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </PageLayout>
         )
     }

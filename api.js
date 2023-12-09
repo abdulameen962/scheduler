@@ -1,9 +1,8 @@
+// import {EXPO_PUBLIC_API_KEY,EXPO_PUBLIC_BASE_URL} from "@env"
 import {EXPO_PUBLIC_API_KEY,EXPO_PUBLIC_BASE_URL} from "@env"
 
 const BASE_URL = EXPO_PUBLIC_BASE_URL
 const API_KEY = EXPO_PUBLIC_API_KEY
-// console.log(process.env.EXPO_PUBLIC_API_KEY)
-// console.log(BASE_URL)
 // console.log(API_KEY)
 const BASE_FUNCTION = async(url,method,fetchBody=null,extraHeaders={},handleChange=false) => {
     try{

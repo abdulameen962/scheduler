@@ -20,6 +20,9 @@ import * as Device from 'expo-device';
 import Constants from 'expo-constants'
 import GetNav from './layouts/appLayout';
 import * as Updates from 'expo-updates';
+// import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
+import { GluestackUIProvider } from "@gluestack-ui/themed"
+import { config } from "@gluestack-ui/config"
 // import GetNav from './layouts/appLayout';
 
 // import {LogBox} from "react-native";
@@ -264,7 +267,7 @@ class App extends React.Component {
                                 </Stack.Screen>
 
                                 <Stack.Screen name="Signup">
-                                  {(props) => <Signup {...props} updateState={this.updateState}  />}
+                                  {(props) => <Signup {...props} updateState={this.updateState} sendNotification={this.sendNotification}  />}
                                 </Stack.Screen>
                               </>
                             ):(
@@ -299,4 +302,12 @@ class App extends React.Component {
   }
 }
 
-export default App;
+function Main() {
+  return (
+    <GluestackUIProvider config={config}>
+      <App/>
+    </GluestackUIProvider>
+  );
+}
+
+export default Main;

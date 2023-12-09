@@ -79,9 +79,13 @@ export const googleApi = (token,googleFunc=googleEntry) => async dispatch => {
         const successMessage = "Logged in sucessfully"
         const payload = {accessToken,refreshToken,registerDone,onboardDone,errMessage:null,successMessage}
         dispatch({type:LOG_IN_FULFILLED,payload})
+
+        return true;
     }
     catch(error){
         dispatch({type:LOG_IN_REJECTED,payload:error.message})
+
+        return false;
     }
 }
 

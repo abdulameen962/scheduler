@@ -21,6 +21,7 @@ class Signup extends Component{
         err: Proptypes.string,
         registerDone: Proptypes.bool,
         updateState: Proptypes.func.isRequired,
+        sendNotification: Proptypes.func.isRequired,
     }
 
     state = {
@@ -214,7 +215,7 @@ class Signup extends Component{
                 }
                 <FormFooter>
                     <View style={styles.boxContainer}>
-                        <GoogleComponent name="Signup" />
+                        <GoogleComponent name="Signup" sendNotification={this.props.sendNotification} />
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')} style={{flexDirection:"row",justifyContent:"center"}}>
                             <Text style={styles.p}>Already own an account?</Text>
                             <Text style={[styles.p,styles.textBg,{paddingLeft:6}]}>Login</Text>
@@ -230,6 +231,7 @@ const mapStateToProps = (state,ownProps) => ({
     err: state.user.errMessage || null,
     registerDone: state.user.registerDone || null,
     updateState: ownProps.updateState,
+    sendNotification: ownProps.sendNotification,
 })
 
 export default connect(mapStateToProps,{registerUser})(Signup)

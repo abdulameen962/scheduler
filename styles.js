@@ -3,7 +3,7 @@ import Constants from 'expo-constants';
 
 const btnColor = "#3E4ADE";
 const blue = "#0094DC"
-const greyBackground = "#F4F6F8";
+const greyBackground = "rgba(243, 245, 247,.4)";
 const button = {
   pillRadius: 30,
   width: "100%",

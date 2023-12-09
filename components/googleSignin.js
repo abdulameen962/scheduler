@@ -6,7 +6,6 @@ import * as Google from "expo-auth-session/providers/google"
 import {EXPO_PUBLIC_GOOGLE_ANDROID_AUTH,EXPO_PUBLIC_GOOGLE_ISO_AUTH,EXPO_PUBLIC_GOOGLE_WEB_AUTH} from "@env"
 import {TouchableOpacity,Text,View,Image} from "react-native"
 import styles from "../styles";
-import { store } from "../redux/store"
 import { googleApi } from "../redux/actions"
 import { connect } from "react-redux"
 import PropTypes from "prop-types"
@@ -22,7 +21,7 @@ WebBrowser.maybeCompleteAuthSession();
 const GoogleComponent = props => {
     const GOOGLE_ANDROID_AUTH = EXPO_PUBLIC_GOOGLE_ANDROID_AUTH;
     const GOOGLE_ISO_AUTH = EXPO_PUBLIC_GOOGLE_ISO_AUTH;
-    const [userInfo,setUserInfo] = React.useState(null)
+    // const [userInfo,setUserInfo] = React.useState(null)
     const [request,response,promptAsync] = Google.useAuthRequest({
         androidClientId: `${GOOGLE_ANDROID_AUTH}`,
         iosClientId: `${GOOGLE_ISO_AUTH}`,
@@ -55,7 +54,12 @@ const GoogleComponent = props => {
             // visibilityTime: 7000
             // topOffset: 30,
         })
-        await props.googleApi(token);
+        const result = await props.googleApi(token);
+        if (result && props.sendNotification) {
+            let header = "Thanks for signing up";
+            let body = "Congrats on signing up,awesome awaits 🙌🎉🙌🎉";
+            props.sendNotification(header,body,{url:"Setting"});
+        }
     }
 
     return (
@@ -73,11 +77,13 @@ const GoogleComponent = props => {
 }
 
 GoogleComponent.propTypes = {
-    name: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired,
+    sendNotification: PropTypes.func,
 }
 
 const mapStateToProps = (state,ownProps) => ({
     name: ownProps.name,
+    sendNotification: ownProps.sendNotification,
 })
 
 
