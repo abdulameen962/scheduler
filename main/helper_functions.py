@@ -111,3 +111,26 @@ def get_google_login(token:str) -> object:
     result = response.json()
     
     return result
+
+def fcm_push_notifications(message):
+    from firebase_admin.messaging import Message
+    from fcm_django.models import FCMDevice
+
+    message_obj = Message(
+        data={
+            "Nick" : "Mario",
+            "body" : "great match!",
+            "Room" : "PortugalVSDenmark"
+    },
+    )
+    
+    Message(
+    notification=Notification(title="title", body="text", image="url"),
+    topic="Optional topic parameter: Whatever you want",
+    )
+
+    # You can still use .filter() or any methods that return QuerySet (from the chain)
+    device = FCMDevice.objects.all().first()
+    # send_message parameters include: message, dry_run, app
+    device.send_message(message_obj)
+    # Boom!

@@ -153,7 +153,7 @@ class CheckVerificationToken(APIView):
   
 class LogoutView(APIView):
     permission_classes = [HasAPIKey,IsAuthenticated]
-    authentication_classes = (JWTAuthentication)
+    authentication_classes = [JWTAuthentication]
     www_authenticate_realm = "api"
     
     def post(self,request):
