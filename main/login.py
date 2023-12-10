@@ -5,10 +5,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from main.otp_generator import Otp_manager
 from main.models import *
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework_api_key.permissions import HasAPIKey
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.conf import settings
 from django.utils.html import strip_tags
 from django.core.mail import send_mail
@@ -150,3 +152,15 @@ class CheckVerificationToken(APIView):
     
   def get(self,request):
       return Response({"message":"Token is valid"},status=status.HTTP_200_OK)
+  
+  
+class LogoutView(APIView):
+    permission_classes = [HasAPIKey,IsAuthenticated]
+    authentication_classes = (JWTAuthentication)
+    www_authenticate_realm = "api"
+    
+    def post(self,request):
+        logout(request)
+            
+        return Response({"message":"Logout successful"},status=status.HTTP_200_OK)
+    
