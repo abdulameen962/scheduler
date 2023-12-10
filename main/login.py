@@ -18,8 +18,6 @@ from django.template.loader import render_to_string
 # from .send_sms import send_text_message
 from django.contrib.auth import logout
 
-otp_password_validate = False
-
 class Login(APIView):
     permission_classes = [HasAPIKey]
     authentication_classes = ()
@@ -94,7 +92,6 @@ class PasswordResetView(APIView):
         if otp is None:
             return Response({"message":"Otp required"},status=status.HTTP_400_BAD_REQUEST)
         
-        global otp_password_validate
         otp_password_validate = Otp_manager(180).validate_otp(request,otp)
         
         if otp_password_validate:
@@ -111,7 +108,7 @@ class PasswordResetChange(APIView):
     
     def post(self,request):
         #confirm user has verified his otp
-        global otp_password_validate
+        otp_password_validate = self.request.session['otp_validation']
         if otp_password_validate == False:
             return Response({"message":"Otp verification failed"},status=status.HTTP_403_FORBIDDEN)
         
