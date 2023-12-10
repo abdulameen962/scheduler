@@ -10,7 +10,7 @@ const PageLayout = props => {
 
     return (
         <Alerter>
-            <View style={[styles.container,styles.greyBack,styles.formContainer]}>
+            <View style={[styles.container,styles.greyBack]}>
                 <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
                     {children}
                     <StatusBar style="auto" />

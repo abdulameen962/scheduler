@@ -8,6 +8,7 @@ import { login,
     googleEntry,
     getGoals,
     getProfile,
+    logoutApi
 } from '../api';
 import { getToken } from '../storeapis';
 import { getRandom } from '../helpfulFunc';
@@ -220,11 +221,20 @@ export const changePassword = (store,password,changeFunc=changeNewPassword) => a
     }
 }
 
-export const logUserOut = () => dispatch => {
-    dispatch({
-        type: LOGOUT_USER,
-        payload: {successMessage:`${getRandom()}.${"Logout sucessful"}`,errMessage:null},
-    })
+export const logUserOut = (store,logFunc=logoutApi) => async dispatch => {
+    try{
+        const authCode = await getToken(store,resetAcessToken,logoutUser);
+        const result = await logFunc(authCode);
+        if (result) dispatch({
+            type: LOGOUT_USER,
+            payload: {successMessage:`${getRandom()}.${"Logout sucessful"}`,errMessage:null},
+        })
+    }
+    catch(error){
+        // const {messages} = error.message[0];
+        // const {message} = messages;
+        dispatch({type:OTP_REJECTED,payload:error.message})
+    }
 }
 
 /**

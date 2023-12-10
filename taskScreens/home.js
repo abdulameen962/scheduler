@@ -60,22 +60,38 @@ class Home extends React.Component{
         const {username} = this.state.profile;
         return (
             <PageLayout>
-                <View style={[styles.orContainer,{width:width -40,}]}>
+                <View style={[styles.orContainer,{width:width -30,}]}
+                    pt='$3'
+                >
                     <Heading
                         style={[{width:width/(5/4)}]}
                     >
                         Hello
                         <Heading color="$blue600"> {username}</Heading>
                     </Heading>
-                    <Pressable onPress={() => {
+                    <Pressable 
+                        onPress={() => {
                         this.props.navigation.navigate('Setting')
-                    }}
-                        style={[{width:width/(5/1),flexDirection:"row",justifyContent:"flex-start"}]}
+                        }}
+                        rounded="$full"
+                        // borderWidth={1}
+                        // borderColor="$gray400"
+                        backgroundColor="$secondary100"
+                        padding="$2"
+                        // style={[{flexDirection:"row",justifyContent:"flex-start"}]}
                     >
-                        <Ionicons name="notifications-outline" color={"black"} size={30} />
+                        <Ionicons name="notifications-outline" color={"rgba(0,0,0,.5)"} size={25} />
                     </Pressable>
-                    {/* <Text>hello</Text> */}
                 </View>
+                <Heading
+                    bold
+                    size="3xl"
+                    pt="$4"
+                    pb="$4"
+                    width={250}
+                >
+                    Manage Your Daily Tasks
+                </Heading>
                 {/* <MyLoader/>
                 <MyLoader/>
                 <MyLoader/> */}

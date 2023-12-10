@@ -22,42 +22,42 @@ class Alerter extends React.Component {
     //     }
     // }
 
-    showToast = (type,msg) => {
-        Toast.show({
-            type: `${type.toLowerCase()}`,
-            text1:type,
-            text2: msg,
-            position:"top",
-            // visibilityTime: 7000
-            // topOffset: 30,
-        })
-    }
+    // showToast = (type,msg) => {
+    //     Toast.show({
+    //         type: `${type.toLowerCase()}`,
+    //         text1:type,
+    //         text2: msg,
+    //         position:"top",
+    //         visibilityTime: 4000
+    //         // topOffset: 30,
+    //     })
+    // }
 
-    checkMessage = () => {
-        const props = this.props;
-        if (props.error && props.error !== null) {
-            this.showToast("Error",props.error)
-        }
+    // checkMessage = () => {
+    //     const props = this.props;
+    //     if (props.error && props.error !== null) {
+    //         this.showToast("Error",props.error)
+    //     }
     
-        if (props.sucess && props.sucess !== null) {
-            this.showToast("Success",props.sucess)
-        }
-    }
+    //     if (props.sucess && props.sucess !== null) {
+    //         this.showToast("Success",props.sucess)
+    //     }
+    // }
 
-    componentDidMount(){
-        this.checkMessage();
-    }
+    // componentDidMount(){
+    //     this.checkMessage();
+    // }
 
-    componentDidUpdate(prevProps,prevState){
-        if (prevProps.error !== this.props.error && this.props.error !== null 
-            && this.props.error !== undefined
-        ) {
-            this.showToast("Error",this.props.error)
-        }
-        else if(prevProps.sucess !== this.props.sucess && this.props.sucess !== null && this.props.sucess !== undefined){
-            this.showToast("Success",this.props.sucess)
-        }
-    }
+    // componentDidUpdate(prevProps,prevState){
+    //     if (prevProps.error !== this.props.error && this.props.error !== null 
+    //         && this.props.error !== undefined
+    //     ) {
+    //         this.showToast("Error",this.props.error)
+    //     }
+    //     else if(prevProps.sucess !== this.props.sucess && this.props.sucess !== null && this.props.sucess !== undefined){
+    //         this.showToast("Success",this.props.sucess)
+    //     }
+    // }
 
     render(){
         const {children} = this.props;

@@ -20,9 +20,18 @@ import * as Device from 'expo-device';
 import Constants from 'expo-constants'
 import GetNav from './layouts/appLayout';
 import * as Updates from 'expo-updates';
+import PageLayout from './layouts/pageLayout';
+import { Spinner } from "@gluestack-ui/themed";
 // import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
 import { GluestackUIProvider } from "@gluestack-ui/themed"
 import { config } from "@gluestack-ui/config"
+import * as Font from 'expo-font';
+import {
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+  Inter_900Black, } from "@expo-google-fonts/inter";
 // import GetNav from './layouts/appLayout';
 
 // import {LogBox} from "react-native";
@@ -246,7 +255,9 @@ class App extends React.Component {
       <>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
-            <NavigationContainer>
+            <NavigationContainer
+              fallback={<PageLayout><Spinner size="large" /></PageLayout>}
+            >
               { 
                 this.state.userAuth == false ? (
                   <>
@@ -303,6 +314,14 @@ class App extends React.Component {
 }
 
 function Main() {
+  const [fontsLoaded] = Font.useFonts({
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
+    Inter_900Black,
+  })
+  
   return (
     <GluestackUIProvider config={config}>
       <App/>

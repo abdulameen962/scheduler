@@ -3,6 +3,7 @@ import { TouchableOpacity,Text,View } from "react-native";
 import styles from "../styles";
 import { connect } from "react-redux";
 import { logUserOut } from "../redux/actions";
+import { store } from "../redux/store";
 import PropTypes from "prop-types";
 import PageLayout from "../layouts/pageLayout";
 import PopUp from "../components/popUp";
@@ -18,8 +19,8 @@ class Setting extends React.Component {
         // state: false
     }
 
-    removeUser = () => {
-         this.props.logUserOut();
+    removeUser = async () => {
+        await this.props.logUserOut(store);
     }
 
     static getDerivedStateFromProps(nextProps,state){

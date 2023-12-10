@@ -13,7 +13,7 @@
       },
       "env": {
         "EXPO_PUBLIC_GOOGLE_WEB_AUTH": "266934796958-q67l9pudemq16mgptr8oug372uev7vr1.apps.googleusercontent.com",
-        "EXPO_PUBLIC_API_KEY": "k5UjgYAC.MMi15gRsNHbIhMCg9LeoRbdvAvAz91tc",
+        "EXPO_PUBLIC_API_KEY": "faHuoKbL.wUQgGKU77kU2HPAvv4NLaWeH1G8JP9NA",
         "EXPO_PUBLIC_BASE_URL": "https://suited-touched-mammoth.ngrok-free.app/api/v1/",
         "EXPO_PUBLIC_GOOGLE_ANDROID_AUTH": "266934796958-u2frfhlvidc8f58qu7i9spcv6jpkflnq.apps.googleusercontent.com",
         "EXPO_PUBLIC_GOOGLE_ISO_AUTH": "266934796958-iquamj7kmmttesdr4i78pkfe2i5uqiua.apps.googleusercontent.com"
@@ -25,7 +25,7 @@
       "distribution": "internal",
       "env": {
         "EXPO_PUBLIC_GOOGLE_WEB_AUTH": "266934796958-q67l9pudemq16mgptr8oug372uev7vr1.apps.googleusercontent.com",
-        "EXPO_PUBLIC_API_KEY": "k5UjgYAC.MMi15gRsNHbIhMCg9LeoRbdvAvAz91tc",
+        "EXPO_PUBLIC_API_KEY": "faHuoKbL.wUQgGKU77kU2HPAvv4NLaWeH1G8JP9NA",
         "EXPO_PUBLIC_BASE_URL": "https://scheduler-eight-sigma.vercel.app//api/v1/",
         "EXPO_PUBLIC_GOOGLE_ANDROID_AUTH": "266934796958-u2frfhlvidc8f58qu7i9spcv6jpkflnq.apps.googleusercontent.com",
         "EXPO_PUBLIC_GOOGLE_ISO_AUTH": "266934796958-iquamj7kmmttesdr4i78pkfe2i5uqiua.apps.googleusercontent.com"
@@ -35,7 +35,7 @@
       "channel": "production",
       "env": {
         "EXPO_PUBLIC_GOOGLE_WEB_AUTH": "266934796958-q67l9pudemq16mgptr8oug372uev7vr1.apps.googleusercontent.com",
-        "EXPO_PUBLIC_API_KEY": "mgkVEInb.QZQCnnkK7dAdYMKcuo49e4c4VtLqbU5R",
+        "EXPO_PUBLIC_API_KEY": "RtACDQ88.nK5QRQTXQUWlnTc65XOwCusTfnKL2llP",
         "EXPO_PUBLIC_BASE_URL": "https://scheduler-eight-sigma.vercel.app//api/v1/",
         "EXPO_PUBLIC_GOOGLE_ANDROID_AUTH": "266934796958-u2frfhlvidc8f58qu7i9spcv6jpkflnq.apps.googleusercontent.com",
         "EXPO_PUBLIC_GOOGLE_ISO_AUTH": "266934796958-iquamj7kmmttesdr4i78pkfe2i5uqiua.apps.googleusercontent.com"

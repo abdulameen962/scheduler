@@ -37,14 +37,14 @@ const HomeScreen = props => {
             barStyle={{
                 height:height * 0.09,
                 backgroundColor:'rgba(255, 255, 255,.4)',
-                paddingBottom:45
+                // paddingBottom:45
                 // display:"none"
             }}
             screenOptions={{
-                // tabBarStyle: { position: 'absolute' },
-                // tabBarBackground: () => (
-                //     <BlurView tint="light" intensity={100} style={StyleSheet.absoluteFill} />
-                //   ),
+                tabBarStyle: { position: 'absolute' },
+                tabBarBackground: () => (
+                    <BlurView tint="light" intensity={100} style={StyleSheet.absoluteFill} />
+                  ),
             }}
             // barStyle={{display:'none'}}
             >
@@ -55,7 +55,7 @@ const HomeScreen = props => {
                         title:'Home',
                         tabBarLabel: 'Home',
                         tabBarIcon: ({ color }) => (<MaterialCommunityIcons name="home" color={color} size={IconHeight} />),
-                        
+                          
                     }}
                 />
                 

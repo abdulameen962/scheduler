@@ -38,8 +38,8 @@ const BASE_FUNCTION = async(url,method,fetchBody=null,extraHeaders={},handleChan
             return true;
         }
         
-        const {message} = result;
-        throw new Error(message);
+        const {message,detail} = result;
+        throw new Error(message?message:detail);
     }
     catch(err){
         throw new Error(err.message);
@@ -77,6 +77,15 @@ export const getProfile = async authCode => {
         "Authorization":`Bearer ${authCode}`
     }
     return await BASE_FUNCTION(url,method,null,header,true);
+}
+
+export const logoutApi = async authCode => {
+    const url = "users/logout/";
+    const method = "POST";
+    const header = {
+        "Authorization":`Bearer ${authCode}`
+    }
+    return await BASE_FUNCTION(url,method,null,header);
 }
 
 export const getGoals = async (authCode,is_completed=null,num=null) => {
