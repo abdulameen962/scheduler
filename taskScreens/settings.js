@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity,Text,View } from "react-native";
+import { TouchableOpacity,Text,View } from '@gluestack-ui/themed';
 import styles from "../styles";
 import { connect } from "react-redux";
 import { logUserOut } from "../redux/actions";

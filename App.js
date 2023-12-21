@@ -313,6 +313,10 @@ class App extends React.Component {
   }
 }
 
+import {
+  BottomSheetModalProvider,} from '@gorhom/bottom-sheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+
 function Main() {
   const [fontsLoaded] = Font.useFonts({
     Inter_400Regular,
@@ -323,9 +327,13 @@ function Main() {
   })
   
   return (
-    <GluestackUIProvider config={config}>
-      <App/>
-    </GluestackUIProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <BottomSheetModalProvider>
+        <GluestackUIProvider config={config}>
+          <App/>
+        </GluestackUIProvider>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 }
 
