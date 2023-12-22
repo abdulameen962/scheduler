@@ -148,7 +148,8 @@ class Filter_task(APIView):
         
         
 class Task_creation(APIView):
-    pass
+    permission_classes = [HasAPIKey,IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
 
 
 class goal_creation(APIView):
