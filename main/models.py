@@ -74,7 +74,8 @@ class Goal(models.Model):
     title = models.CharField(_("Title of goal"),max_length=100)
     description = models.TextField(_("Description of goal"),max_length=500)
     creation_time = models.DateTimeField(_("Date of goal creation"),auto_now_add=False,editable=False,default=timezone.now)
-    deadline = models.DateTimeField(_("Deadline of goal"),auto_now_add=False,editable=False,default=timezone.now)
+    start_time = models.DateTimeField(_("When the goal should start"), auto_now=False,default=timezone.now)
+    deadline = models.DateTimeField(_("Deadline of goal"),auto_now_add=False,default=timezone.now)
     is_completed = models.BooleanField(_("Completion state of goal"),default=False)
     
     def __str__(self):
@@ -102,7 +103,8 @@ class Task(models.Model):
     title = models.CharField(_("Title of task"),max_length=100)
     description = models.TextField(_("Description of task"),max_length=500)
     creation_time = models.DateTimeField(_("Date of task creation"),auto_now_add=False,editable=False,default=timezone.now)
-    deadline = models.DateTimeField(_("Deadline of task"),auto_now_add=False,editable=False,default=timezone.now)
+    start_time = models.DateTimeField(_("When the task should start"),auto_now_add=False,default=timezone.now)
+    deadline = models.DateTimeField(_("Deadline of task"),auto_now_add=False,default=timezone.now)
     labels = models.ManyToManyField("main.Label",related_name="task_labels")
     is_completed = models.BooleanField(_("Completion state of task"),default=False)
     
