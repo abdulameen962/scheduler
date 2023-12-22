@@ -121,7 +121,7 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     'rest_framework_simplejwt',
     
-    'fcm_django',
+    # 'fcm_django',
 ]
 
 API_KEY_CUSTOM_HEADER = "HTTP_X_API_KEY"
