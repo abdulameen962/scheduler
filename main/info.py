@@ -130,8 +130,8 @@ class Filter_task(APIView):
         command = data.get("command",None)
         num = data.get("num",None)
         num = num if num is None else int(num)
-        if command is None:
-            return Response({"message":"Command is required"},status=status.HTTP_400_BAD_REQUEST)
+        if command is None or num is None:
+            return Response({"message":"Command and number of tasks are required"},status=status.HTTP_400_BAD_REQUEST)
         
         if command == "ongoing":
             tasks = Task.objects.filter(user=user,is_completed=False).order_by("-creation_time")[:num]
