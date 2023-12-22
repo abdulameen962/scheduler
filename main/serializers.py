@@ -53,9 +53,17 @@ class LabelSerializer(serializers.ModelSerializer):
         model = Label
         fields = ['id','name','color']        
 
+class GoalInfoSerializer(serializers.ModelSerializer):
+    # user = UserInfoSerializer(many=False,read_only=True)
+    class Meta:
+        model = Goal
+        fields = ['id','goal_image', 'title']
+ 
+
 class TaskSerializer(serializers.ModelSerializer):
     labels = LabelSerializer(many=True,read_only=True)
+    goal = GoalInfoSerializer(many=False,read_only=True)
     
     class Meta:
         model = Task
-        fields = ['id','title','description','creation_time','start_time','deadline','is_completed','labels']
+        fields = ['id','title','description','prob_completion','creation_time','start_time','deadline','is_completed','labels']
