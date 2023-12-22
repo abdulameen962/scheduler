@@ -244,7 +244,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD',"")
 OTP_TIME_LIMIT = os.environ.get('OTP_TIME_LIMIT',300)
 
 # fire base configuration
-from firebase_admin import initialize_app
+# from firebase_admin import initialize_app
 
 # Optional ONLY IF you have initialized a firebase app already:
 # Visit https://firebase.google.com/docs/admin/setup/#python
@@ -252,18 +252,18 @@ from firebase_admin import initialize_app
 # Store an environment variable called GOOGLE_APPLICATION_CREDENTIALS
 # which is a path that point to a json file with your credentials.
 # Additional arguments are available: credentials, options, name
-FIREBASE_APP = initialize_app()
-# To learn more, visit the docs here:
-# https://cloud.google.com/docs/authentication/getting-started>
+# FIREBASE_APP = initialize_app()
+# # To learn more, visit the docs here:
+# # https://cloud.google.com/docs/authentication/getting-started>
 
-FCM_DJANGO_SETTINGS = {
-     # default: _('FCM Django')
-    "APP_VERBOSE_NAME": "main",
-     # true if you want to have only one active device per registered user at a time
-     # default: False
-    "ONE_DEVICE_PER_USER": False,
-     # devices to which notifications cannot be sent,
-     # are deleted upon receiving error response from FCM
-     # default: False
-    "DELETE_INACTIVE_DEVICES": False,
-}
+# FCM_DJANGO_SETTINGS = {
+#      # default: _('FCM Django')
+#     "APP_VERBOSE_NAME": "main",
+#      # true if you want to have only one active device per registered user at a time
+#      # default: False
+#     "ONE_DEVICE_PER_USER": False,
+#      # devices to which notifications cannot be sent,
+#      # are deleted upon receiving error response from FCM
+#      # default: False
+#     "DELETE_INACTIVE_DEVICES": False,
+# }

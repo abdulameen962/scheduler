@@ -88,6 +88,11 @@ class Goal(models.Model):
     @property
     def goal_image(self):
         return self.image.url if self.image else "#"
+    
+    @property
+    def task_num(self):
+        # check for all the tasks under the goal
+        return self.goal_tasks.all().count()
         
 class Task(models.Model):
     

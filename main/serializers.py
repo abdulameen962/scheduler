@@ -38,10 +38,10 @@ class UserInfoSerializer(serializers.ModelSerializer):
 #-----------------------------------------------------------------------------#
 # Goal serializer
 class GoalSerializer(serializers.ModelSerializer):
-    user = UserInfoSerializer(many=False,read_only=True)
+    # user = UserInfoSerializer(many=False,read_only=True)
     class Meta:
         model = Goal
-        fields = ['id','user', 'goal_image', 'title', 'description', 'creation_time', 'deadline']
+        fields = ['id','goal_image', 'title', 'description', 'creation_time', 'deadline','task_num']
         
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
