@@ -110,7 +110,42 @@ class task_api(APIView):
         
         
 class Filter_task(APIView):
-    pass
+    """_summary_
+
+    Args:
+        user must have correct api key and authenticated with jwt
+        and also pass whether he wants ongoing or completed
+        and the number
+
+    Returns:
+        Tasks whether ongoing or completed of the user with the number requested
+    """
+    
+    permission_classes = [HasAPIKey,IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+    
+    def post(self,request):
+        user = self.request.user
+        data = self.request.data
+        command = data.get("command",None)
+        num = data.get("num",None)
+        num = num if num is None else int(num)
+        if command is None:
+            return Response({"message":"Command is required"},status=status.HTTP_400_BAD_REQUEST)
+        
+        if command == "ongoing":
+            tasks = Task.objects.filter(user=user,is_completed=False).order_by("-creation_time")[:num]
+            tasks = TaskSerializer(tasks,many=True).data
+            return Response(tasks,status=status.HTTP_200_OK)
+        
+        elif command == "completed":
+            tasks = Task.objects.filter(user=user,is_completed=True).order_by("-creation_time")[:num]
+            tasks = TaskSerializer(tasks,many=True).data
+            return Response(tasks,status=status.HTTP_200_OK)
+        
+        else:
+            return Response({"message":"Command not supported"},status=status.HTTP_400_BAD_REQUEST)
+        
         
 class Task_creation(APIView):
     pass

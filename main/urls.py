@@ -24,12 +24,13 @@ urlpatterns = [
     path('tasks/',views.task_api.as_view(),name="task_info"),
     path('notification/',views.Notification_api.as_view(),name="notification"),
     path('profile/',views.Profile.as_view(),name="profile"),
+    path('tasks-info/',views.Filter_task.as_view(),name="filter_task"),
     
-    path("firebase-messaging-sw.js",
-        TemplateView.as_view(
-            template_name="main/firebase-messaging-sw.js",
-            content_type="application/javascript",
-        ),
-        name="firebase-messaging-sw.js"
-    ),
+    # path("firebase-messaging-sw.js",
+    #     TemplateView.as_view(
+    #         template_name="main/firebase-messaging-sw.js",
+    #         content_type="application/javascript",
+    #     ),
+    #     name="firebase-messaging-sw.js"
+    # ),
 ]
