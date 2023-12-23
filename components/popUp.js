@@ -14,7 +14,8 @@ import { Modal,
     Center,
     CloseIcon,
     ButtonText,
-    Pressable
+    Pressable,
+    Spinner
 } from '@gluestack-ui/themed';
 
 const PopUp = props => {
@@ -29,54 +30,65 @@ const PopUp = props => {
 
     return (
     <Center h={300}>
-      <Button onPress={() => setShowModal(true)} ref={ref}>
-        {triggerElement}
-      </Button>
-      <Modal
-        isOpen={showModal}
-        onClose={() => {
-          setShowModal(false)
-        }}
-        finalFocusRef={ref}
-      >
-        <ModalBackdrop />
-        <ModalContent>
-          <ModalHeader>
-            <Heading size="lg">{header}</Heading>
-            <ModalCloseButton>
-              <Icon as={CloseIcon} />
-            </ModalCloseButton>
-          </ModalHeader>
-          <ModalBody>
-            <Text>
-              {text}
-            </Text>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              variant="outline"
-              size="sm"
-              action="secondary"
-              mr="$3"
-              onPress={() => {
-                setShowModal(false)
-              }}
-            >
-              <ButtonText>Cancel</ButtonText>
+      {
+        action === true ? (
+          <>
+            <Spinner size="large" />
+          </>
+        ):
+        (
+          <>
+            <Button onPress={() => setShowModal(true)} ref={ref}>
+              {triggerElement}
             </Button>
-            <Button
-              size="sm"
-              action={positive==true?"positive":"negative"}
-              borderWidth="$0"
-              onPress={() => {
-                setAction(true)
-              }}
-            >
-              <ButtonText>{props.action}</ButtonText>
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+            <Modal
+                isOpen={showModal}
+                onClose={() => {
+                  setShowModal(false)
+                }}
+                finalFocusRef={ref}
+              >
+              <ModalBackdrop />
+              <ModalContent>
+                <ModalHeader>
+                  <Heading size="lg">{header}</Heading>
+                  <ModalCloseButton>
+                    <Icon as={CloseIcon} />
+                  </ModalCloseButton>
+                </ModalHeader>
+                <ModalBody>
+                  <Text>
+                    {text}
+                  </Text>
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    action="secondary"
+                    mr="$3"
+                    onPress={() => {
+                      setShowModal(false)
+                    }}
+                  >
+                    <ButtonText>Cancel</ButtonText>
+                  </Button>
+                  <Button
+                    size="sm"
+                    action={positive==true?"positive":"negative"}
+                    borderWidth="$0"
+                    onPress={() => {
+                      setAction(true)
+                    }}
+                  >
+                    <ButtonText>{props.action}</ButtonText>
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
+          </>
+        )
+      }
     </Center>
     )
 }

@@ -1,32 +1,47 @@
 import React from 'react'
-import { View, TouchableOpacity,Text,StyleSheet } from 'react-native'
+import { View, Pressable,Text,StyleSheet } from 'react-native'
+import { btnColor } from '../styles';
+import { greyBackground } from '../styles';
 
-// interface ButtonProp = {
+interface ButtonProp {
+    children: React.ReactNode,
+    onPress: () => void
+}
 
-// }
+const size = 70
 
-const CustomPlusButton = ({children,onPress}: any) => {
-    // console.log('t came')
+const CustomPlusButton = ({children,onPress}: ButtonProp) => {
     return(
-        <TouchableOpacity
-            onPress={onPress}
-            style = {{
-                top: -30,
-                justifyContent: 'center',
-                alignItems: 'center'
-            }}
+        <View style={{
+            top: -30,
+            justifyContent: 'center',
+            alignItems: 'center',
+            width:size,
+            height:size,
+            borderRadius: size / 2,
+            zIndex: 4,
+            backgroundColor: "rgba(243, 245, 247,.4)",
+        }}
         >
-            <View
-                style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 35,
-                    backgroundColor: '#3E4ADE'
+            <Pressable
+                onPress={onPress}
+                style = {{
+                    justifyContent: 'center',
+                    alignItems: 'center'
                 }}
             >
-                {children}
-            </View>
-        </TouchableOpacity>
+                <View
+                    style={{
+                        width: 50,
+                        height: 50,
+                        borderRadius: 35,
+                        backgroundColor: btnColor
+                    }}
+                >
+                    {children}
+                </View>
+            </Pressable>
+        </View>
     )
 }
 

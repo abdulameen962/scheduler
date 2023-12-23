@@ -14,8 +14,7 @@ import {
     Provider as PaperProvider,
 } from "react-native-paper";
 
-import AddTask from '../taskScreens/addTask';
-
+import { btnColor } from '../styles';
 import { StyleSheet } from 'react-native';
 
 const theme = {
@@ -41,6 +40,7 @@ const HomeScreen = props => {
                 screenOptions={{
                     headerShown: false,
                     tabBarShowLabel: false,
+                    tabBarActiveTintColor: btnColor,
                     tabBarStyle: { 
                         backgroundColor:'white',
                         // backgroundColor:'green',
@@ -54,7 +54,7 @@ const HomeScreen = props => {
                         borderTopRightRadius: 40,
                         borderLeftWidth: 0.2,
                         borderRightWidth: 0.2,
-                        overflow: 'hidden',
+                        overflow: 'visible',
                     },
                     tabBarBackground: () => (
                         <BlurView tint="light" intensity={0} style={StyleSheet.absoluteFill} />
@@ -71,6 +71,17 @@ const HomeScreen = props => {
                         
                     }}
                 />
+                <BottomStack.Screen name="Summary" 
+                    options={{
+                        animationTypeForReplace: 'pop',
+                        // tabBarActiveBackgroundColor:"white",
+                        title:'Summary',
+                        tabBarLabel: 'Summary',
+                        tabBarIcon: ({ color }) => (<Ionicons name="calendar-outline" color={color} size={IconHeight} />),
+                    }}
+                >
+                    {(props) => <Setting {...props} updateState={updateState}  />}
+                </BottomStack.Screen>
                 <BottomStack.Screen
                     name='Add Task'
                     options={{
@@ -88,14 +99,26 @@ const HomeScreen = props => {
                             // Prevent default action
                             e.preventDefault();
                             const {history} = navigation.getState();
-                            const {key} = history[0];
+                            const {key} = history[history.length - 1];
                             const previousState = key.split('-')[0]
-                            console.log(previousState); 
                             // Do something with the `navigation` object
-                            
+                            navigation.navigate(previousState,{
+                                showTask: true
+                            })
                           
                         },
                       })}
+                >
+                    {(props) => <Setting {...props} updateState={updateState}  />}
+                </BottomStack.Screen>
+                <BottomStack.Screen name="Notes" 
+                    options={{
+                        animationTypeForReplace: 'pop',
+                        // tabBarActiveBackgroundColor:"white",
+                        title:'Notes',
+                        tabBarLabel: 'Notes',
+                        tabBarIcon: ({ color }) => (<MaterialCommunityIcons name="notebook" color={color} size={IconHeight} />),
+                    }}
                 >
                     {(props) => <Setting {...props} updateState={updateState}  />}
                 </BottomStack.Screen>

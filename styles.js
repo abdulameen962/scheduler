@@ -1,10 +1,10 @@
 import { StyleSheet } from "react-native";
 import Constants from 'expo-constants';
 
-const btnColor = "#3E4ADE";
-const blue = "#0094DC"
+export const btnColor = "#3E4ADE";
+export const blue = "#0094DC"
 // const blue = "##059669"
-const greyBackground = "rgba(243, 245, 247,.4)";
+export const greyBackground = "rgba(255, 255, 255,.3)";
 const button = {
   pillRadius: 30,
   width: "100%",
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     },
     googleText:{
       fontSize: 14,
-      fontWeight: 500,
+      fontWeight: "500",
       paddingLeft: 5
     },
     googleImg:{

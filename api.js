@@ -100,7 +100,21 @@ export const getGoals = async (authCode,is_completed=null,num=null) => {
     }
 
     const result = await BASE_FUNCTION(url,method,body,header,true);
-    // console.log(result);
+    return result;
+}
+
+export const getOngoingTasks = async (authCode,command="ongoing",num=5) => {
+    const url = "tasks-info//";
+    const method = "POST";
+    const header = {
+        "Authorization":`Bearer ${authCode}`
+    }
+
+    const body = {
+        command,num
+    }
+
+    const result = await BASE_FUNCTION(url,method,body,header,true);
     return result;
 }
 

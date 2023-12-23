@@ -8,7 +8,8 @@ import { login,
     googleEntry,
     getGoals,
     getProfile,
-    logoutApi
+    logoutApi,
+    getOngoingTasks
 } from '../api';
 import { getToken } from '../storeapis';
 import { getRandom } from '../helpfulFunc';
@@ -163,7 +164,24 @@ export const userGoals = async (store,goalFunc=getGoals) => {
     // dispatch({type:OTP_CONFIRM_SENT,payload:""})
     try{
         const authCode = await getToken(store,resetAcessToken,logoutUser);
-        const result = await goalFunc(authCode,true,3);
+        const result = await goalFunc(authCode,false,3);
+
+        // console.log(result);
+
+        return result;
+        // dispatch({type:OTP_RESEND,payload:"Otp resent sucessfully,enter the otp sent to your mail"})
+    }
+    catch(error){
+        console.log(error.message)
+        // dispatch({type:OTP_REJECTED,payload:error.message})
+    }
+}
+
+export const onGoingTasks = async (store,goalFunc=getOngoingTasks) => {
+    // dispatch({type:OTP_CONFIRM_SENT,payload:""})
+    try{
+        const authCode = await getToken(store,resetAcessToken,logoutUser);
+        const result = await goalFunc(authCode,"ongoing",8);
 
         // console.log(result);
 

@@ -19,6 +19,9 @@
       "supportsTablet": true,
       "runtimeVersion": {
         "policy": "appVersion"
+      },
+      "infoPlist": {
+        "UIBackgroundModes": ["location", "fetch", "remote-notification"]
       }
     },
     "android": {

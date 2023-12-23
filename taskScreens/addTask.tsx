@@ -1,32 +1,39 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef,forwardRef } from 'react';
 import { Text } from '@gluestack-ui/themed';
 import { StyleSheet,View,Button } from 'react-native';
-import BottomSheet,{
+import 
+  // BottomSheet,
+    {
     BottomSheetBackdrop,  
     BottomSheetModal,
-    useBottomSheetModal,
+    // useBottomSheetModal,
     } from '@gorhom/bottom-sheet';
-import { useAnimatedKeyboard,useAnimatedStyle } from 'react-native-reanimated';
-import Animated from 'react-native-reanimated';
+// import { useAnimatedKeyboard,useAnimatedStyle } from 'react-native-reanimated';
+// import Animated from 'react-native-reanimated';
+interface Props {
+  // children: React.ReactNode;
+}
 
-const AddTask = props => {
+type Ref = BottomSheetModal;
+
+const AddTask = forwardRef<Ref,Props>((props, ref) => {
   // ref
-  const bottomSheetRef = useRef<BottomSheetModal>(null);
-  const {dismiss} = useBottomSheetModal();
+  // const bottomSheetRef = useRef<BottomSheetModal>(null);
+  // const {dismiss} = useBottomSheetModal();
 
   // variables
   const snapPoints = useMemo(() => ['30%', '50%','75%'], []);
 
-  const handleClosePress = () => bottomSheetRef.current?.close();
-  const handleExpandPress = () => bottomSheetRef.current?.expand();
-  const handleCollapsePress = () => bottomSheetRef.current?.collapse();
-  const snaPindex = (num: number) => bottomSheetRef.current?.snapToIndex(num);
-  const handlePresentPress = () => bottomSheetRef.current?.present();
-  const handleDismissPress = () => bottomSheetRef.current?.dismiss();
+  // const handleClosePress = () => bottomSheetRef.current?.close();
+  // const handleExpandPress = () => bottomSheetRef.current?.expand();
+  // const handleCollapsePress = () => bottomSheetRef.current?.collapse();
+  // const snaPindex = (num: number) => bottomSheetRef.current?.snapToIndex(num);
+  // const handlePresentPress = () => bottomSheetRef.current?.present();
+  // const handleDismissPress = () => bottomSheetRef.current?.dismiss();
 
   // callbacks
   const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index);
+    // console.log('handleSheetChanges', index);
   }, []);
 
 //   const keyboard = useAnimatedKeyboard();
@@ -44,12 +51,12 @@ const AddTask = props => {
   // renders
   return (
         <>
-            <View style={{marginTop:30}}>
+            {/* <View style={{marginTop:30}}>
                 <Button title='Present' onPress={handlePresentPress} />
                 <Button title='Dismiss' onPress={handleDismissPress} />
-            </View>
-            <BottomSheetModal
-                ref={bottomSheetRef}
+            </View> */}
+              <BottomSheetModal
+                ref={ref}
                 index={0}
                 snapPoints={snapPoints}
                 onChange={handleSheetChanges}
@@ -57,15 +64,15 @@ const AddTask = props => {
                 backgroundStyle={{backgroundColor:'white'}}
                 backdropComponent={renderBackdrop}
                 handleIndicatorStyle={{backgroundColor:'black'}}
-            >
+              >
                 <View style={[styles.container,styles.contentContainer]}>
                 <Text>Awesome 🎉</Text>
                 
                 </View>
-            </BottomSheetModal>
+                </BottomSheetModal>
         </>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

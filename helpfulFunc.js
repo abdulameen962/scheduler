@@ -29,3 +29,14 @@ export const getRandom = () => {
 
     return num;
 }
+
+export function truncateString(str, maxLength) {  
+    let result;
+    if (str.length>maxLength) {  
+       result = str.substring(0, maxLength) + "...";
+    } else {  
+       result = str;  
+    }  
+
+    return result;
+}  

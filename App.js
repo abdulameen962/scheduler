@@ -32,6 +32,9 @@ import {
   Inter_600SemiBold,
   Inter_700Bold,
   Inter_900Black, } from "@expo-google-fonts/inter";
+
+import registerAllTasks from "./backgroundtasks/handler";
+// import { unregisterBackgroundFetchAsync } from './backgroundtasks/notifications';
 // import GetNav from './layouts/appLayout';
 
 // import {LogBox} from "react-native";
@@ -248,65 +251,63 @@ class App extends React.Component {
       // You can also add an alert() to see the error message in case of an error when fetching updates.
       alert(`Error fetching latest Expo update: ${error}`);
     }
+    await registerAllTasks();
+    // await unregisterBackgroundFetchAsync();
   }
 
   render(){
     return(
       <>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <NavigationContainer
-              fallback={<PageLayout><Spinner size="large" /></PageLayout>}
-            >
-              { 
-                this.state.userAuth == false ? (
-                  <>
-                    {
-                      this.state.hasCheckedCarousel == false ? (
-                        <Stack.Navigator screenOptions={{headerShown:false,animation:"fade_from_bottom"}} initialRouteName={this.state.initialRouteName}>
-                            <Stack.Screen name="Carousel" >
-                              {(props) => <Carousel {...props} moveToLogin={this.updateState}  />}
+        <NavigationContainer
+          fallback={<PageLayout><Spinner size="large" /></PageLayout>}
+        >
+          { 
+            this.state.userAuth == false ? (
+              <>
+                {
+                  this.state.hasCheckedCarousel == false ? (
+                    <Stack.Navigator screenOptions={{headerShown:false,animation:"fade_from_bottom"}} initialRouteName={this.state.initialRouteName}>
+                        <Stack.Screen name="Carousel" >
+                          {(props) => <Carousel {...props} moveToLogin={this.updateState}  />}
+                        </Stack.Screen>
+                    </Stack.Navigator>
+                  ):(
+                    <Stack.Navigator screenOptions={{headerShown:false,animation:"fade_from_bottom"}} initialRouteName={this.state.initialRouteName}>
+                      {
+                        this.state.registerDone == false ? (
+                          <>
+                            <Stack.Screen name="Login">
+                              {(props) => <Login {...props} updateState={this.updateState} />}
                             </Stack.Screen>
-                        </Stack.Navigator>
-                      ):(
-                        <Stack.Navigator screenOptions={{headerShown:false,animation:"fade_from_bottom"}} initialRouteName={this.state.initialRouteName}>
-                          {
-                            this.state.registerDone == false ? (
-                              <>
-                                <Stack.Screen name="Login">
-                                  {(props) => <Login {...props} updateState={this.updateState} />}
-                                </Stack.Screen>
 
-                                <Stack.Screen name="Signup">
-                                  {(props) => <Signup {...props} updateState={this.updateState} sendNotification={this.sendNotification}  />}
-                                </Stack.Screen>
-                              </>
-                            ):(
-                              <Stack.Screen name="VerifyOtp">
-                                {(props) => <VerifyOtp {...props} updateState={this.updateState} sendNotification={this.sendNotification} />}
-                              </Stack.Screen>
-                            )
-                          }
-                          <Stack.Screen name="Forgot" component={ForgotPassword} />
-                          <Stack.Screen name="ForgotOtp" component={ForgotOtp} />
-                          <Stack.Screen name="ForgotPasswordEmail" component={ForgotPasswordEmail} />
-                        </Stack.Navigator>
+                            <Stack.Screen name="Signup">
+                              {(props) => <Signup {...props} updateState={this.updateState} sendNotification={this.sendNotification}  />}
+                            </Stack.Screen>
+                          </>
+                        ):(
+                          <Stack.Screen name="VerifyOtp">
+                            {(props) => <VerifyOtp {...props} updateState={this.updateState} sendNotification={this.sendNotification} />}
+                          </Stack.Screen>
+                        )
+                      }
+                      <Stack.Screen name="Forgot" component={ForgotPassword} />
+                      <Stack.Screen name="ForgotOtp" component={ForgotOtp} />
+                      <Stack.Screen name="ForgotPasswordEmail" component={ForgotPasswordEmail} />
+                    </Stack.Navigator>
 
-                      )
-                    }
-                    </>
-                ):(
-                  <HomeScreen updateState={this.updateState}/>
-                )
-              }
-              {
-                this.state.token && this.state.notification && (
-                  <GetNav setNavigation={this.setNavigation}/>
-                )
-              }
-            </NavigationContainer>
-          </PersistGate>
-        </Provider>
+                  )
+                }
+                </>
+            ):(
+              <HomeScreen updateState={this.updateState}/>
+            )
+          }
+          {
+            this.state.token && this.state.notification && (
+              <GetNav setNavigation={this.setNavigation}/>
+            )
+          }
+        </NavigationContainer>
         <Toast config={toastConfig} />
       </>
     )
@@ -315,7 +316,8 @@ class App extends React.Component {
 
 import {
   BottomSheetModalProvider,} from '@gorhom/bottom-sheet';
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import NetInfo from '@react-native-community/netinfo';
 
 function Main() {
   const [fontsLoaded] = Font.useFonts({
@@ -325,15 +327,51 @@ function Main() {
     Inter_700Bold,
     Inter_900Black,
   })
+
+  const [isOnline,changeStatus] = React.useState(true);
+
+  React.useEffect(() => {
+    handleOnline();
+  },[isOnline]);
+
+  const checkInternet = NetInfo.addEventListener(state => {
+    // console.log('Connection type', state.type);
+    // console.log('Is connected?', state.isConnected);
+    if (isOnline !== state.isConnected) {
+      changeStatus(state.isConnected);
+    }
+  });
+
+  checkInternet();
+
+  const handleOnline = () => {
+    if (!isOnline) {
+      // add a toast notification to inform the user
+      Toast.show({
+        type: `error`,
+        text1:"Internet connection",
+        text2: "You are currently offline and some functions might not wotrk",
+        position:"bottom",
+        bottomOffset: 30,
+        visibilityTime: 6000,
+        // visibilityTime: 7000
+        // topOffset: 30,
+      })
+    }
+  }
   
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <BottomSheetModalProvider>
-        <GluestackUIProvider config={config}>
-          <App/>
-        </GluestackUIProvider>
-      </BottomSheetModalProvider>
-    </GestureHandlerRootView>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <BottomSheetModalProvider>
+            <GluestackUIProvider config={config}>
+                <App/>
+              </GluestackUIProvider>
+          </BottomSheetModalProvider>
+        </GestureHandlerRootView>
+      </PersistGate>
+    </Provider>
   );
 }
 
