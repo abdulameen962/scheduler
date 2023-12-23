@@ -95,6 +95,18 @@ class Goal(models.Model):
     def task_num(self):
         # check for all the tasks under the goal
         return self.goal_tasks.all().count()
+    
+    @property
+    def start_time_date(self):
+        return self.start_time.strftime("%m/%d/%Y %I:%M %p")
+    
+    @property
+    def deadline_date(self):
+        return self.deadline.strftime("%m/%d/%Y %I:%M %p")
+    
+    @property
+    def creation_time_date(self):
+        return self.creation_time.strftime("%m/%d/%Y %I:%M %p")
         
 class Task(models.Model):
     
@@ -117,6 +129,18 @@ class Task(models.Model):
         verbose_name = "Task"
         verbose_name_plural = "Tasks"
         ordering = ("-creation_time",)
+        
+    @property
+    def start_time_date(self):
+        return self.start_time.strftime("%m/%d/%Y %I:%M %p")
+    
+    @property
+    def deadline_date(self):
+        return self.deadline.strftime("%m/%d/%Y %I:%M %p")
+    
+    @property
+    def creation_time_date(self):
+        return self.creation_time.strftime("%m/%d/%Y %I:%M %p")
         
         
 class Label(models.Model):

@@ -41,7 +41,7 @@ class GoalSerializer(serializers.ModelSerializer):
     # user = UserInfoSerializer(many=False,read_only=True)
     class Meta:
         model = Goal
-        fields = ['id','goal_image', 'title', 'description', 'creation_time', 'deadline','task_num']
+        fields = ['id','goal_image', 'title', 'description', 'creation_time_date', 'deadline_date','task_num']
         
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -66,4 +66,4 @@ class TaskSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Task
-        fields = ['id','title','goal','description','prob_completion','creation_time','start_time','deadline','is_completed','labels']
+        fields = ['id','title','goal','description','prob_completion','creation_time_date','start_time_date','deadline_date','is_completed','labels']
