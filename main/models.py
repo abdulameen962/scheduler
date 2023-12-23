@@ -98,15 +98,15 @@ class Goal(models.Model):
     
     @property
     def start_time_date(self):
-        return self.start_time.strftime("%m/%d/%Y %I:%M %p")
+        return self.start_time.strftime("%Y-%m-%d %I:%M %p")
     
     @property
     def deadline_date(self):
-        return self.deadline.strftime("%m/%d/%Y %I:%M %p")
+        return self.deadline.strftime("%Y-%m-%d %I:%M %p")
     
     @property
     def creation_time_date(self):
-        return self.creation_time.strftime("%m/%d/%Y %I:%M %p")
+        return self.creation_time.strftime("%Y-%m-%d %I:%M %p")
         
 class Task(models.Model):
     
@@ -132,15 +132,15 @@ class Task(models.Model):
         
     @property
     def start_time_date(self):
-        return self.start_time.strftime("%m/%d/%Y %I:%M %p")
+        return self.start_time.strftime("%Y-%m-%d %I:%M %p")
     
     @property
     def deadline_date(self):
-        return self.deadline.strftime("%m/%d/%Y %I:%M %p")
+        return self.deadline.strftime("%Y-%m-%d %I:%M %p")
     
     @property
     def creation_time_date(self):
-        return self.creation_time.strftime("%m/%d/%Y %I:%M %p")
+        return self.creation_time.strftime("%Y-%m-%d %I:%M %p")
         
         
 class Label(models.Model):
