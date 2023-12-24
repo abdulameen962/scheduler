@@ -23,7 +23,7 @@ class NEXT_WORD(APIView):
             
             bert = BERT_AI(word)
             next_word = bert.predict_next_word(sentence)
-            return Response(next_word,status=status.HTTP_200_OK)
+            return Response({"word":next_word},status=status.HTTP_200_OK)
         
         except Exception:
             return Response({"message":"Something went wrong"},status=status.HTTP_400_BAD_REQUEST)
