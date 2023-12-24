@@ -98,15 +98,15 @@ class Goal(models.Model):
     
     @property
     def start_time_date(self):
-        return self.start_time.strftime("%Y-%m-%d %I:%M %p")
+        return self.start_time
     
     @property
     def deadline_date(self):
-        return self.deadline.strftime("%Y-%m-%d %I:%M %p")
+        return self.deadline
     
     @property
     def creation_time_date(self):
-        return self.creation_time.strftime("%Y-%m-%d %I:%M %p")
+        return self.creation_time
         
 class Task(models.Model):
     
