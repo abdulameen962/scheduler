@@ -51,14 +51,14 @@ def just_created(date,difference_time:int):
     
     return False
 
-def compare_dates(date1,date2,difference:int):
+def compare_dates(date1,date2,differenced:int):
     """
         Compares 2 dates whether they have the difference specified
     """
-    date1 = timezone.localtime(date1)
+    # date1 = timezone.localtime(date1)
     date1 = date1.strftime("%m/%d/%Y %I:%M %p")
     date1 = datetime.strptime(date1,"%m/%d/%Y %I:%M %p")
-    date2 = timezone.localtime(date2)
+    # date2 = timezone.localtime(date2)
     date2 = date2.strftime("%m/%d/%Y %I:%M %p")
     date2 = datetime.strptime(date2,"%m/%d/%Y %I:%M %p")
     difference = date1 - date2
@@ -66,7 +66,7 @@ def compare_dates(date1,date2,difference:int):
     
     #convert to a minute
     difference = difference / 60
-    if difference >= int(difference):
+    if difference <= int(differenced):
         return True
     
     return False

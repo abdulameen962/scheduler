@@ -156,6 +156,8 @@ class goal_creation(APIView):
     pass
 
 
+from .helper_functions import compare_dates,timezone
+
 class Notification_api(APIView):
     permission_classes = [HasAPIKey,IsAuthenticated]
     authentication_classes = [JWTAuthentication]
@@ -164,6 +166,19 @@ class Notification_api(APIView):
     def post(self,request):
         user = self.request.user
         data = request.data
+        command = data.get("command",None)
+        if command == "newest":
+            # get last notifications that was sent in maxiumum 5 mins ago
+            notifications = Notification.objects.filter(user=user).order_by("-creation_time")
+            notification_arr = []
+            for notify in notifications:
+                if compare_dates(timezone.now(),notify.creation_time,3):
+                    notification_arr.append(notify)
+                    
+            notifications = NotificationSerializer(notification_arr,many=True).data if len(notification_arr) > 0 else []
+            
+            return Response(notifications,status=status.HTTP_200_OK)
+        
         num = int(data.get("num",50))
         is_read = int(data.get("is_read",False))
         notification = Notification.objects.filter(user=user,is_read=is_read).order_by("-creation_time")[:num]
