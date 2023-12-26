@@ -54,6 +54,7 @@ export const login = async (username,password) => {
     }
     const header = {}
     const result = await BASE_FUNCTION(url,method,body,header,true);
+    console.log(result);
     return result;
 }
 

@@ -59,9 +59,13 @@ export const loginUser = (username,password,loginFn=login) => async dispatch => 
     try{
         const result = await loginFn(username,password);
         const {message} = result;
+        const {data} = result;
+        const {access_token,refresh_token} = data;
+        let accessToken = access_token;
+        let refreshToken = refresh_token;
         if (message == 'user not email verified') {
             const {email} = result;
-            dispatch({type:NOT_EMAIL_VERIFIED,payload:{email,message:"Your email isn't verified,pls click to resend"}})
+            dispatch({type:NOT_EMAIL_VERIFIED,payload:{accessToken,refreshToken,email,message:"Your email isn't verified,pls click to resend"}})
         }
         else{
             const {data} = result;

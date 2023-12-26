@@ -54,7 +54,7 @@ const userReducer = (state = {}, action) => {
 
       case NOT_EMAIL_VERIFIED:
 
-        return merge(state,{email:action.payload.email,onboardDone:false,registerDone:true,errMessage:`${getRandom()}.${action.payload.message}`,successMessage:null})
+        return merge(state,{accessToken:action.payload.accessToken,refreshToken:action.payload.refreshToken,email:action.payload.email,onboardDone:false,registerDone:true,errMessage:`${getRandom()}.${action.payload.message}`,successMessage:null})
         
       case REGISTER_REJECTED:
         return merge(state,{errMessage:`${getRandom()}.${action.payload}`,successMessage:null})
