@@ -1,5 +1,6 @@
 # from django.urls import reverse
 from rest_framework_api_key.permissions import HasAPIKey
+from rest_framework.views import APIView
 from rest_framework import status
 from .api_base import API_VERIFIED_BASE
 from rest_framework.response import Response
@@ -7,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .models import Goal,Task,Notification
 from .serializers import GoalSerializer,NotificationSerializer,TaskSerializer
+from .helper_functions import verified_mail
 # from django.core.paginator import Paginator
 
 # profile api
@@ -16,7 +18,7 @@ from .serializers import GoalSerializer,NotificationSerializer,TaskSerializer
 # notifications api
 # task api single
 
-class goal_info(API_VERIFIED_BASE):
+class goal_info(APIView):
     """_summary_
 
     Args:
@@ -25,7 +27,17 @@ class goal_info(API_VERIFIED_BASE):
     Returns:
         General information of the user such as goals,tasks
     """
+    permission_classes = [HasAPIKey,IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
     serializer_classes = GoalSerializer
+    
+    def has_permission(self,request,view):
+        user = self.request.user
+        
+        if user.is_anonymous:
+            return False
+        
+        return verified_mail(user)
     
     def post(self,request):
         user = self.request.user
