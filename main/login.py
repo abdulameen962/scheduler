@@ -1,5 +1,5 @@
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.views import APIView
+from .api_base import API_NON_VERIFIED_BASE
 from django.contrib.auth import authenticate, login
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,7 +7,6 @@ from main.otp_generator import Otp_manager
 from main.models import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -17,32 +16,36 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 # from .send_sms import send_text_message
 from django.contrib.auth import logout
+from .helper_functions import verified_mail
 
-class Login(APIView):
-    permission_classes = [HasAPIKey]
-    authentication_classes = ()
-    www_authenticate_realm = "api"
-
-    throttle_scope = 'important'
-
+class Login(API_NON_VERIFIED_BASE):
     def post(self, request):
         username = request.data.get("username")
         password = request.data.get("password")
 
         user = authenticate(request, username=username, password=password)
         if user is not None and user.login_method == User.LoginMethod.EMAIL:
-            refresh = RefreshToken.for_user(user)
+            if verified_mail(user):
+                refresh = RefreshToken.for_user(user)
 
+                response_data = {
+                    "status": "success",
+                    "message": "Login successful",
+                    "data": {
+                        "access_token": str(refresh.access_token),
+                        "refresh_token": str(refresh),
+                    }
+                }
+                #------Login User------#
+                login(request, user)
+                return Response(response_data, status=status.HTTP_200_OK)
+            
             response_data = {
                 "status": "success",
-                "message": "Login successful",
-                "data": {
-                    "access_token": str(refresh.access_token),
-                    "refresh_token": str(refresh),
-                }
+                "message": "user not email verified",
+                "email": user.email,
             }
-            #------Login User------#
-            login(request, user)
+            
             return Response(response_data, status=status.HTTP_200_OK)
         
         error_data = {
@@ -52,13 +55,7 @@ class Login(APIView):
         }
         return Response(error_data, status=status.HTTP_401_UNAUTHORIZED)
 
-class PasswordResetView(APIView):
-    permission_classes = [HasAPIKey]
-    authentication_classes = ()
-    www_authenticate_realm = "api"
-
-    throttle_scope = 'important'
-  
+class PasswordResetView(API_NON_VERIFIED_BASE):
     def post(self,request):
         #send the otp to the user
         data = request.data
@@ -100,12 +97,7 @@ class PasswordResetView(APIView):
         return Response({"message":"Otp verification failed"},status=status.HTTP_403_FORBIDDEN)
     
     
-class PasswordResetChange(APIView):
-    permission_classes = [HasAPIKey]
-    authentication_classes = ()
-    www_authenticate_realm = "api"
-    throttle_scope = 'important'
-    
+class PasswordResetChange(API_NON_VERIFIED_BASE):
     def post(self,request):
         #confirm user has verified his otp
         otp_password_validate = self.request.session['otp_validation']
@@ -131,8 +123,7 @@ class PasswordResetChange(APIView):
             return Response({"message":"User with this email doesn't exist"},status=status.HTTP_404_NOT_FOUND)
         
         
-        
-class CheckVerificationToken(APIView):
+class CheckVerificationToken(API_NON_VERIFIED_BASE):
   permission_classes = [HasAPIKey]
   throttle_scope = 'important'
   
@@ -151,7 +142,7 @@ class CheckVerificationToken(APIView):
       return Response({"message":"Token is valid"},status=status.HTTP_200_OK)
   
   
-class LogoutView(APIView):
+class LogoutView(API_NON_VERIFIED_BASE):
     permission_classes = [HasAPIKey,IsAuthenticated]
     authentication_classes = [JWTAuthentication]
     www_authenticate_realm = "api"

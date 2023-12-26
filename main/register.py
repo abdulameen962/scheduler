@@ -17,10 +17,9 @@ from dj_rest_auth.registration.views import SocialLoginView
 from main.otp_generator import Otp_manager
 from main.models import *
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from .api_base import API_VERIFIED_BASE,API_NON_VERIFIED_BASE
 from rest_framework import status
 from django.conf import settings
-from rest_framework.permissions import IsAuthenticated
 from main.helper_functions import verified_mail,get_google_login
 from django.utils.html import strip_tags
 from django.core.mail import send_mail
@@ -30,10 +29,9 @@ from allauth.account.models import EmailAddress
 from dj_rest_auth.app_settings import api_settings
 from dj_rest_auth.models import TokenModel
 from dj_rest_auth.utils import jwt_encode
-from django.contrib.auth import login,authenticate
+from django.contrib.auth import login
 from rest_framework_simplejwt.tokens import RefreshToken
 from main.models import *
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
 otp_time_limit = int(settings.OTP_TIME_LIMIT)
 sensitive_post_parameters_m = method_decorator(
@@ -118,13 +116,7 @@ class RegisterView(CreateAPIView):
         except Exception:
             return Response({"message":"Something went wrong,otp couldn't be sent"},status=status.HTTP_201_CREATED)
         
-class GoogleLogin(APIView):
-    permission_classes = [HasAPIKey]
-    authentication_classes = ()
-    www_authenticate_realm = "api"
-
-    throttle_scope = 'important'
-    
+class GoogleLogin(API_NON_VERIFIED_BASE):
     def post(self,request):
         data = request.data
         token = data.get("token",None)
@@ -173,12 +165,7 @@ class GoogleLogin(APIView):
 
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-class generate_registration_otp(APIView):
-  permission_classes = [HasAPIKey,IsAuthenticated]
-  authentication_classes = [JWTAuthentication]
-  throttle_scope = 'important'
-  
-    
+class generate_registration_otp(API_VERIFIED_BASE):
   def has_permission(self,request,view):
         user = self.request.user
         if user.is_anonymous:

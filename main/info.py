@@ -1,7 +1,7 @@
 # from django.urls import reverse
 from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework import status
-from rest_framework.views import APIView
+from .api_base import API_VERIFIED_BASE
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -16,7 +16,7 @@ from .serializers import GoalSerializer,NotificationSerializer,TaskSerializer
 # notifications api
 # task api single
 
-class goal_info(APIView):
+class goal_info(API_VERIFIED_BASE):
     """_summary_
 
     Args:
@@ -25,8 +25,6 @@ class goal_info(APIView):
     Returns:
         General information of the user such as goals,tasks
     """
-    permission_classes = [HasAPIKey,IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
     serializer_classes = GoalSerializer
     
     def post(self,request):
@@ -42,9 +40,7 @@ class goal_info(APIView):
         return Response(goals,status=status.HTTP_200_OK)
     
     
-class task_api(APIView):
-    permission_classes = [HasAPIKey,IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+class task_api(API_VERIFIED_BASE):
     
     def post(self,request):
         # get a task under
@@ -109,7 +105,7 @@ class task_api(APIView):
             return Response({"message":"Task does not exist"},status=status.HTTP_400_BAD_REQUEST)
         
         
-class Filter_task(APIView):
+class Filter_task(API_VERIFIED_BASE):
     """_summary_
 
     Args:
@@ -120,9 +116,6 @@ class Filter_task(APIView):
     Returns:
         Tasks whether ongoing or completed of the user with the number requested
     """
-    
-    permission_classes = [HasAPIKey,IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
     
     def post(self,request):
         user = self.request.user
@@ -147,21 +140,17 @@ class Filter_task(APIView):
             return Response({"message":"Command not supported"},status=status.HTTP_400_BAD_REQUEST)
         
         
-class Task_creation(APIView):
-    permission_classes = [HasAPIKey,IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+class Task_creation(API_VERIFIED_BASE):
+    pass
 
 
-class goal_creation(APIView):
+class goal_creation(API_VERIFIED_BASE):
     pass
 
 
 from .helper_functions import compare_dates,timezone
 
-class Notification_api(APIView):
-    permission_classes = [HasAPIKey,IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
-    # serializer_classes = [NotificationSerializer]
+class Notification_api(API_VERIFIED_BASE):
     
     def post(self,request):
         user = self.request.user

@@ -15,13 +15,17 @@ from django.template.loader import render_to_string
 import requests
 
 
-def verified_mail(user):
+def verified_mail(user:User):
     """
     Check whether a user has a verified email
     """
+    if user.login_method != User.LoginMethod.EMAIL:
+        return True
+        
     res = False
     try:
-        emailuser = EmailAddress.objects.get(user=user)
+        emailuser = EmailAddress.objects.get_or_create(user=user)
+        emailuser = emailuser[0]
         if emailuser.verified:
             res = True
             
