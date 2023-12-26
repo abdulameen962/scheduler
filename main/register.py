@@ -212,7 +212,7 @@ class generate_registration_otp(API_VERIFIED_BASE):
 
             #send email to the user
             plain_message = strip_tags(html_message)
-            send_mail(message=plain_message, from_email=f"Handyman <{settings.EMAIL_HOST_USER}>",subject=header,recipient_list=[user.email],fail_silently=False,html_message=html_message)
+            send_mail(message=plain_message, from_email=f"Scheduler <{settings.EMAIL_HOST_USER}>",subject=header,recipient_list=[user.email],fail_silently=False,html_message=html_message)
             
             return Response({"message":"otp validated successfulyy"},status=status.HTTP_202_ACCEPTED)
         
