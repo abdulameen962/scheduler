@@ -31,13 +31,13 @@ class goal_info(APIView):
     authentication_classes = [JWTAuthentication]
     serializer_classes = GoalSerializer
     
-    def has_permission(self,request,view):
-        user = self.request.user
+    # def has_permission(self,request,view):
+    #     user = self.request.user
         
-        if user.is_anonymous:
-            return False
+    #     if user.is_anonymous:
+    #         return False
         
-        return verified_mail(user)
+    #     return verified_mail(user)
     
     def post(self,request):
         user = self.request.user
