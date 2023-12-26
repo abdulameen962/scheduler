@@ -1,5 +1,5 @@
 from rest_framework_simplejwt.tokens import RefreshToken
-from .api_base import API_NON_VERIFIED_BASE
+from .api_base import API_NON_VERIFIED_BASE,API_VERIFIED_BASE
 from django.contrib.auth import authenticate, login
 from rest_framework.response import Response
 from rest_framework import status
@@ -122,30 +122,12 @@ class PasswordResetChange(API_NON_VERIFIED_BASE):
             return Response({"message":"User with this email doesn't exist"},status=status.HTTP_404_NOT_FOUND)
         
         
-class CheckVerificationToken(API_NON_VERIFIED_BASE):
-  permission_classes = [HasAPIKey]
-  throttle_scope = 'important'
-  
-  def has_permission(self,request,view):
-        user = self.request.user
-        if user.is_anonymous:
-            return False
-            
-        #check if user is logged in but not verified mail
-        elif user.is_authenticated:
-            return True
-
-        return False
-    
+class CheckVerificationToken(API_VERIFIED_BASE):
   def get(self,request):
       return Response({"message":"Token is valid"},status=status.HTTP_200_OK)
   
   
-class LogoutView(API_NON_VERIFIED_BASE):
-    permission_classes = [HasAPIKey,IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
-    www_authenticate_realm = "api"
-    
+class LogoutView(API_VERIFIED_BASE):
     def post(self,request):
         logout(request)
             
