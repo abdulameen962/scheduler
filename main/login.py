@@ -25,26 +25,25 @@ class Login(API_NON_VERIFIED_BASE):
 
         user = authenticate(request, username=username, password=password)
         if user is not None and user.login_method == User.LoginMethod.EMAIL:
-            if verified_mail(user):
-                refresh = RefreshToken.for_user(user)
-
-                response_data = {
-                    "status": "success",
-                    "message": "Login successful",
-                    "data": {
-                        "access_token": str(refresh.access_token),
-                        "refresh_token": str(refresh),
-                    }
-                }
-                #------Login User------#
-                login(request, user)
-                return Response(response_data, status=status.HTTP_200_OK)
+            refresh = RefreshToken.for_user(user)
             
             response_data = {
                 "status": "success",
-                "message": "user not email verified",
-                "email": user.email,
+                "message": "Login successful",
+                "data": {
+                    "access_token": str(refresh.access_token),
+                    "refresh_token": str(refresh),
+                }
             }
+            
+            #------Login User------#
+            login(request, user)
+            
+            if verified_mail(user):
+                return Response(response_data, status=status.HTTP_200_OK)
+            
+            response_data["message"] =  "user not email verified"
+            response_data["email"] = user.email
             
             return Response(response_data, status=status.HTTP_200_OK)
         
