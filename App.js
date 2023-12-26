@@ -341,7 +341,7 @@ function Main() {
       Toast.show({
         type: `error`,
         text1:"Internet connection",
-        text2: "You are currently offline and some functions might not wotrk",
+        text2: "You are currently offline and some functions might not work",
         position:"bottom",
         bottomOffset: 30,
         visibilityTime: 6000,

@@ -205,7 +205,8 @@ export const userGoals = async (store,goalFunc=getGoals) => {
         // dispatch({type:OTP_RESEND,payload:"Otp resent sucessfully,enter the otp sent to your mail"})
     }
     catch(error){
-        console.log(error.message)
+        
+        throw new Error(error.message);
         // dispatch({type:OTP_REJECTED,payload:error.message})
     }
 }

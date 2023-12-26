@@ -16,6 +16,7 @@ import {MyLoader} from "../nativeHelpers";
 import { FlashList, useBlankAreaTracker } from '@shopify/flash-list'
 import taskSingle from "../components/taskSingle";
 import {width} from "../components/homeHeader";
+import Toast from "react-native-toast-message";
 
 class Home extends React.Component{
     static propTypes = {
@@ -29,34 +30,49 @@ class Home extends React.Component{
     }
 
     getGoals = async () => {
-        const result = await userGoals(store);
-        const returnedData = result;
-        for (let i = 0; i < returnedData.length; i++) {
-            const element = returnedData[i];
-            element["title"] = truncateString(element["title"],12);
-            switch (i) {
-                case 0:
-                    element["color"] = "rgba(219, 212, 254,.6)";
-
-                    break;
-
-                case 1:
-                    element["color"] = "rgba(218,255,247,.8)";
-
-                    break;
-
-                case 2:
-                    element["color"] = "rgba(230,242,158,.6)";
-
-                    break;
-            
-                default:
-                    break;
+        try{
+            const result = await userGoals(store);
+            const returnedData = result;
+            for (let i = 0; i < returnedData.length; i++) {
+                const element = returnedData[i];
+                element["title"] = truncateString(element["title"],12);
+                switch (i) {
+                    case 0:
+                        element["color"] = "rgba(219, 212, 254,.6)";
+    
+                        break;
+    
+                    case 1:
+                        element["color"] = "rgba(218,255,247,.8)";
+    
+                        break;
+    
+                    case 2:
+                        element["color"] = "rgba(230,242,158,.6)";
+    
+                        break;
+                
+                    default:
+                        break;
+                }
             }
+            this.setState({
+                goals: returnedData
+            })
         }
-        this.setState({
-            goals: returnedData
-        })
+        catch(e){
+            Toast.show({
+                type: `error`,
+                text1:"Error",
+                text2: `${e}`,
+                position:"bottom",
+                bottomOffset: 30,
+                visibilityTime: 6000,
+                // visibilityTime: 7000
+                // topOffset: 30,
+            })
+        }
+
     }
 
     getOngoingTasks = async () => {
