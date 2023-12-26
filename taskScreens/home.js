@@ -65,7 +65,7 @@ class Home extends React.Component{
                 type: `error`,
                 text1:"Error",
                 text2: `${e}`,
-                position:"bottom",
+                position:"top",
                 bottomOffset: 30,
                 visibilityTime: 6000,
                 // visibilityTime: 7000
@@ -76,8 +76,22 @@ class Home extends React.Component{
     }
 
     getOngoingTasks = async () => {
-        const ongoingTaks = await onGoingTasks(store);
-        this.setState({ongoingTaks})
+        try{
+            const ongoingTaks = await onGoingTasks(store);
+            this.setState({ongoingTaks})
+        }
+        catch(e){
+            Toast.show({
+                type: `error`,
+                text1:"Error",
+                text2: `${e}`,
+                position:"top",
+                bottomOffset: 30,
+                visibilityTime: 6000,
+                // visibilityTime: 7000
+                // topOffset: 30,
+            })
+        }
     }
 
     updateProfile = async () => {

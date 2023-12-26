@@ -342,7 +342,7 @@ function Main() {
         type: `error`,
         text1:"Internet connection",
         text2: "You are currently offline and some functions might not work",
-        position:"bottom",
+        position:"top",
         bottomOffset: 30,
         visibilityTime: 6000,
         // visibilityTime: 7000
