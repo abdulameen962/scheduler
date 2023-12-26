@@ -1,15 +1,25 @@
-import React from "react"
+import React from"react"
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Spinner,View,Text,Pressable,Heading,Image,Button,ButtonText } from "@gluestack-ui/themed";
+import styles from "../styles";
+import { tryParseDateFromString } from "../helpfulFunc";
 
-const taskSingle = ({item}:any) => {
-    const {goal,labels,prob_completion,title,start_time_date,deadline_date } = item;
+const taskSingle = ({item}) => {
+    let {goal,labels,prob_completion,title,start_time_date,deadline_date } = item;
+    let mainDate = tryParseDateFromString(start_time_date);
+    const monthOfYear = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const endDate = `${monthOfYear[mainDate.getMonth()]} ${mainDate.getFullYear()}`;
+    start_time_date = `${mainDate.toLocaleTimeString()}`;
+    mainDate = tryParseDateFromString(deadline_date);   
+    deadline_date = `${tryParseDateFromString(deadline_date).toLocaleTimeString()}`;
+    // console.log(mainDate.getUTCHours());
+    // console.log(mainDate.getUTCMinutes());
     const {goal_image} = goal;
     return (
         <View
             mb="$4"
             rounded="$2xl"
-            paddingVertical="$7"
+            paddingVertical="$5"
             paddingHorizontal="$6"
             backgroundColor={"rgba(255, 255, 255,.8)"}
         >
@@ -42,25 +52,25 @@ const taskSingle = ({item}:any) => {
                     <Text> {prob_completion * 100}%</Text>
                 </View>
             </View>
-            <View>
-                <Heading>{title}</Heading>
-                <View style={[{flexDirection:"row"}]}>
-                    <MaterialCommunityIcons name="clock-outline" color="black" size={25} />
-                    <View>
-                        <Text>{start_time_date} - {deadline_date}</Text>
-                    </View>
+            <View mt="$4">
+                <Heading size="$sm">{title}</Heading>
+                <View style={[{flexDirection:"row",alignItems:"center"}]} mt="$3">
+                    <MaterialCommunityIcons name="clock-outline" color="#B0B0B0" size={25} />
+                    <Text color="$secondary300" ml="$3">{start_time_date} - {deadline_date}</Text>
                 </View>
             </View>
-            <View style={[styles.orContainer]}>
-                <View>
+            <View style={[styles.orContainer]} pt="$5">
+                <View style={[{flexDirection:"row"}]}>
                     <Text>Due date:</Text>
-                    <Text>{deadline}</Text>
+                    <Text bold> {endDate}</Text>
                 </View>
                 <View>
                     <Image
                         alt={title}
                         source={{uri: goal_image}}
                         resizeMode="contain"
+                        width={30}
+                        height={30}
                     />
                 </View>
             </View>

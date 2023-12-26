@@ -40,3 +40,28 @@ export function truncateString(str, maxLength) {
 
     return result;
 }  
+
+// fixed format dd-mm-yyyy
+function dateString2Date(dateString) {
+    const dt = dateString.split(/\-|\s/);
+    return new Date(dt.slice(0, 3).reverse().join('-') + ' ' + dt[3]);
+  }
+  
+// multiple formats (e.g. yyyy/mm/dd (ymd) or mm-dd-yyyy (mdy) etc.)
+export function tryParseDateFromString(dateStringCandidateValue, format = "ymd") {
+    const candidate = (dateStringCandidateValue || ``)
+      .split(/[ :\-\/]/g).map(Number).filter(v => !isNaN(v));
+    const toDate = () => {
+      format = [...format].reduce((acc, val, i) => ({ ...acc,  [val]: i }), {});
+      const parts = 
+        [candidate[format.y], candidate[format.m] - 1, candidate[format.d] ]
+          .concat(candidate.length > 3 ? candidate.slice(3) : []);
+      const checkDate = d => d.getDate && 
+        ![d.getFullYear(), d.getMonth(), d.getDate()]
+          .find( (v, i) => v !== parts[i] ) && d || undefined;
+      
+      return checkDate( new Date(Date.UTC(...parts)) );
+    };
+  
+    return candidate.length < 3 ? undefined : toDate();
+  }

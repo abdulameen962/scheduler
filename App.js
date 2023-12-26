@@ -34,6 +34,7 @@ import {
   Inter_900Black, } from "@expo-google-fonts/inter";
 
 import registerAllTasks from "./backgroundtasks/handler";
+import { schedulePushNotification } from './nativeHelpers';
 // import { unregisterBackgroundFetchAsync } from './backgroundtasks/notifications';
 // import GetNav from './layouts/appLayout';
 
@@ -43,14 +44,6 @@ import registerAllTasks from "./backgroundtasks/handler";
 // "ViewPropTypes will be removed",
 // "ColorPropType will be removed",
 // ])
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
-});
 
 const Stack = createNativeStackNavigator();
 
@@ -89,17 +82,6 @@ class App extends React.Component {
     token: null,
     notification: null,
     navigation: null,
-  }
-
-  schedulePushNotification = async(header,body,extraData={ data: 'goes here' }) => {
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: header,
-        body: body,
-        data: extraData,
-      },
-      trigger: { seconds: 1 },
-    });
   }
 
   setNavigation = (navigation) => {
@@ -187,7 +169,7 @@ class App extends React.Component {
   }
 
   sendNotification = async (header,body,extraData={ data: 'goes here' }) => {
-    await this.schedulePushNotification(header,body,extraData);
+    await schedulePushNotification(header,body,extraData);
   }
 
   startNotification = () => {
@@ -221,6 +203,9 @@ class App extends React.Component {
         if (navigation) {
           navigation.navigate(url); 
         }
+      }
+      else{
+        navigation.navigate(this.state.initialRouteName ? this.state.initialRouteName : "Home");
       }
     });
 
@@ -257,59 +242,65 @@ class App extends React.Component {
 
   render(){
     return(
-      <>
-        <NavigationContainer
-          fallback={<PageLayout><Spinner size="large" /></PageLayout>}
-        >
-          { 
-            this.state.userAuth == false ? (
-              <>
-                {
-                  this.state.hasCheckedCarousel == false ? (
-                    <Stack.Navigator screenOptions={{headerShown:false,animation:"fade_from_bottom"}} initialRouteName={this.state.initialRouteName}>
-                        <Stack.Screen name="Carousel" >
-                          {(props) => <Carousel {...props} moveToLogin={this.updateState}  />}
-                        </Stack.Screen>
-                    </Stack.Navigator>
-                  ):(
-                    <Stack.Navigator screenOptions={{headerShown:false,animation:"fade_from_bottom"}} initialRouteName={this.state.initialRouteName}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <BottomSheetModalProvider>
+              <NavigationContainer
+                fallback={<PageLayout><Spinner size="large" /></PageLayout>}
+              >
+                { 
+                  this.state.userAuth == false ? (
+                    <>
                       {
-                        this.state.registerDone == false ? (
-                          <>
-                            <Stack.Screen name="Login">
-                              {(props) => <Login {...props} updateState={this.updateState} />}
-                            </Stack.Screen>
-
-                            <Stack.Screen name="Signup">
-                              {(props) => <Signup {...props} updateState={this.updateState} sendNotification={this.sendNotification}  />}
-                            </Stack.Screen>
-                          </>
+                        this.state.hasCheckedCarousel == false ? (
+                          <Stack.Navigator screenOptions={{headerShown:false,animation:"fade_from_bottom"}} initialRouteName={this.state.initialRouteName}>
+                              <Stack.Screen name="Carousel" >
+                                {(props) => <Carousel {...props} moveToLogin={this.updateState}  />}
+                              </Stack.Screen>
+                          </Stack.Navigator>
                         ):(
-                          <Stack.Screen name="VerifyOtp">
-                            {(props) => <VerifyOtp {...props} updateState={this.updateState} sendNotification={this.sendNotification} />}
-                          </Stack.Screen>
+                          <Stack.Navigator screenOptions={{headerShown:false,animation:"fade_from_bottom"}} initialRouteName={this.state.initialRouteName}>
+                            {
+                              this.state.registerDone == false ? (
+                                <>
+                                  <Stack.Screen name="Login">
+                                    {(props) => <Login {...props} updateState={this.updateState} />}
+                                  </Stack.Screen>
+
+                                  <Stack.Screen name="Signup">
+                                    {(props) => <Signup {...props} updateState={this.updateState} sendNotification={this.sendNotification}  />}
+                                  </Stack.Screen>
+                                </>
+                              ):(
+                                <Stack.Screen name="VerifyOtp">
+                                  {(props) => <VerifyOtp {...props} updateState={this.updateState} sendNotification={this.sendNotification} />}
+                                </Stack.Screen>
+                              )
+                            }
+                            <Stack.Screen name="Forgot" component={ForgotPassword} />
+                            <Stack.Screen name="ForgotOtp" component={ForgotOtp} />
+                            <Stack.Screen name="ForgotPasswordEmail" component={ForgotPasswordEmail} />
+                          </Stack.Navigator>
+
                         )
                       }
-                      <Stack.Screen name="Forgot" component={ForgotPassword} />
-                      <Stack.Screen name="ForgotOtp" component={ForgotOtp} />
-                      <Stack.Screen name="ForgotPasswordEmail" component={ForgotPasswordEmail} />
-                    </Stack.Navigator>
-
+                      </>
+                  ):(
+                    <HomeScreen updateState={this.updateState}/>
                   )
                 }
-                </>
-            ):(
-              <HomeScreen updateState={this.updateState}/>
-            )
-          }
-          {
-            this.state.token && this.state.notification && (
-              <GetNav setNavigation={this.setNavigation}/>
-            )
-          }
-        </NavigationContainer>
-        <Toast config={toastConfig} />
-      </>
+                {
+                  this.state.token && this.state.notification && (
+                    <GetNav setNavigation={this.setNavigation}/>
+                  )
+                }
+              </NavigationContainer>
+              <Toast config={toastConfig} />
+            </BottomSheetModalProvider>
+          </GestureHandlerRootView>
+        </PersistGate>
+      </Provider>
     )
   }
 }
@@ -361,17 +352,10 @@ function Main() {
   }
   
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <BottomSheetModalProvider>
-            <GluestackUIProvider config={config}>
-                <App/>
-              </GluestackUIProvider>
-          </BottomSheetModalProvider>
-        </GestureHandlerRootView>
-      </PersistGate>
-    </Provider>
+      <GluestackUIProvider config={config}>
+          <App/>
+        </GluestackUIProvider>
+      
   );
 }
 

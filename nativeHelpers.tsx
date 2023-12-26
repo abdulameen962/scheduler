@@ -6,7 +6,7 @@ import ContentLoader, { Rect, Circle, Path } from "react-content-loader/native"
  * For checking network connection
  * @returns {boolean}
  */
-export const checkConnection = () => {
+export const checkConnection = async () => {
     NetInfo.fetch().then(state => {
         return state.isConnected;
     })
@@ -46,3 +46,31 @@ export const MyLoader = (props:LoaderProps) => (
       <Rect x="230" y="13" rx="8" ry="8" width="92" height="13" />
     </ContentLoader>
 ) 
+
+import * as Notifications from 'expo-notifications';
+
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+    }),
+});
+
+/**
+ * Used for sending push push notification to the user
+ * @param header should be the header of the message
+ * @param body = all the body of the message
+ * @param extraData for data stuff,if you want to pass an app,pass in the underlying data object
+ * @example {data: {url: 'home'}}
+ */
+export const schedulePushNotification = async(header:string,body:string,extraData={ data: 'goes here' }) => {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: header,
+        body: body,
+        data: extraData,
+      },
+      trigger: { seconds: 1 },
+    });
+}

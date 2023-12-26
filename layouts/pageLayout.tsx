@@ -1,10 +1,11 @@
 import React,{useRef} from "react";
 import PropTypes from "prop-types"
-import { View,ScrollView } from "react-native";
+import { View } from "react-native";
 import styles from "../styles";
 import { StatusBar } from 'expo-status-bar';
 import Alerter from "../components/alerter";
 import AddTask from "../taskScreens/addTask";
+import Animated, { interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset } from "react-native-reanimated";
 import 
     {
     useBottomSheetModal,  
@@ -14,9 +15,24 @@ import
 interface Props {
     children: React.ReactNode;
     route: any;
+    navigation: any;
+    headerShow: boolean;
 }
 
 const PageLayout = (props: Props) => {
+    const scrollRef = useAnimatedRef<Animated.ScrollView>();
+    const scrollOfset = useScrollViewOffset(scrollRef);
+
+    const headerAnimatedStyle = useAnimatedStyle(() => {
+        return {
+            opacity: interpolate(
+                scrollOfset.value,
+                [0,200],
+                [0.1,1]
+            )
+        }
+    })
+
     // ref
     const bottomSheetRef = useRef<BottomSheetModal>(null);
     const {dismiss} = useBottomSheetModal();
@@ -30,6 +46,12 @@ const PageLayout = (props: Props) => {
     const handleDismissPress = () => bottomSheetRef.current?.dismiss();
 
     const {children,route} = props;
+    if (props.headerShow) {
+        props.navigation.setOptions({
+            headerBackground: () => <Animated.View style={[styles.headerBackground,headerAnimatedStyle]}/>
+        })  
+    }
+
     if (route) {
         if (route.params !== undefined ) {
             const {showTask} = route.params;
@@ -41,15 +63,17 @@ const PageLayout = (props: Props) => {
     }
 
     return (
-        <Alerter>
-            <AddTask ref={bottomSheetRef}/>
-            <View style={[styles.container,styles.greyBack]}>
-                <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
-                    {children}
-                    <StatusBar style="auto" />
-                </ScrollView>
-            </View>
-        </Alerter>
+        <>
+            <Alerter>
+                <AddTask ref={bottomSheetRef}/>
+                <View style={[styles.containerLayout,styles.greyBack]}>
+                    <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
+                        {children}
+                        <StatusBar style="auto" />
+                    </Animated.ScrollView>
+                </View>
+            </Alerter>
+        </>
     )
 }
 

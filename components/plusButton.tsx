@@ -20,7 +20,7 @@ const CustomPlusButton = ({children,onPress}: ButtonProp) => {
             height:size,
             borderRadius: size / 2,
             zIndex: 4,
-            backgroundColor: "rgba(243, 245, 247,.4)",
+            // backgroundColor: "rgba(243, 245, 247,.4)",
         }}
         >
             <Pressable

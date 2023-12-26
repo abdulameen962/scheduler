@@ -1,5 +1,8 @@
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
+import {schedulePushNotification} from "../nativeHelpers";
+import { store } from '../redux/store';
+import { getNotifications } from '../redux/actions';
 
 export const BACKGROUND_NOTIFICATION_TASK = 'background-notification';
 
@@ -7,8 +10,13 @@ export const BACKGROUND_NOTIFICATION_TASK = 'background-notification';
 // Note: This needs to be called in the global scope (e.g outside of your React components)
 TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, async () => {
     const now = Date.now();
-  
-    console.log(`Got background fetch call at date: ${new Date(now).toISOString()}`);
+    
+    const results = await getNotifications(store);
+    for (let i = 0; i < results.length; i++) {
+        const element = results[i];
+        const {body,header} = element;
+        await schedulePushNotification(header,body)
+    }
   
     // Be sure to return the successful result type!
     return BackgroundFetch.BackgroundFetchResult.NewData;

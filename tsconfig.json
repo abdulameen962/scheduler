@@ -4,5 +4,5 @@
   "include": [
     "**/*.ts",
     "**/*.tsx"
-, "styles.js"  ]
+, "styles.js", "components/homeHeader.js", "components/taskSingle.js"  ]
 }

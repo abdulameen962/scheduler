@@ -3,71 +3,35 @@ import {TextInput,Pressable,Image,View} from "react-native"
 import PropTypes from "prop-types";
 import styles from "./formstyles";
 import { Asset } from 'expo-asset';
+import Icon from "./icon";
 
-const Icon = props => {
-    let src;
-    if (props.abled && props.icon.activeSrc) {
-        src = props.icon.activeSrc;
+
+const InputCustom = props => {
+    const {CustomInput} = props;
+    const Element = CustomInput;
+
+    // nullify the input so it wont affect
+    props[CustomInput] = null;
+
+    if (Element) {
+        return (
+            <Element
+                { ...props}
+            />
+        )
     }
+
     else{
-        src = props.icon.src;
+        return (
+            <TextInput
+                {...props}
+            />
+        )
     }
-    // const [img,changImg] = useState(src);
-    // const [state,changeState] = useState(true);
-    // const changeVisibility = () => {
-    //     const {clickedImg} = props.icon;
-    //     if (clickedImg) {
-    //         changImg(img === src ? clickedImg:src);
-    //         changeState(!state);
-    //         // this.setState(prevState => ({
-    //         //     showPassword:{
-    //         //         show: !prevState.showPassword.show,
-    //         //         src: prevState.showPassword.src == require("../assets/eye.png") ? require("../assets/eye-cancel.png"): require("../assets/eye.png"),
-    //         //     }
-    //         // }))
-    //     }
-    // }
-
-    return (
-        <>
-            {
-                props.icon.clickable ? (
-                    <>
-                        {
-                            props.icon.onClick == "showpassword" ? (
-                                <Pressable onPress={() => props.click()}>
-                                    <Image
-                                        style = {styles.inputIcon}
-                                        source={props.img}
-                                        {...props.icon.attributes}
-                                    />                        
-                                </Pressable>
-                            ):
-                            (
-                                <Pressable onPress={props.icon.onClick}>
-                                    <Image
-                                        style = {styles.inputIcon}
-                                        source={src}
-                                        {...props.icon.attributes}
-                                    />                        
-                                </Pressable>
-                            )
-                        }
-                    </>
-                ):(
-                    <Image
-                        style = {styles.inputIcon}
-                        source={src}
-                        {...props.icon.attributes}
-                    />         
-                )
-            }        
-        </>
-    )
 }
 
-Icon.propTypes = {
-    icon: PropTypes.object.isRequired,
+InputCustom.propTypes = {
+    CustomInput: PropTypes.node || null,
 }
 
 /***
@@ -153,86 +117,98 @@ class FormSingle extends React.Component{
     }
 
     render(){
+        const {CustomInput} = this.props;
+        const {Label} = this.props.input;
         return (
-            <View style={this.getStyle()}>
+            <View>
                 {
-                    this.props.input.leftIcon && (
-                        <Icon
-                            icon={this.props.input.leftIcon} {...this.state}
-                        />
+                    Label && (
+                        <Label />
                     )
                 }
-                {
-                    this.props.input.rightIcon ? (
-                        <>
-                            {
-                                this.props.input.rightIcon.onClick == "showpassword" && this.state.showPassword ? (
-                                    <TextInput
-                                        style={styles.inputArea}
-                                        {...this.props.input.attributes}
-                                        // onKeyPress={this.toggleState(true)}
-                                        onFocus={() => {
-                                        this.toggleState(true)
-                                        }}
-                                        onBlur={() => {
-                                            this.toggleState(false)
-                                        }}
-                                        secureTextEntry = {this.state.showPassword.show}
-                                        // multiline={true}
-                                        // numberOfLines={4}
-                                        // onPressIn={this.toggleState(true)}
-                                        // onPressOut={this.toggleState(false)}
-                                    />
-                                ):
-                                (
-                                    <TextInput
-                                        style={styles.inputArea}
-                                        {...this.props.input.attributes}
-                                        onFocus={() => {
-                                        this.toggleState(true)
-                                        }}
-                                        onBlur={() => {
-                                            this.toggleState(false)
-                                        }}
-                                    />
-                                )
-                            }
-                        </>
-                    ):
-                    (
-                        <TextInput
-                            style={styles.inputArea}
-                            {...this.props.input.attributes}
-                            onFocus={() => {
-                            this.toggleState(true)
-                            }}
-                            onBlur={() => {
-                                this.toggleState(false)
-                            }}
-                        />
-                    )
-                }
-                {
-                    this.props.input.rightIcon && (
-                        <>
-                            {
-                                this.props.input.rightIcon.onClick == "showpassword" && this.state.showPassword ? (
-                                    <Icon
-                                        icon={this.props.input.rightIcon} 
-                                        {...this.state}
-                                        img={this.state.showPassword.src} 
-                                        click={this.initializePassword}
-                                    />
-                                ):
-                                (
-                                    <Icon
-                                        icon={this.props.input.rightIcon} {...this.state}
-                                    />
-                                )
-                            }
-                        </>
-                    )
-                }
+                <View style={this.getStyle()}>
+                    {
+                        this.props.input.leftIcon && (
+                            <Icon
+                                icon={this.props.input.leftIcon} {...this.state}
+                            />
+                        )
+                    }
+                    {
+                        this.props.input.rightIcon ? (
+                            <>
+                                {
+                                    this.props.input.rightIcon.onClick == "showpassword" && this.state.showPassword ? (
+                                        <InputCustom
+                                            CustomInput = {CustomInput}
+                                            style={styles.inputArea}
+                                            {...this.props.input.attributes}
+                                            // onKeyPress={this.toggleState(true)}
+                                            onFocus={() => {
+                                            this.toggleState(true)
+                                            }}
+                                            onBlur={() => {
+                                                this.toggleState(false)
+                                            }}
+                                            secureTextEntry = {this.state.showPassword.show}
+                                            // multiline={true}
+                                            // numberOfLines={4}
+                                            // onPressIn={this.toggleState(true)}
+                                            // onPressOut={this.toggleState(false)}
+                                        />
+                                    ):
+                                    (
+                                        <InputCustom
+                                            CustomInput = {CustomInput}
+                                            style={styles.inputArea}
+                                            {...this.props.input.attributes}
+                                            onFocus={() => {
+                                            this.toggleState(true)
+                                            }}
+                                            onBlur={() => {
+                                                this.toggleState(false)
+                                            }}
+                                        />
+                                    )
+                                }
+                            </>
+                        ):
+                        (
+                            <InputCustom
+                                CustomInput = {CustomInput}
+                                style={styles.inputArea}
+                                {...this.props.input.attributes}
+                                onFocus={() => {
+                                this.toggleState(true)
+                                }}
+                                onBlur={() => {
+                                    this.toggleState(false)
+                                }}
+                            />
+                        )
+                    }
+                    {
+                        this.props.input.rightIcon && (
+                            <>
+                                {
+                                    this.props.input.rightIcon.onClick == "showpassword" && this.state.showPassword ? (
+                                        <Icon
+                                            icon={this.props.input.rightIcon} 
+                                            {...this.state}
+                                            img={this.state.showPassword.src} 
+                                            click={this.initializePassword}
+                                        />
+                                    ):
+                                    (
+                                        <Icon
+                                            icon={this.props.input.rightIcon} {...this.state}
+                                        />
+                                    )
+                                }
+                            </>
+                        )
+                    }
+                </View>
             </View>
         )
     }

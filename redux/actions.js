@@ -9,7 +9,9 @@ import { login,
     getGoals,
     getProfile,
     logoutApi,
-    getOngoingTasks
+    getOngoingTasks,
+    predictWord,
+    getCurrentNotifications
 } from '../api';
 import { getToken } from '../storeapis';
 import { getRandom } from '../helpfulFunc';
@@ -38,6 +40,7 @@ export const OTP_FORGOT_CONFIRM_FULFILLED = "OTP FORGOT CONFIRM FULFILLED"
 export const CLEAR_MESSSAGES = "CLEAR_MESSSAGES"
 export const SET_NOTIFICATION_TOKEN = "SET_NOTIFICATION_TOKEN"
 export const USER_DETAILS = "USER_DETAILS"
+export const NOT_EMAIL_VERIFIED = "NOT EMAIL VERIFIED"
 
 // action creators
 export const updateUser = update => ({
@@ -54,15 +57,26 @@ export const updateCarousel = update => ({
 export const loginUser = (username,password,loginFn=login) => async dispatch => {
     dispatch({type:LOG_IN_SENT,payload:""})
     try{
-        const token = await loginFn(username,password)
-        const {access_token,refresh_token} = token;
-        let accessToken = access_token;
-        let refreshToken = refresh_token;
-        const onboardDone = true;
-        const registerDone = true;
-        const successMessage = "Logged in sucessfully"
-        const payload = {accessToken,refreshToken,registerDone,onboardDone,errMessage:null,successMessage}
-        dispatch({type:LOG_IN_FULFILLED,payload})
+        const result = await loginFn(username,password);
+        const {message} = result;
+        if (message == 'user not email verified') {
+            const {email} = result;
+            dispatch({type:NOT_EMAIL_VERIFIED,payload:{email,message:"Your email isn't verified,pls click to resend"}})
+        }
+        else{
+            const {data} = result;
+            const {access_token,refresh_token} = data;
+            let accessToken = access_token;
+            let refreshToken = refresh_token;
+            const onboardDone = true;
+            const registerDone = true;
+            const successMessage = "Logged in sucessfully"
+            const payload = {accessToken,refreshToken,registerDone,onboardDone,errMessage:null,successMessage}
+            dispatch({type:LOG_IN_FULFILLED,payload})
+    
+            // // get profile here
+            getImmediateProfile(access_token,dispatch);
+        }
     }
     catch (error)
     {
@@ -85,6 +99,8 @@ export const googleApi = (token,googleFunc=googleEntry) => async dispatch => {
         const payload = {accessToken,refreshToken,registerDone,onboardDone,errMessage:null,successMessage}
         dispatch({type:LOG_IN_FULFILLED,payload})
 
+        // // get profile here
+        getImmediateProfile(access_token,dispatch);
         return true;
     }
     catch(error){
@@ -112,6 +128,9 @@ export const confirmRegisterOtp = (store,otp,otpFunc=confirmOtp) => async dispat
         const authCode = await getToken(store,resetAcessToken,logoutUser);
         await otpFunc(otp,authCode);
         dispatch({type:OTP_CONFIRM_FULFILLED,payload:""})
+
+        // get profile here
+        return getImmediateProfile(false,dispatch,store);
     }
     catch(error){
         // const {messages} = error.message[0];
@@ -134,16 +153,15 @@ export const resendOtpVerification = (store,resendFunc=resendOtp) => async dispa
     }
 }
 
-export const userProfile = (store,profileFunc=getProfile) => async dispatch =>  {
-    // dispatch({type:OTP_CONFIRM_SENT,payload:""})
-    const mainStore = store.getState();
-    const {profile} = mainStore.userProfile;
-    if (profile) {
-        return profile;
-    }
-
+const getImmediateProfile = async (authName=false,dispatch,store=null,profileFunc=getProfile) => {
     try{
-        const authCode = await getToken(store,resetAcessToken,logoutUser);
+        let authCode;
+        if (authName) {
+            authCode = authName;
+        }
+        else{
+            authCode = await getToken(store,resetAcessToken,logoutUser);
+        }
         const result = await profileFunc(authCode);
         const {email,first_name,last_name,username} = result;
         const data = {email,first_name,last_name,username}
@@ -158,6 +176,17 @@ export const userProfile = (store,profileFunc=getProfile) => async dispatch =>  
         dispatch({type:OTP_REJECTED,payload:error.message});
         return;
     }
+}
+
+export const userProfile = (store,profileFunc=getProfile) => async dispatch =>  {
+    // dispatch({type:OTP_CONFIRM_SENT,payload:""})
+    const mainStore = store.getState();
+    const {profile} = mainStore.userProfile;
+    if (profile) {
+        return profile;
+    }
+
+    return await getImmediateProfile(false,dispatch,store,profileFunc);
 }
 
 export const userGoals = async (store,goalFunc=getGoals) => {
@@ -178,19 +207,38 @@ export const userGoals = async (store,goalFunc=getGoals) => {
 }
 
 export const onGoingTasks = async (store,goalFunc=getOngoingTasks) => {
-    // dispatch({type:OTP_CONFIRM_SENT,payload:""})
     try{
         const authCode = await getToken(store,resetAcessToken,logoutUser);
         const result = await goalFunc(authCode,"ongoing",8);
 
-        // console.log(result);
-
         return result;
-        // dispatch({type:OTP_RESEND,payload:"Otp resent sucessfully,enter the otp sent to your mail"})
     }
     catch(error){
         console.log(error.message)
-        // dispatch({type:OTP_REJECTED,payload:error.message})
+    }
+}
+
+export const wordPredict = async (store,sentence,word=null,predictor=predictWord) => {
+    try{
+        const authCode = await getToken(store,resetAcessToken,logoutUser);
+        const result = word !== null? await predictor(authCode,sentence,word) : await predictor(authCode,sentence);
+
+        return result;
+    }
+    catch(error){
+        console.log(error.message)
+    }
+}
+
+export const getNotifications = async (store,notifyFunc=getCurrentNotifications) => {
+    try{
+        const authCode = await getToken(store,resetAcessToken,logoutUser);
+        const result = await notifyFunc(authCode);
+
+        return result;
+    }
+    catch(error){
+        console.log(error.message)
     }
 }
 

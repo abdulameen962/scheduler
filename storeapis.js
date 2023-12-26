@@ -1,5 +1,5 @@
 import {EXPO_PUBLIC_API_KEY,EXPO_PUBLIC_BASE_URL} from "@env"
-
+import {checkConnection} from "./nativeHelpers"
 
 const BASE_URL = EXPO_PUBLIC_BASE_URL
 const API_KEY = EXPO_PUBLIC_API_KEY
@@ -20,8 +20,8 @@ export const getToken = async (store,changeFunc,logoutUser=null) => {
             store.dispatch(changeFunc(accessToken))
         }
         catch(error){
-            console.log(error.message);
-            if (logoutUser) {
+            const isOnline = await checkConnection();
+            if (logoutUser && isOnline) {
                 store.dispatch(logoutUser())
                 const message = "Your session has expired,kindly login again"
                 throw new Error(message);

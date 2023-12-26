@@ -54,8 +54,7 @@ export const login = async (username,password) => {
     }
     const header = {}
     const result = await BASE_FUNCTION(url,method,body,header,true);
-    const {data} = result;
-    return data;
+    return result;
 }
 
 export const googleEntry = async token => {
@@ -97,6 +96,37 @@ export const getGoals = async (authCode,is_completed=null,num=null) => {
 
     const body = {
         num,is_completed
+    }
+
+    const result = await BASE_FUNCTION(url,method,body,header,true);
+    return result;
+}
+
+export const predictWord = async (authCode,sentence,word=1) => {
+    const url = "predict-word/";
+    const method = "POST";
+    const header = {
+        "Authorization":`Bearer ${authCode}`
+    }
+
+    const body = {
+        sentence,word
+    }
+
+    const result = await BASE_FUNCTION(url,method,body,header,true);
+    const newWord = result.word;
+    return newWord;
+}
+
+export const getCurrentNotifications = async authCode => {
+    const url = "notification/";
+    const method = "POST";
+    const header = {
+        "Authorization":`Bearer ${authCode}`
+    }
+
+    const body = {
+        command: "newest"
     }
 
     const result = await BASE_FUNCTION(url,method,body,header,true);

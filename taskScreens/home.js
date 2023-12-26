@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import { Spinner,View,Text,Pressable,Heading,Image,Button,ButtonText } from "@gluestack-ui/themed";
 import { TouchableOpacity,Dimensions,ScrollView } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+// import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { truncateString } from "../helpfulFunc";
 // import { Pre } from "@expo/html-elements";
 import styles from "../styles";
@@ -15,8 +15,7 @@ import appStyles from "../styles/appStyles";
 import {MyLoader} from "../nativeHelpers";
 import { FlashList, useBlankAreaTracker } from '@shopify/flash-list'
 import taskSingle from "../components/taskSingle";
-
-const width = Dimensions.get('window').width - 30;
+import {width} from "../components/homeHeader";
 
 class Home extends React.Component{
     static propTypes = {
@@ -88,45 +87,49 @@ class Home extends React.Component{
         if (prevProps.profile !== this.props.profile) {
             this.updateProfile();
         }
+        if (this.state.profile) {
+            const {username} = this.props.profile;
+            this.props.navigation.setOptions({
+                headerShown: true,
+                headerRight: () => 
+                <Pressable 
+                    onPress={() => {
+                        props.navigation.navigate('Setting')
+                    }}
+                    mr="$5"
+                    width={40}
+                    rounded="$full"
+                    backgroundColor={"rgba(255, 255, 255,.8)"}
+                    padding="$2"
+                >
+                <Ionicons name="notifications-outline" color={"rgba(0,0,0,.9)"} size={25} />
+            </Pressable>,
+            headerLeft: () =>  
+                <Heading
+                    style={[{width:width/(5/4)}]}
+                    ml="$5"
+                >
+                    Hello
+                    <Heading color="$blue600"> {username}</Heading>
+                </Heading>,
+            })
+        }
     }
 
     render(){
         if (!this.state.profile || !this.state.goals) return (
-            <PageLayout>
+            <PageLayout  {...this.props}>
                 <Spinner size="large" />
             </PageLayout>
         );
         const {username} = this.state.profile;
         return (
-            <PageLayout {...this.props}>
+            <PageLayout {...this.props} headerShow={true} username={username}>
                 <View style={[{width:width}]}>
-                    <View style={[styles.orContainer]}
-                        pt='$3'
-                    >
-                        <Heading
-                            style={[{width:width/(5/4)}]}
-                        >
-                            Hello
-                            <Heading color="$blue600"> {username}</Heading>
-                        </Heading>
-                        <Pressable 
-                            onPress={() => {
-                            this.props.navigation.navigate('Setting')
-                            }}
-                            rounded="$full"
-                            // borderWidth={1}
-                            // borderColor="$gray400"
-                            backgroundColor={"rgba(255, 255, 255,.8)"}
-                            padding="$2"
-                            // style={[{flexDirection:"row",justifyContent:"flex-start"}]}
-                        >
-                            <Ionicons name="notifications-outline" color={"rgba(0,0,0,.9)"} size={25} />
-                        </Pressable>
-                    </View>
                     <Heading
                         bold
                         size="2xl"
-                        pt="$4"
+                        // pt="$4"
                         pb="$4"
                         width={200}
                     >
@@ -228,8 +231,8 @@ class Home extends React.Component{
                         }
 
                     <View
-                        mt="$7"
-                        mb="$7"
+                        mt="$5"
+                        mb="$5"
                         style={[{width:"100%"}]}
                     >
                         <View
@@ -246,10 +249,10 @@ class Home extends React.Component{
                             </Pressable>
                         </View>
                         <View
-                            mt="$5"
+                            mt="$4"
+                            mb="$4"
                             width={"100%"}
                             minHeight={40}
-                            // style={[styles.border]}
                         >
                             {
                                 this.state.ongoingTaks ? (

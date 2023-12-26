@@ -52,13 +52,15 @@ class Form extends React.Component {
 
     render() {
         const props = this.props;
+        const {customInput} = props;
+
         return (
             <KeyboardAvoidingView behavior={props.boardType?props.boardType:"height"} style={styles.formContainer}> 
                 {
                     props.form && props.form.length > 0 && (
                         <>
                             {
-                                props.form.map((input,index) => <FormSingle input={input} key={index} /> )
+                                props.form.map((input,index) => <FormSingle input={input} key={index} customInput={customInput} /> )
                             }
                         </>
                     )

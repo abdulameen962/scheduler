@@ -17,6 +17,7 @@ class Login extends Component{
         onboardDone: Proptypes.bool.isRequired,
         loginUser: Proptypes.func.isRequired,
         updateState: Proptypes.func.isRequired,
+        email: Proptypes.string,
     }
 
     state = {
@@ -131,7 +132,7 @@ class Login extends Component{
 
     static getDerivedStateFromProps(nextProps,state){
         try{
-            if (nextProps.onboardDone) {
+            if (nextProps.onboardDone || nextProps.email) {
                 nextProps.updateState();
             }
             return null;
@@ -169,6 +170,7 @@ const mapStateToProps = (state,ownProps) => ({
     err: state.user.errMessage || null,
     updateState: ownProps.updateState,
     onboardDone: state.user.onboardDone || false,
+    email: state.user.email || null,
 })
 
 export default connect(mapStateToProps,{loginUser})(Login)

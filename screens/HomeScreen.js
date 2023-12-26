@@ -6,7 +6,7 @@ import PropTypes from "prop-types"
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from "react-native-vector-icons/AntDesign"
-import { Dimensions } from 'react-native';
+import { Dimensions, Text } from 'react-native';
 import CustomPlusButton from '../components/plusButton'
 import { BlurView } from 'expo-blur';
 import {
@@ -66,9 +66,11 @@ const HomeScreen = props => {
                         animationTypeForReplace: 'pop', 
                         // tabBarActiveBackgroundColor:"white",
                         title:'Home',
+                        headerTitleStyle: {
+                            display: "none"
+                        },
                         tabBarLabel: 'Home',
                         tabBarIcon: ({ color }) => (<MaterialCommunityIcons name="home" color={color} size={IconHeight} />),
-                        
                     }}
                 />
                 <BottomStack.Screen name="Summary" 

@@ -18,6 +18,7 @@ import {UPDATE_USER,
   CLEAR_MESSSAGES,
   SET_NOTIFICATION_TOKEN,
   USER_DETAILS,
+  NOT_EMAIL_VERIFIED,
 
 } from './actions'
 import { getRandom } from '../helpfulFunc'
@@ -51,6 +52,10 @@ const userReducer = (state = {}, action) => {
 
         return merge(state,{accessToken,refreshToken,registerDone,onboardDone,errMessage:null,successMessage:`${getRandom()}.An otp has been sent to you`})
 
+      case NOT_EMAIL_VERIFIED:
+
+        return merge(state,{email:action.payload.email,onboardDone:false,registerDone:true,errMessage:`${getRandom()}.${action.payload.message}`,successMessage:null})
+        
       case REGISTER_REJECTED:
         return merge(state,{errMessage:`${getRandom()}.${action.payload}`,successMessage:null})
 

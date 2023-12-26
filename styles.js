@@ -13,13 +13,24 @@ const button = {
   alignItems: "center",
 }
 
+const styleContainer = {
+  flex: 1,
+  backgroundColor: '#fff',
+  alignItems: 'center',
+  justifyContent: 'center',
+}
+
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
+      ...styleContainer,
       marginTop: Constants.statusBarHeight,
+    },
+    containerLayout: {
+      ...styleContainer,
+    },
+    headerBackground:{
+      backgroundColor:"white",
+      height: "100%",
     },
     border:{
       borderWidth:1,
