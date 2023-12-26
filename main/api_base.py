@@ -9,13 +9,13 @@ class API_VERIFIED_BASE(APIView):
     permission_classes = [HasAPIKey,IsAuthenticated]
     authentication_classes = [JWTAuthentication]
     
-    def has_permission(self,request,view):
-        user = self.request.user
+    # def has_permission(self,request,view):
+    #     user = self.request.user
         
-        if user.is_anonymous:
-            return False
+    #     if user.is_anonymous:
+    #         return False
         
-        return verified_mail(user)
+    #     return verified_mail(user)
     
 class API_NON_VERIFIED_BASE(APIView):
     permission_classes = [HasAPIKey]
