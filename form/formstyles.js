@@ -33,6 +33,10 @@ const styles = StyleSheet.create({
         alignItems: "center",   
         // height: 20
     },
+    baseContainer:{
+        flexDirection: "row",
+        alignItems: "center",   
+    },
     activeContainer:{
         borderColor: 'rgba(0,0,0,.8)',
     },
@@ -43,14 +47,10 @@ const styles = StyleSheet.create({
         shadowOpacity: 1,
     },
     inputArea:{
-        // height: "100%",
         minWidth: "70%",
         maxWidth: "100%",
         fontSize: 16,
-        paddingHorizontal: 15,
-        // borderWidth: 2,
-        // borderStyle: "solid",
-        // borderColor: "green",
+        paddingHorizontal: 20,
     },
     submitBtn:{
         // pillRadius: 30,

@@ -20,8 +20,9 @@ export const getToken = async (store,changeFunc,logoutUser=null) => {
             store.dispatch(changeFunc(accessToken))
         }
         catch(error){
-            const isOnline = await checkConnection();
-            if (logoutUser && isOnline) {
+            const message = error.message;
+            // const isOnline = await checkConnection();
+            if (logoutUser && parseInt(message) == 401) {
                 store.dispatch(logoutUser())
                 const message = "Your session has expired,kindly login again"
                 throw new Error(message);
@@ -50,9 +51,9 @@ const refreshTokenFunc = async token => {
         return access;
         
     }
-    const {message} = result;
+    // const {message} = result;
     // console.log(message);
-    throw new Error(message);
+    throw new Error(response.status);
 }
 
 const checkTokenExpired = async token => {

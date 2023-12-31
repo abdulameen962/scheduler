@@ -1,8 +1,13 @@
-import React, { useCallback, useMemo, useRef,forwardRef,useState } from 'react';
-import { Text,Heading } from '@gluestack-ui/themed';
-import { StyleSheet,View,Button } from 'react-native';
+import React, { useCallback, useMemo, useRef,forwardRef,useState, useEffect } from 'react';
+import { 
+  Text,
+  Heading,
+} from '@gluestack-ui/themed';
+import { StyleSheet,View,Pressable, ScrollView } from 'react-native';
 import {wordPredict} from "../redux/actions";
 import {store} from "../redux/store";
+import Label from '../components/label';
+import { userGoals } from '../redux/actions';
 import 
   // BottomSheet,
     {
@@ -15,10 +20,12 @@ import
     } from '@gorhom/bottom-sheet';
 
 import Form from "../form/index";
+import Select from "../components/select";
 // import { useAnimatedKeyboard,useAnimatedStyle } from 'react-native-reanimated';
 // import Animated from 'react-native-reanimated';
 interface Props {
   // children: React.ReactNode;
+  navigation: any;
 }
 
 type Ref = BottomSheetModal;
@@ -30,16 +37,61 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
   const [startDate,setStartDate] = useState<String>("");
   const [endDate,setEndDate] = useState<String>("");
   const [descr,setDescr] = useState<String>("");
+  const [goal,setGoal] = useState<String>("");
+  const [disabled,setDisabled] = useState<boolean>(true);
+  const [goals,setGoals] = useState<string[]>([]);
+  const [gotoGoal,setGotoGoal] = useState<boolean>(false);
 
   const predictWord = async () => {
     const result = await wordPredict(store,word,1);
     
     setResult(result);
   }
+  
+  useEffect(() => {
+    checkDisabled()
+  },[goal,name,startDate,endDate,descr])
+
+  const goalsFunc = useCallback(async () => {
+    if (goals.length < 1) {
+      let result;
+      try{
+        result = await userGoals(store,50);
+      }
+      catch(error) {
+        result = [
+          {
+            id: null,
+            title: error.message,
+            click: (e) => {
+              e.preventDefault();
+            }
+          }
+        ]
+      }
+      const creategoal = {
+        id: null,
+        title: "Create Goal",
+        click: () => {
+          // setGotoGoal(true);
+          const {navigation} = props;
+          navigation.navigate("AddTask",{
+            screen: "CreateGoal"
+          })
+        }
+      }
+      result.unshift(creategoal);
+      setGoals(result); 
+    }
+  },[]);
+
+  const checkDisabled = () => {
+
+  }
 
   type handleFunc = typeof setName | typeof setStartDate | typeof setEndDate | typeof setDescr;
 
-  type handleKey = "name" | "startDate" | "endDate" | "descr";
+  type handleKey = "name" | "startDate" | "endDate" | "descr" | "goal";
 
   type calendarKey = "startDate" | "endDate";
 
@@ -64,6 +116,11 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
 
         break;
 
+      case "goal":
+        func = setGoal;
+
+        break;
+
       default:
         break;
     }
@@ -75,76 +132,107 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
 
   }
 
+  const submitForm = () => {
+
+  }
+
   let formArr = {
     customInput: BottomSheetTextInput,
     form : [
         {
-            Label: <Text>Task name</Text>,
+            Label: <Label text="Task name"/>,
             attributes:{
-                placeholder:"" ,
                 autoCapitalize:'none' ,
                 autoComplete:'off' ,
                 onChangeText: handleChange("name"),
+
             },
-            leftIcon:{
-                clickable: false,
-                src: require("../assets/email.png"),
-                activeSrc: require("../assets/email-active.png"),
-                attributes:{}
-            },
+            inputStyle: [styles.inputStyle],
+            activeInput: [styles.activeInput],
+            styled: styles.styled,
         },
         {
-            Label: <Text>Start Date</Text>,
+            Label: <Label text={"Start Date"} />,
             attributes:{
-                placeholder:"" ,
                 autoCapitalize:'none' ,
                 autoComplete:'off' ,
                 // secureTextEntry:state.showPassword.show,
                 // onChangeText:handleChange('password')
             },
-            rightIcon:{
-                clickable: true,
-                src: require("../assets/eye-cancel.png"),
-                activeSrc: require("../assets/eye-cancel.png"),
-                attributes:{},
-                onClick: showCalendar("startDate"),
-                clickedImg: require("../assets/eye.png"),
-            }
+            inputStyle: [styles.inputStyle],
+            activeInput: [styles.activeInput],
+            styled: styles.styled,
+            // rightIcon:{
+            //     clickable: true,
+            //     src: require("../assets/eye-cancel.png"),
+            //     activeSrc: require("../assets/eye-cancel.png"),
+            //     attributes:{},
+            //     onClick: showCalendar("startDate"),
+            //     clickedImg: require("../assets/eye.png"),
+            // }
         },
         {
-          Label: <Text>End Date</Text>,
+          Label: <Label text="End Date" />,
           attributes:{
-              placeholder:"" ,
               autoCapitalize:'none' ,
               autoComplete:'off' ,
               // secureTextEntry:state.showPassword.show,
               // onChangeText:handleChange('password')
           },
-          rightIcon:{
-              clickable: true,
-              src: require("../assets/eye-cancel.png"),
-              activeSrc: require("../assets/eye-cancel.png"),
-              attributes:{},
-              onClick: showCalendar("endDate"),
-              clickedImg: require("../assets/eye.png"),
-          }
-      },
+          inputStyle: [styles.inputStyle],
+          activeInput: [styles.activeInput],
+          styled: styles.styled,
+          // rightIcon:{
+          //     clickable: true,
+          //     src: require("../assets/eye-cancel.png"),
+          //     activeSrc: require("../assets/eye-cancel.png"),
+          //     attributes:{},
+          //     onClick: showCalendar("endDate"),
+          //     clickedImg: require("../assets/eye.png"),
+          // }
+        },
+
+        {
+          Label: <Label text="Description" />,
+          attributes:{
+              autoCapitalize:'none' ,
+              autoComplete:'off' ,
+              multiline: true,
+              // secureTextEntry:state.showPassword.show,
+              // onChangeText:handleChange('password')
+          },
+          inputStyle: [styles.inputStyle],
+          activeInput: [styles.activeInput],
+          styled: {...styles.styled,minHeight:70},
+          // rightIcon:{
+          //     clickable: true,
+          //     src: require("../assets/eye-cancel.png"),
+          //     activeSrc: require("../assets/eye-cancel.png"),
+          //     attributes:{},
+          //     onClick: showCalendar("endDate"),
+          //     clickedImg: require("../assets/eye.png"),
+          // }
+        },
     ],
-    // submit: {
-    //     btnText: "Login",
-    //     onSubmit:submitForm,
-    //     disabled: state.disabled,
-    // },
-    // extras: [
-    //     <View style={[styles.actionContainer,{paddingHorizontal:10}]}>
-    //         {/* <Switch onValueChange={} value={false} /> */}
-    //         <TouchableOpacity style={styles.forgot} onPress={() => props.navigation.navigate('Forgot')}>
-    //             <Text style={[styles.p,styles.blueText]}>Forgot Password?</Text>
-    //         </TouchableOpacity>
-    //     </View>
-    // ],
+    topExtras: [
+      <Select onChange={handleChange("goal")} label='Choose goal' values={goals} onOpen={() => goalsFunc()} />
+    ],
+    boardType: "padding"
     // error: state.err
   }
+
+  const renderFooter = useCallback(
+    props => (
+      <BottomSheetFooter {...props} bottomInset={18}>
+        <View>
+          <Pressable>
+            <Text>Create Task</Text>
+          </Pressable>
+        </View>
+      </BottomSheetFooter>
+    ),
+    []
+  );
 
   React.useEffect(() => {
     handleChangePrediction();
@@ -158,7 +246,7 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
   // const {dismiss} = useBottomSheetModal();
 
   // variables
-  const snapPoints = useMemo(() => ['30%', '50%','75%',"95%"], []);
+  const snapPoints = useMemo(() => ['45%','75%',"90%"], []);
 
   // const handleClosePress = () => bottomSheetRef.current?.close();
   // const handleExpandPress = () => bottomSheetRef.current?.expand();
@@ -172,15 +260,8 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
     // console.log('handleSheetChanges', index);
   }, []);
 
-//   const keyboard = useAnimatedKeyboard();
-//   const translateStyle = useAnimatedStyle(() => {
-//     return {
-//       transform: [{ translateY: -keyboard.height.value }],
-//     };
-//   });
-
   const renderBackdrop = useCallback(
-    (props:any) => <BottomSheetBackdrop appearsOnIndex={1} disappearsOnIndex={-1} {...props} opacity={0.4} />,
+    (props:any) => <BottomSheetBackdrop appearsOnIndex={1} disappearsOnIndex={-1} {...props} opacity={0.5} />,
     []
   )
 
@@ -188,39 +269,61 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
   // renders
   return (
         <>
-          <BottomSheetModal
-            ref={ref}
-            index={0}
-            snapPoints={snapPoints}
-            onChange={handleSheetChanges}
-            enablePanDownToClose={true}
-            backgroundStyle={{backgroundColor:'white'}}
-            backdropComponent={renderBackdrop}
-            handleIndicatorStyle={{backgroundColor:'black'}}
-          >
-            <View style={[styles.container,styles.contentContainer]}>
-              <Heading
-                size="lg"
+          {
+            gotoGoal === false && (
+              <BottomSheetModal
+                ref={ref}
+                index={0}
+                snapPoints={snapPoints}
+                onChange={handleSheetChanges}
+                enablePanDownToClose
+                backgroundStyle={{backgroundColor:'white'}}
+                backdropComponent={renderBackdrop}
+                handleIndicatorStyle={{backgroundColor:'black'}}
+                keyboardBehavior="fillParent"
+                keyboardBlurBehavior='restore'
+                // footerComponent={renderFooter}
               >
-                Create New Task
-              </Heading>
-            
-            </View>
-            </BottomSheetModal>
+                <BottomSheetScrollView contentContainerStyle={[styles.container]} >
+                  <Heading
+                    size="lg"
+                  >
+                    Create New Task
+                  </Heading>
+                  <Form {...formArr} />
+                </BottomSheetScrollView>
+                </BottomSheetModal>
+            )
+          }
         </>
   );
 });
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     padding: 24,
     backgroundColor: 'white',
   },
   contentContainer: {
-    flex: 1,
-    alignItems: 'center',
+    // flex: 1,
+    // alignItems: 'center',
   },
+  inputStyle: {
+    paddingHorizontal: 0,
+    paddingVertical: 1,
+    borderWidth: 1,
+    borderTopWidth: 0,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+    borderColor: 'rgba(0,0,0,.06)',
+  },
+  activeInput: {
+    borderColor: 'rgba(0,0,0,1)',
+  },
+  styled:{
+    paddingHorizontal: 2
+  }
 });
 
 export default AddTask;

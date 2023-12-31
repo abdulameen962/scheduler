@@ -11,11 +11,16 @@ export const BACKGROUND_NOTIFICATION_TASK = 'background-notification';
 TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, async () => {
     const now = Date.now();
     
-    const results = await getNotifications(store);
-    for (let i = 0; i < results.length; i++) {
-        const element = results[i];
-        const {body,header} = element;
-        await schedulePushNotification(header,body)
+    try{
+        const results = await getNotifications(store);
+        for (let i = 0; i < results.length; i++) {
+            const element = results[i];
+            const {body,header} = element;
+            await schedulePushNotification(header,body)
+        }
+    }
+    catch(e){
+        console.log(e);
     }
   
     // Be sure to return the successful result type!

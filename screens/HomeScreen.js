@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Home from "../taskScreens/home"
+import Home from "../taskScreens/home";
+import TaskController from "../taskScreens/taskController";
 import Setting from '../taskScreens/settings';
 import PropTypes from "prop-types"
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -27,7 +28,7 @@ colors: {
 // import NotificationsView from '../taskScreens/notification';
 const IconHeight = 24
 const {height,width} = Dimensions.get('window');
-const BottomStack = createBottomTabNavigator()
+const BottomStack = createBottomTabNavigator();
 
 const HomeScreen = props => {
     const {updateState} = props;
@@ -85,7 +86,7 @@ const HomeScreen = props => {
                     {(props) => <Setting {...props} updateState={updateState}  />}
                 </BottomStack.Screen>
                 <BottomStack.Screen
-                    name='Add Task'
+                    name='AddTask'
                     options={{
                         animationTypeForReplace: 'pop', 
                         // tabBarActiveBackgroundColor:"white",
@@ -94,7 +95,11 @@ const HomeScreen = props => {
                         tabBarIcon: ({ color,focused }) => (<AntDesign name="plus" color={'white'} size={IconHeight * 1} />),
                         tabBarButton: (props) => (
                             <CustomPlusButton {...props} />
-                        )
+                        ),
+                        tabBarStyle: {
+                            display: "none"
+                        },
+                        headerShown: false,
                     }}
                     listeners={({navigation}) => ({
                         tabPress: (e) => {
@@ -111,7 +116,7 @@ const HomeScreen = props => {
                         },
                       })}
                 >
-                    {(props) => <Setting {...props} updateState={updateState}  />}
+                    {(props) => <TaskController {...props} updateState={updateState}  />}
                 </BottomStack.Screen>
                 <BottomStack.Screen name="Notes" 
                     options={{

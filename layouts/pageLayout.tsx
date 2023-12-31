@@ -65,7 +65,7 @@ const PageLayout = (props: Props) => {
     return (
         <>
             <Alerter>
-                <AddTask ref={bottomSheetRef}/>
+                <AddTask ref={bottomSheetRef} navigation={props.navigation}/>
                 <View style={[styles.containerLayout,styles.greyBack]}>
                     <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
                         {children}

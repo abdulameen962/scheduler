@@ -9,7 +9,6 @@ import Icon from "./icon";
 const InputCustom = props => {
     const {CustomInput} = props;
     const Element = CustomInput;
-
     // nullify the input so it wont affect
     props[CustomInput] = null;
 
@@ -28,10 +27,11 @@ const InputCustom = props => {
             />
         )
     }
+
 }
 
 InputCustom.propTypes = {
-    CustomInput: PropTypes.node || null,
+    CustomInput: PropTypes.object || null,
 }
 
 /***
@@ -54,11 +54,18 @@ class FormSingle extends React.Component{
     }
 
     getStyle = () => {
+        let inputStyle = this.props.input.inputStyle ? this.props.input.inputStyle : styles.inputContainer;
+        let activeContainer = this.props.input.activeInput ? this.props.input.activeInput : styles.activeContainer;
+        let inactiveContainer = this.props.input.activeInput ? inputStyle : styles.inactiveContainer;
+        const result = [inputStyle,styles.baseContainer];
         if (this.state.abled) {
-            return [styles.inputContainer,styles.activeContainer];
+            result.push(activeContainer)
+            return result;
         }
-        return [styles.inputContainer,styles.inactiveContainer];
+        result.push(inactiveContainer);
+        return result;
     }
+    
     
     getPhotos = () => {
         // check if there is lefticon and or right icon
@@ -120,10 +127,12 @@ class FormSingle extends React.Component{
         const {CustomInput} = this.props;
         const {Label} = this.props.input;
         return (
-            <View>
+            <View style={[{marginVertical:5}]}>
                 {
                     Label && (
-                        <Label />
+                        <>
+                            {Label}
+                        </>
                     )
                 }
                 <View style={this.getStyle()}>
@@ -141,8 +150,7 @@ class FormSingle extends React.Component{
                                     this.props.input.rightIcon.onClick == "showpassword" && this.state.showPassword ? (
                                         <InputCustom
                                             CustomInput = {CustomInput}
-                                            style={styles.inputArea}
-                                            {...this.props.input.attributes}
+                                            style={[styles.inputArea,this.props.input.styled]}
                                             // onKeyPress={this.toggleState(true)}
                                             onFocus={() => {
                                             this.toggleState(true)
@@ -155,12 +163,13 @@ class FormSingle extends React.Component{
                                             // numberOfLines={4}
                                             // onPressIn={this.toggleState(true)}
                                             // onPressOut={this.toggleState(false)}
+                                            {...this.props.input.attributes}
                                         />
                                     ):
                                     (
                                         <InputCustom
                                             CustomInput = {CustomInput}
-                                            style={styles.inputArea}
+                                            style={[styles.inputArea,this.props.input.styled]}
                                             {...this.props.input.attributes}
                                             onFocus={() => {
                                             this.toggleState(true)
@@ -176,7 +185,7 @@ class FormSingle extends React.Component{
                         (
                             <InputCustom
                                 CustomInput = {CustomInput}
-                                style={styles.inputArea}
+                                style={[styles.inputArea,this.props.input.styled]}
                                 {...this.props.input.attributes}
                                 onFocus={() => {
                                 this.toggleState(true)

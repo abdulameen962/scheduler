@@ -35,7 +35,7 @@ import {
 
 import registerAllTasks from "./backgroundtasks/handler";
 import { schedulePushNotification } from './nativeHelpers';
-// import { unregisterBackgroundFetchAsync } from './backgroundtasks/notifications';
+import { unregisterBackgroundFetchAsync } from './backgroundtasks/notifications';
 // import GetNav from './layouts/appLayout';
 
 // import {LogBox} from "react-native";
@@ -234,7 +234,7 @@ class App extends React.Component {
       }
     } catch (error) {
       // You can also add an alert() to see the error message in case of an error when fetching updates.
-      alert(`Error fetching latest Expo update: ${error}`);
+      // alert(`Error fetching latest Expo update: ${error}`);
     }
     await registerAllTasks();
     // await unregisterBackgroundFetchAsync();

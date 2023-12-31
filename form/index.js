@@ -57,10 +57,21 @@ class Form extends React.Component {
         return (
             <KeyboardAvoidingView behavior={props.boardType?props.boardType:"height"} style={styles.formContainer}> 
                 {
+                    props.topExtras && props.topExtras.length > 0 ? (
+                        <>
+                            {
+                                props.topExtras.map((extra,index) => <ExtraForm key={index}>
+                                    {extra}
+                                </ExtraForm> )
+                            }
+                        </>
+                    ):null
+                }
+                {
                     props.form && props.form.length > 0 && (
                         <>
                             {
-                                props.form.map((input,index) => <FormSingle input={input} key={index} customInput={customInput} /> )
+                                props.form.map((input,index) => <FormSingle input={input} key={index} CustomInput={customInput} /> )
                             }
                         </>
                     )
@@ -76,9 +87,13 @@ class Form extends React.Component {
                         </>
                     ):null
                 }
-                <SubmitBtn
-                    submit={props.submit} err={props.error}
-                />
+                {
+                    props.submit && (
+                        <SubmitBtn
+                            submit={props.submit} err={props.error}
+                        />
+                    )
+                }
             </KeyboardAvoidingView>
         )
     }
@@ -86,9 +101,9 @@ class Form extends React.Component {
 
 Form.propTypes = {
     form: PropTypes.array.isRequired,
-    submit: PropTypes.object.isRequired,
+    submit: PropTypes.object,
     extras: PropTypes.array,
-    error: PropTypes.string
+    error: PropTypes.string,
 }
 
 export default Form

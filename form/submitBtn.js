@@ -4,7 +4,6 @@ import PropTypes from "prop-types"
 import styles from "./formstyles"
 import Toast from "react-native-toast-message";
 
-
 class SubmitBtn extends React.Component {   
     state = {
         "name":null

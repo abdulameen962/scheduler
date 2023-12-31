@@ -193,11 +193,11 @@ export const userProfile = (store,profileFunc=getProfile) => async dispatch =>  
     return await getImmediateProfile(false,dispatch,store,profileFunc);
 }
 
-export const userGoals = async (store,goalFunc=getGoals) => {
+export const userGoals = async (store,num=3,goalFunc=getGoals) => {
     // dispatch({type:OTP_CONFIRM_SENT,payload:""})
     try{
         const authCode = await getToken(store,resetAcessToken,logoutUser);
-        const result = await goalFunc(authCode,false,3);
+        const result = await goalFunc(authCode,false,num);
 
         // console.log(result);
 
