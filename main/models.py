@@ -66,6 +66,7 @@ class Notification(models.Model):
         unique_together = ["header","body","user","creation_time"]
         
         
+        
 class Goal(models.Model):
     
     id = models.UUIDField(primary_key=True,editable=False,default=uuid.uuid4)
@@ -86,6 +87,7 @@ class Goal(models.Model):
         verbose_name = "Goal"
         verbose_name_plural = "Goals"
         ordering = ("-creation_time",)    
+        unique_together = ["user","title"]
         
     @property
     def goal_image(self):
