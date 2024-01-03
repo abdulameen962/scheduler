@@ -59,6 +59,9 @@ const PageLayout = (props: Props) => {
             if (showTask !== undefined && showTask == true) {
                 handlePresentPress();
             }
+            else{
+                dismiss();
+            }
         }   
     }
 

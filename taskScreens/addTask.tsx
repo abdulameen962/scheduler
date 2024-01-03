@@ -73,10 +73,13 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
         id: null,
         title: "Create Goal",
         click: () => {
-          // setGotoGoal(true);
+          setGotoGoal(true);
           const {navigation} = props;
           navigation.navigate("AddTask",{
-            screen: "CreateGoal"
+            screen: "CreateGoal",
+            params:{
+              showTask: false
+            }
           })
         }
       }
@@ -215,7 +218,8 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
         },
     ],
     topExtras: [
-      <Select onChange={handleChange("goal")} label='Choose goal' values={goals} onOpen={() => goalsFunc()} />
+      <Select onChange={handleChange("goal")} label='Choose goal' values={goals} onOpen={() => goalsFunc()} />,
+      <Select onChange={handleChange("goal")} label='Choose Task label' values={goals} onOpen={() => goalsFunc()} />
     ],
     boardType: "padding"
     // error: state.err
@@ -269,37 +273,33 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
   // renders
   return (
         <>
-          {
-            gotoGoal === false && (
-              <BottomSheetModal
-                ref={ref}
-                index={0}
-                snapPoints={snapPoints}
-                onChange={handleSheetChanges}
-                enablePanDownToClose
-                backgroundStyle={{backgroundColor:'white'}}
-                backdropComponent={renderBackdrop}
-                handleIndicatorStyle={{backgroundColor:'black'}}
-                keyboardBehavior="fillParent"
-                keyboardBlurBehavior='restore'
-                // footerComponent={renderFooter}
+          <BottomSheetModal
+            ref={ref}
+            index={0}
+            snapPoints={snapPoints}
+            onChange={handleSheetChanges}
+            enablePanDownToClose
+            backgroundStyle={{backgroundColor:'white'}}
+            backdropComponent={renderBackdrop}
+            handleIndicatorStyle={{backgroundColor:'black'}}
+            keyboardBehavior="fillParent"
+            keyboardBlurBehavior='restore'
+            footerComponent={renderFooter}
+          >
+            <BottomSheetScrollView contentContainerStyle={[styles.container]} >
+              <Heading
+                size="lg"
               >
-                <BottomSheetScrollView contentContainerStyle={[styles.container]} >
-                  <Heading
-                    size="lg"
-                  >
-                    Create New Task
-                  </Heading>
-                  <Form {...formArr} />
-                </BottomSheetScrollView>
-                </BottomSheetModal>
-            )
-          }
+                Create New Task
+              </Heading>
+              <Form {...formArr} />
+            </BottomSheetScrollView>
+            </BottomSheetModal>
         </>
   );
 });
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     // flex: 1,
     padding: 24,

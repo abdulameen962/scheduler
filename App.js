@@ -35,7 +35,6 @@ import {
 
 import registerAllTasks from "./backgroundtasks/handler";
 import { schedulePushNotification } from './nativeHelpers';
-import { unregisterBackgroundFetchAsync } from './backgroundtasks/notifications';
 // import GetNav from './layouts/appLayout';
 
 // import {LogBox} from "react-native";

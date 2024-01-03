@@ -78,6 +78,20 @@ export const getProfile = async authCode => {
     return await BASE_FUNCTION(url,method,null,header,true);
 }
 
+export const createGoal = async (authCode,goal_name,goal_description,start_time,deadline,image) => {
+    const url = "create-goals/";
+    // new FormData()
+    const method = "POST";
+    const header = {
+        "Authorization":`Bearer ${authCode}`
+    }
+    const body = {
+        goal_name,goal_description,start_time,deadline,image
+    }
+    return await BASE_FUNCTION(url,method,body,header);
+
+}
+
 export const logoutApi = async authCode => {
     const url = "users/logout/";
     const method = "POST";

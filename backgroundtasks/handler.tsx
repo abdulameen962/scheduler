@@ -2,7 +2,8 @@ import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
 import {
     BACKGROUND_NOTIFICATION_TASK,
-    registerBackgroundFetchAsync
+    registerBackgroundFetchAsync,
+    unregisterBackgroundFetchAsync
 } from "./notifications"
 
 
@@ -16,6 +17,7 @@ interface Task {
  * @returns {Promise<void>}
  */
 const registerAllTasks = async () => {
+    await unregisterBackgroundFetchAsync()
     // get all names of tasks in an array of objects made up of names and the function to invoke the creation
     const status = await BackgroundFetch.getStatusAsync();
 

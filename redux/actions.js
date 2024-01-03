@@ -11,7 +11,8 @@ import { login,
     logoutApi,
     getOngoingTasks,
     predictWord,
-    getCurrentNotifications
+    getCurrentNotifications,
+    createGoal,
 } from '../api';
 import { getToken } from '../storeapis';
 import { getRandom } from '../helpfulFunc';
@@ -41,6 +42,8 @@ export const CLEAR_MESSSAGES = "CLEAR_MESSSAGES"
 export const SET_NOTIFICATION_TOKEN = "SET_NOTIFICATION_TOKEN"
 export const USER_DETAILS = "USER_DETAILS"
 export const NOT_EMAIL_VERIFIED = "NOT EMAIL VERIFIED"
+export const GOAL_FULFILLED = "Goal completed"
+export const GOAL_REJECTED = "Goal rejected"
 
 // action creators
 export const updateUser = update => ({
@@ -259,6 +262,23 @@ export const sendForgotPasswordOtp = (email,store=null,forgotFunc=resetPassword)
     }
     catch(error){
         dispatch({type:OTP_REJECTED,payload:error.message});
+        return false;
+    }
+}
+
+export const goalCreation = (store,goal,goalFunc=createGoal) => async dispatch => {
+    try{
+        const authCode = await getToken(store,resetAcessToken,logoutUser);
+        await goalFunc(authCode,...goal);
+
+        dispatch({type:GOAL_CREATED,payload:"Goal created sucessfully"})
+
+        return true;
+        
+    }
+    catch(error){
+        dispatch({type:GOAL_REJECTED,payload:error.message})
+
         return false;
     }
 }

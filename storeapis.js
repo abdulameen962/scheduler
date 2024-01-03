@@ -23,8 +23,8 @@ export const getToken = async (store,changeFunc,logoutUser=null) => {
             const message = error.message;
             // const isOnline = await checkConnection();
             if (logoutUser && parseInt(message) == 401) {
-                store.dispatch(logoutUser())
-                const message = "Your session has expired,kindly login again"
+                const message = "Your session has expired,kindly login again";
+                store.dispatch(logoutUser(message))
                 throw new Error(message);
             }
         }
