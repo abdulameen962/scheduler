@@ -138,3 +138,16 @@ def fcm_push_notifications(message):
     # send_message parameters include: message, dry_run, app
     device.send_message(message_obj)
     # Boom!
+    
+    
+def confirm_real_color(color:str=None):
+    """
+        Confirm whether the color is a real color, it must be in hex
+    """
+    if color is None:
+        return False
+    
+    if color.startswith("#") and len(color) <= 7 and len(color) > 3:
+        return True
+    
+    return False
