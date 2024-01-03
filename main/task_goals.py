@@ -4,6 +4,7 @@ from .models import Goal,Task,Label
 from rest_framework import status
 from .serializers import TaskSerializer
 from datetime import datetime
+from .helper_functions import compare_greater_dates
 
 class task_api(API_VERIFIED_BASE):
     
@@ -113,6 +114,8 @@ class Task_creation(API_VERIFIED_BASE):
         task_name = data.get("task_name",None)
         task_description = data.get("task_description",None)
         try:
+            if not compare_greater_dates(start_time,deadline,2):
+                return Response({"message":"Start time cannot be greater than deadline"},status=status.HTTP_400_BAD_REQUEST)
             
             start_time = datetime.strptime(data.get("start_time",None),"%Y-%m-%d %H:%M:%S")
             deadline = datetime.strptime(data.get("deadline",None),"%Y-%m-%d %H:%M:%S")
@@ -139,4 +142,4 @@ class Task_creation(API_VERIFIED_BASE):
             return Response({"message":"Task created successfully"},status=status.HTTP_200_OK)
             
         except Goal.DoesNotExist or Label.DoesNotExist or Exception as e:
-            return Response({f"message":"An error occured {e}"},status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message":f"An error occured {e}"},status=status.HTTP_400_BAD_REQUEST)

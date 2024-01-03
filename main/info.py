@@ -4,7 +4,7 @@ from .api_base import API_VERIFIED_BASE
 from rest_framework.response import Response
 from .models import Goal,Label
 from .serializers import GoalSerializer,LabelSerializer
-from .helper_functions import confirm_real_color
+from .helper_functions import confirm_real_color,compare_greater_dates
 from datetime import datetime
 # from django.core.paginator import Paginator
 
@@ -83,8 +83,10 @@ class goal_creation(API_VERIFIED_BASE):
             start_time = datetime.strptime(data.get("start_time",None),"%Y-%m-%d %H:%M:%S")
             deadline = datetime.strptime(data.get("deadline",None),"%Y-%m-%d %H:%M:%S")
             
-        except Exception as e:
+            if not compare_greater_dates(start_time,deadline,2):
+                return Response({"message":"Start time cannot be greater than deadline"},status=status.HTTP_400_BAD_REQUEST)
             
+        except Exception as e:
             return Response({"message":"Start time and deadline are required"},status=status.HTTP_400_BAD_REQUEST)
             
         image = data.get("image",None)
@@ -96,6 +98,6 @@ class goal_creation(API_VERIFIED_BASE):
             goal.save()
             
         except Exception as e:
-            return Response({f"message":"An error occured {e}"},status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message":f"An error occured {e}"},status=status.HTTP_400_BAD_REQUEST)
         
         return Response({"message":"Goal created successfully"},status=status.HTTP_200_OK)
