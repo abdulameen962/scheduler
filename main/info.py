@@ -2,8 +2,10 @@
 from rest_framework import status
 from .api_base import API_VERIFIED_BASE
 from rest_framework.response import Response
-from .models import Goal,Task,Notification
-from .serializers import GoalSerializer,NotificationSerializer,TaskSerializer
+from .models import Goal,Label
+from .serializers import GoalSerializer,LabelSerializer
+from .helper_functions import confirm_real_color
+from datetime import datetime
 # from django.core.paginator import Paginator
 
 # profile api
@@ -37,154 +39,63 @@ class goal_info(API_VERIFIED_BASE):
         return Response(goals,status=status.HTTP_200_OK)
     
     
-class task_api(API_VERIFIED_BASE):
+class labels(API_VERIFIED_BASE):
+    def get(self,request):
+        all_labels = Label.objects.all()
+        
+        all_labels = LabelSerializer(all_labels,many=True).data
+        
+        return Response(all_labels,status=status.HTTP_200_OK)
+    
     
     def post(self,request):
-        # get a task under
-        user = request.user
         data = self.request.data
-        goal_id = data.get("goal_id",None)
-        is_completed = data.get("is_completed",None)
-        num = data.get("num",None)
-        num = num if num is None else int(num)
-        if goal_id is None:
-            return Response({"message":"Goal id is required"},status=status.HTTP_400_BAD_REQUEST) 
+        
+        name = data.get("name",None)
+        
+        color = data.get("color",None)
+        
+        if name is None or color is None:
+            return Response({"message":"name and color are required"},status=status.HTTP_400_BAD_REQUEST)
+        
+        if confirm_real_color(color) is False:
+            return Response({"message":"color is invalid"},status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            goal = Goal.objects.get(id=goal_id,user=user)
+            Label.objects.create(name=name,color=color)
             
-            if num is None:
-                all_tasks = goal.goal_tasks.filter(is_completed=is_completed) if is_completed is not None else goal.goal_tasks.all()
-                
-            else:
-                all_tasks = goal.goal_tasks.filter(is_completed=is_completed) if is_completed is not None else goal.goal_tasks.all()
-                all_tasks = all_tasks[:num] if num is not None else all_tasks[:num]
-                
-            all_tasks = TaskSerializer(all_tasks,many=True).data
-            
-            return Response(all_tasks,status=status.HTTP_200_OK)
-            
-        except Goal.DoesNotExist:
-            return Response({"message":"Goal does not exist"},status=status.HTTP_400_BAD_REQUEST)
-            
-    def put(self,request):
-        user = self.request.user
-        data = self.request.data
-        task_id = data.get("task_id",None)
-        if task_id is None:
-            return Response({"message":"Task id is required"},status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"message":f"Something went wrong {e}"},status=status.HTTP_400_BAD_REQUEST)
         
-        try:
-            task = Task.objects.get(id=task_id,user=user)
-            
-            task.is_completed = True
-            task.save()
-            return Response({"message":"Task completed successfully"},status=status.HTTP_200_OK)
-            
-        except Task.DoesNotExist:
-            return Response({"message":"Task does not exist"},status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message":"Label created successfully"},status=status.HTTP_200_OK)
         
-        
-    def delete(self,request):
-        user = self.request.user
-        data = self.request.data
-        task_id = data.get("task_id",None)
-        if task_id is None:
-            return Response({"message":"Task id is required"},status=status.HTTP_400_BAD_REQUEST)
-        
-        try:
-            task = Task.objects.get(id=task_id,user=user)
-            
-            task.delete()
-            return Response({"message":"Task deleted successfully"},status=status.HTTP_200_OK)
-            
-        except Task.DoesNotExist:
-            return Response({"message":"Task does not exist"},status=status.HTTP_400_BAD_REQUEST)
-        
-        
-class Filter_task(API_VERIFIED_BASE):
-    """_summary_
-
-    Args:
-        user must have correct api key and authenticated with jwt
-        and also pass whether he wants ongoing or completed
-        and the number
-
-    Returns:
-        Tasks whether ongoing or completed of the user with the number requested
-    """
     
-    def post(self,request):
-        user = self.request.user
-        data = self.request.data
-        command = data.get("command",None)
-        num = data.get("num",None)
-        num = num if num is None else int(num)
-        if command is None or num is None:
-            return Response({"message":"Command and number of tasks are required"},status=status.HTTP_400_BAD_REQUEST)
-        
-        if command == "ongoing":
-            tasks = Task.objects.filter(user=user,is_completed=False).order_by("-creation_time")[:num]
-            tasks = TaskSerializer(tasks,many=True).data
-            return Response(tasks,status=status.HTTP_200_OK)
-        
-        elif command == "completed":
-            tasks = Task.objects.filter(user=user,is_completed=True).order_by("-creation_time")[:num]
-            tasks = TaskSerializer(tasks,many=True).data
-            return Response(tasks,status=status.HTTP_200_OK)
-        
-        else:
-            return Response({"message":"Command not supported"},status=status.HTTP_400_BAD_REQUEST)
-        
-        
-class Task_creation(API_VERIFIED_BASE):
-    pass
-
-
+    
 class goal_creation(API_VERIFIED_BASE):
-    pass
-
-
-from .helper_functions import compare_dates,timezone
-
-class Notification_api(API_VERIFIED_BASE):
-    
     def post(self,request):
         user = self.request.user
-        data = request.data
-        command = data.get("command",None)
-        if command == "newest":
-            # get last notifications that was sent in maxiumum 5 mins ago
-            notifications = Notification.objects.filter(user=user).order_by("-creation_time")
-            notification_arr = []
-            for notify in notifications:
-                if compare_dates(timezone.now(),notify.creation_time,3):
-                    notification_arr.append(notify)
-                    
-            notifications = NotificationSerializer(notification_arr,many=True).data if len(notification_arr) > 0 else []
-            
-            return Response(notifications,status=status.HTTP_200_OK)
-        
-        num = int(data.get("num",50))
-        is_read = int(data.get("is_read",False))
-        notification = Notification.objects.filter(user=user,is_read=is_read).order_by("-creation_time")[:num]
-        notification = NotificationSerializer(notification,many=True).data
-        
-        return Response(notification,status=status.HTTP_200_OK)
-    
-    def delete(self,request):
-        user = self.request.user
         data = self.request.data
-        notification_id = data.get("notification_id",None)
-        if notification_id is None:
-            return Response({"message":"Notification id is required"},status=status.HTTP_400_BAD_REQUEST)
+        goal_name = data.get("goal_name",None)
+        goal_description = data.get("goal_description",None)
         
         try:
-            notification = user.user_notifications.get(id=notification_id)
             
-            notification.delete()
-            return Response({"message":"Notification deleted successfully"},status=status.HTTP_200_OK)
+            start_time = datetime.strptime(data.get("start_time",None),"%Y-%m-%d %H:%M:%S")
+            deadline = datetime.strptime(data.get("deadline",None),"%Y-%m-%d %H:%M:%S")
+            
+        except Exception as e:
+            
+            return Response({"message":"Start time and deadline are required"},status=status.HTTP_400_BAD_REQUEST)
+            
+        image = data.get("image",None)
+        if goal_name is None or goal_description is None:
+            return Response({"message":"Goal name and description are required"},status=status.HTTP_400_BAD_REQUEST)
         
-        except Task.DoesNotExist:
-            return Response({"message":"Notification does not exist"},status=status.HTTP_400_BAD_REQUEST)
+        try:
+            goal = Goal(user=user,goal_name=goal_name,goal_description=goal_description,start_time=start_time,deadline=deadline,image=image)
+            goal.save()
+            
+        except Exception as e:
+            return Response({f"message":"An error occured {e}"},status=status.HTTP_400_BAD_REQUEST)
         
+        return Response({"message":"Goal created successfully"},status=status.HTTP_200_OK)
