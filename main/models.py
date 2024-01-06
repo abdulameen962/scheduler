@@ -6,6 +6,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from cloudinary.models import CloudinaryField
 from django.utils.translation import gettext_lazy as _
+from .helper_functions import convert_to_https
 
 # Create your models here.
 class User(AbstractUser,models.Model):
@@ -91,7 +92,7 @@ class Goal(models.Model):
         
     @property
     def goal_image(self):
-        return self.image.url if self.image else "#"
+        return convert_to_https(self.image.url) if self.image else "#"
     
     @property
     def task_num(self):

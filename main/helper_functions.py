@@ -171,3 +171,12 @@ def confirm_real_color(color:str=None):
         return True
     
     return False
+
+
+def convert_to_https(link:str=None):
+    if link is None:
+        return link
+    
+    new_link = link.replace("http","https")
+    
+    return new_link
