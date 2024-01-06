@@ -1,6 +1,6 @@
 import React from "react";
 import { Text } from "@gluestack-ui/themed";
-import { View } from "react-native";
+import { TextInput, View } from "react-native";
 // import styles from "../../styles";
 import PageLayout from "../../layouts/pageLayout";
 import Form from "../../form";
@@ -15,6 +15,11 @@ import { store } from "../../redux/store";
 import { connect } from 'react-redux';
 import CustomSelect from "../../components/select";
 import CalendarBottom from "../../components/calendarBottom";
+import 
+    {
+    useBottomSheetModal,  
+    BottomSheetModal,
+    } from '@gorhom/bottom-sheet';
 
 interface NavigationProps {
     setOptions: Function,
@@ -50,10 +55,10 @@ const CreateGoal = (props:Props) => {
     const [name,setName] = React.useState<String>("");
     const [startDate,setStartDate] = React.useState<String>("");
     const [endDate,setEndDate] = React.useState<String>("");
-    const [descr,setDescr] = React.useState<String>(null);
+    const [descr,setDescr] = React.useState<String>("");
     const [image,setImage] = React.useState<String>(null);
+    const [currentCalendar,setCurrentCalendar] = React.useState<calendarKey>(null)
     const [disabled,setDisabled] = React.useState<boolean>(true);
-    const [calendarShow,setCalendarShow] = React.useState<boolean>(false);
 
     React.useEffect(() => {
         checkDisabled()
@@ -80,11 +85,17 @@ const CreateGoal = (props:Props) => {
             trim(descr).length <= 500 &&
             image != null) 
             setDisabled(false);
+
+        else{
+            if (!disabled) {
+                setDisabled(true);
+            }
+        }
     }
 
     type handleFunc = typeof setName | typeof setImage | typeof setStartDate | typeof setEndDate | typeof setDescr;
 
-    type handleKey = "name" | "startDate" | "endDate" | "descr" | "image";
+    type handleKey = "name" | "descr" | "image";
   
     type calendarKey = "startDate" | "endDate";
 
@@ -93,15 +104,6 @@ const CreateGoal = (props:Props) => {
         switch (key) {
             case "name":
                 func = setName;
-                break;
-        
-            case "startDate":
-                func = setStartDate;
-                break;
-        
-            case "endDate":
-                func = setEndDate;
-        
                 break;
         
             case "descr":
@@ -121,8 +123,38 @@ const CreateGoal = (props:Props) => {
         func(val)
     }
 
+    // ref
+    const bottomSheetRef = React.useRef<BottomSheetModal>(null);
+    const {dismiss} = useBottomSheetModal();
+
+    // // variables
+    const handleClosePress = () => bottomSheetRef.current?.close();
+    const handleExpandPress = () => bottomSheetRef.current?.expand();
+    const handleCollapsePress = () => bottomSheetRef.current?.collapse();
+    const snaPindex = (num: number) => bottomSheetRef.current?.snapToIndex(num);
+    const handlePresentPress = () => bottomSheetRef.current?.present();
+    const handleDismissPress = () => bottomSheetRef.current?.dismiss();
+
     const showCalendar = (key: calendarKey) => {
-        setCalendarShow(true);
+        setCurrentCalendar(key);
+        handlePresentPress();
+    }
+
+    const submitDate = (val:string) => {
+        const key = currentCalendar;
+        switch (key) {
+            case "startDate":
+                setStartDate(val);
+                break;
+
+            case "endDate":
+                setEndDate(val);
+                break;
+        
+            default:
+                break;
+        }
+
     }
 
     let formArr = {
@@ -133,7 +165,6 @@ const CreateGoal = (props:Props) => {
                     autoCapitalize:'none' ,
                     autoComplete:'off' ,
                     onChangeText: handleChange("name"),
-    
                 },
                 inputStyle: [styles.inputStyle],
                 activeInput: [styles.activeInput],
@@ -144,8 +175,8 @@ const CreateGoal = (props:Props) => {
                 attributes:{
                     autoCapitalize:'none' ,
                     autoComplete:'off' ,
-                    // secureTextEntry:state.showPassword.show,
-                    // onChangeText:handleChange('password')
+                    value: startDate,
+                    editable:false,
                 },
                 inputStyle: [styles.inputStyle],
                 activeInput: [styles.activeInput],
@@ -164,8 +195,8 @@ const CreateGoal = (props:Props) => {
                 attributes:{
                     autoCapitalize:'none' ,
                     autoComplete:'off' ,
-                    // secureTextEntry:state.showPassword.show,
-                    // onChangeText:handleChange('password')
+                    value: endDate,
+                    editable:false,
                 },
                 inputStyle: [styles.inputStyle],
                 activeInput: [styles.activeInput],
@@ -186,8 +217,7 @@ const CreateGoal = (props:Props) => {
                   autoCapitalize:'none' ,
                   autoComplete:'off' ,
                   multiline: true,
-                  // secureTextEntry:state.showPassword.show,
-                  // onChangeText:handleChange('password')
+                  onChangeText: handleChange("descr"),
               },
               inputStyle: [styles.inputStyle],
               activeInput: [styles.activeInput],
@@ -211,7 +241,7 @@ const CreateGoal = (props:Props) => {
 
     return (
         <>
-            <CalendarBottom />
+            <CalendarBottom ref={bottomSheetRef} onSubmit={submitDate} />
             <PageLayout {...props} headerShow={true}>
                 <View style={[{width,marginTop:70}]}>
                     <Form {...formArr} />

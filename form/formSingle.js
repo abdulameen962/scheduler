@@ -121,7 +121,7 @@ class FormSingle extends React.Component{
     inputArea = () => {
         const result = [styles.inputArea];
         if (this.props.input.leftIcon && !this.props.input.rightIcon) result.push({minWidth:"85%"})
-
+        // if (!this.props.input.styled) result.push({paddingHorizontal:20})
         return result;
     }
 
@@ -157,7 +157,7 @@ class FormSingle extends React.Component{
                                     this.props.input.rightIcon.onClick == "showpassword" && this.state.showPassword ? (
                                         <InputCustom
                                             CustomInput = {CustomInput}
-                                            style={[this.inputArea(),this.props.styled]}
+                                            style={[this.inputArea(),this.props.input.styled]}
                                             // onKeyPress={this.toggleState(true)}
                                             onFocus={() => {
                                             this.toggleState(true)
@@ -176,7 +176,7 @@ class FormSingle extends React.Component{
                                     (
                                         <InputCustom
                                             CustomInput = {CustomInput}
-                                            style={[this.inputArea(),this.props.styled]}
+                                            style={[this.inputArea(),this.props.input.styled]}
                                             {...this.props.input.attributes}
                                             onFocus={() => {
                                             this.toggleState(true)
@@ -192,7 +192,7 @@ class FormSingle extends React.Component{
                         (
                             <InputCustom
                                 CustomInput = {CustomInput}
-                                style={[this.inputArea(),this.props.styled]}
+                                style={[this.inputArea(),this.props.input.styled]}
                                 {...this.props.input.attributes}
                                 onFocus={() => {
                                 this.toggleState(true)

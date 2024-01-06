@@ -272,7 +272,7 @@ export const styles = StyleSheet.create({
     // alignItems: 'center',
   },
   inputStyle: {
-    paddingHorizontal: 0,
+    paddingHorizontal: 5,
     paddingVertical: 1,
     borderWidth: 1,
     borderTopWidth: 0,
