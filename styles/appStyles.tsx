@@ -4,7 +4,7 @@ import Constants from 'expo-constants';
 // const lightPurple = "rgba(219, 212, 254,.2)";
 const appStyles = StyleSheet.create({
     taskLeft:{
-        borderRadius: 15,
+        borderRadius: 20,
         paddingHorizontal: 20,
         paddingVertical: 25,
         height: "100%",
@@ -23,7 +23,7 @@ const appStyles = StyleSheet.create({
         marginTop: 10,
         paddingVertical:18,
         paddingHorizontal: 20,
-        borderRadius: 15,
+        borderRadius: 20,
     },
     tinyImg:{
         width: 40,

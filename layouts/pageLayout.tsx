@@ -46,11 +46,13 @@ const PageLayout = (props: Props) => {
     const handleDismissPress = () => bottomSheetRef.current?.dismiss();
 
     const {children,route} = props;
-    if (props.headerShow) {
-        props.navigation.setOptions({
-            headerBackground: () => <Animated.View style={[styles.headerBackground,headerAnimatedStyle]}/>
-        })  
-    }
+    React.useEffect(() => {
+        if (props.headerShow) {
+            props.navigation.setOptions({
+                headerBackground: () => <Animated.View style={[styles.headerBackground,headerAnimatedStyle]}/>
+            })  
+        }
+    },[])
 
     if (route) {
         if (route.params !== undefined ) {

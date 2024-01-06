@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     baseContainer:{
         flexDirection: "row",
         alignItems: "center",   
+        justifyContent: "space-between"
     },
     activeContainer:{
         borderColor: 'rgba(0,0,0,.8)',
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
     activeBtn:{
         opacity: 1,
         shadowOffset: {width: -2, height: 4},  
-        shadowColor: '#171717',  
+        shadowColor: 'rgba(0,0,0,.01)',  
         shadowOpacity: 0.5,  
         shadowRadius: 3,  
         elevation: 12,
@@ -80,6 +81,9 @@ const styles = StyleSheet.create({
     formErrText:{
         color: "red"
     },
+    rightIcon:{
+
+    }
 })
 
 export default styles

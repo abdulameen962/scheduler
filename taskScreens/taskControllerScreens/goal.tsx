@@ -11,7 +11,10 @@ import {styles} from "../addTask";
 import Label from '../../components/label';
 import { goalCreation } from "../../redux/actions";
 import { trim,tryParseDateFromString } from "../../helpfulFunc";
+import { store } from "../../redux/store";
 import { connect } from 'react-redux';
+import CustomSelect from "../../components/select";
+import CalendarBottom from "../../components/calendarBottom";
 
 interface NavigationProps {
     setOptions: Function,
@@ -20,8 +23,28 @@ interface NavigationProps {
 
 interface Props {
     navigation: NavigationProps,
-    route: {params: {showTask: boolean}}
+    route: {params: {showTask: boolean}},
+    goalCreation: Function,
+    err: string | null
 }
+
+const imgChoices = [
+    {
+        title:"Block",
+        id:"https://res.cloudinary.com/abdulameen/image/upload/v1703262365/pic1_yge1z0.png",
+        image:{uri:"https://res.cloudinary.com/abdulameen/image/upload/v1703262365/pic1_yge1z0.png"},
+    },
+    {
+        title:"Horse",
+        id:"https://res.cloudinary.com/abdulameen/image/upload/v1703262365/pic2_a0ukhq.png",
+        image:{uri:"https://res.cloudinary.com/abdulameen/image/upload/v1703262365/pic2_a0ukhq.png"},
+    },
+    {
+        title:"Plane",
+        id:"https://res.cloudinary.com/abdulameen/image/upload/v1703262902/pic3_o471pa.png",
+        image:{uri:"https://res.cloudinary.com/abdulameen/image/upload/v1703262902/pic3_o471pa.png"},
+    },
+]
 
 const CreateGoal = (props:Props) => {
     const [name,setName] = React.useState<String>("");
@@ -30,10 +53,24 @@ const CreateGoal = (props:Props) => {
     const [descr,setDescr] = React.useState<String>(null);
     const [image,setImage] = React.useState<String>(null);
     const [disabled,setDisabled] = React.useState<boolean>(true);
+    const [calendarShow,setCalendarShow] = React.useState<boolean>(false);
 
     React.useEffect(() => {
         checkDisabled()
     },[name,startDate,endDate,descr,image]);
+
+    React.useEffect(() => {
+        const {navigation} = props;
+        navigation.setOptions({
+            headerLeft: (prop: any) => {
+                return (
+                    <Pressable onPress={() => navigation.goBack()}>
+                        <Ionicons name="close-outline" color={"rgba(0,0,0,.9)"} size={30} />
+                    </Pressable>
+                )
+            }
+        })
+    },[])
     
     const checkDisabled = () => {
         if (trim(name).length > 4 &&
@@ -54,41 +91,39 @@ const CreateGoal = (props:Props) => {
     const handleChange = (key: handleKey) => (val:String) => {
         let func: handleFunc;
         switch (key) {
-          case "name":
-            func = setName;
-            break;
-    
-          case "startDate":
-            func = setStartDate;
-            break;
-    
-          case "endDate":
-            func = setEndDate;
-    
-            break;
-    
-          case "descr":
-            func = setDescr;
-    
-            break;
-    
-          default:
-            break;
+            case "name":
+                func = setName;
+                break;
+        
+            case "startDate":
+                func = setStartDate;
+                break;
+        
+            case "endDate":
+                func = setEndDate;
+        
+                break;
+        
+            case "descr":
+                func = setDescr;
+        
+                break;
+
+            case "image":
+                func = setImage;
+
+                break;
+        
+            default:
+                break;
         }
     
         func(val)
-      }
+    }
 
-    const {navigation} = props;
-    navigation.setOptions({
-        headerLeft: (prop: any) => {
-            return (
-                <Pressable onPress={() => navigation.goBack()}>
-                    <Ionicons name="close-outline" color={"rgba(0,0,0,.9)"} size={30} />
-                </Pressable>
-            )
-        }
-    })
+    const showCalendar = (key: calendarKey) => {
+        setCalendarShow(true);
+    }
 
     let formArr = {
         form : [
@@ -105,7 +140,7 @@ const CreateGoal = (props:Props) => {
                 styled: styles.styled,
             },
             {
-                Label: <Label text={"Start Date"} />,
+                Label: <Label text="Start Date" />,
                 attributes:{
                     autoCapitalize:'none' ,
                     autoComplete:'off' ,
@@ -115,34 +150,34 @@ const CreateGoal = (props:Props) => {
                 inputStyle: [styles.inputStyle],
                 activeInput: [styles.activeInput],
                 styled: styles.styled,
-                // rightIcon:{
-                //     clickable: true,
-                //     src: require("../assets/eye-cancel.png"),
-                //     activeSrc: require("../assets/eye-cancel.png"),
-                //     attributes:{},
-                //     onClick: showCalendar("startDate"),
-                //     clickedImg: require("../assets/eye.png"),
-                // }
+                rightIcon:{
+                    clickable: true,
+                    src: [<Ionicons name="calendar-outline" color={"rgba(0,0,0,.2)"} size={25} />],
+                    activeSrc: [<Ionicons name="calendar-outline" color={"rgba(0,0,0,1)"} size={27} />],
+                    attributes:{},
+                    onClick: () => showCalendar("startDate"),
+                    clickedImg: [<Ionicons name="calendar-outline" color={"rgba(0,0,0,.2)"} size={25} />],
+                }
             },
             {
-              Label: <Label text="End Date" />,
-              attributes:{
-                  autoCapitalize:'none' ,
-                  autoComplete:'off' ,
-                  // secureTextEntry:state.showPassword.show,
-                  // onChangeText:handleChange('password')
-              },
-              inputStyle: [styles.inputStyle],
-              activeInput: [styles.activeInput],
-              styled: styles.styled,
-              // rightIcon:{
-              //     clickable: true,
-              //     src: require("../assets/eye-cancel.png"),
-              //     activeSrc: require("../assets/eye-cancel.png"),
-              //     attributes:{},
-              //     onClick: showCalendar("endDate"),
-              //     clickedImg: require("../assets/eye.png"),
-              // }
+                Label: <Label text="End Date" />,
+                attributes:{
+                    autoCapitalize:'none' ,
+                    autoComplete:'off' ,
+                    // secureTextEntry:state.showPassword.show,
+                    // onChangeText:handleChange('password')
+                },
+                inputStyle: [styles.inputStyle],
+                activeInput: [styles.activeInput],
+                styled: styles.styled,
+                  rightIcon:{
+                      clickable: true,
+                      src: [<Ionicons name="calendar-outline" color={"rgba(0,0,0,.2)"} size={25} />],
+                      activeSrc: [<Ionicons name="calendar-outline" color={"rgba(0,0,0,1)"} size={27} />],
+                      attributes:{},
+                      onClick: () => showCalendar("endDate"),
+                      clickedImg: [<Ionicons name="calendar-outline" color={"rgba(0,0,0,1)"} size={27} />],
+                  }
             },
     
             {
@@ -160,25 +195,29 @@ const CreateGoal = (props:Props) => {
             },
         ],
 
-        extras : [
-            // image camera component user can only choose
+        topExtras : [                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+            // images user can only choose
+            <CustomSelect onChange={handleChange("image")} label='Choose image' values={imgChoices} onOpen={() => {}} />,
 
         ],
         submit: {
             btnText: "Create Goal",
-            // onSubmit:this.submitForm,
-            // disabled: this.state.disabled,
+            onSubmit:props.goalCreation(store,{goal_name:name,goal_description:descr,start_time:startDate,deadline:endDate,image,}),
+            disabled: disabled,
         },
-        boardType: "padding"
-        // error: state.err
+        // boardType: "padding"
+        error: props.err
       }
 
     return (
-        <PageLayout {...props} headerShow={true}>
-            <View style={[{width,}]}>
-                <Form {...formArr} />
-            </View>
-        </PageLayout>
+        <>
+            <CalendarBottom />
+            <PageLayout {...props} headerShow={true}>
+                <View style={[{width,marginTop:70}]}>
+                    <Form {...formArr} />
+                </View>
+            </PageLayout>
+        </>
     )
 }
 

@@ -1,10 +1,11 @@
-import React,{FC} from "react";
-import {Pressable,Image} from "react-native"
+import React,{FC, isValidElement} from "react";
+import {Pressable,Image,View} from "react-native"
 import PropTypes from "prop-types";
 import styles from "./formstyles";
+import ExtraForm from "./extraForm"
 
 const Icon:FC = (props:any) => {
-    let src : String;
+    let src : String | React.ReactNode | Object;
     if (props.abled && props.icon.activeSrc) {
         src = props.icon.activeSrc;
     }
@@ -12,8 +13,14 @@ const Icon:FC = (props:any) => {
         src = props.icon.src;
     }
 
+    let IconComponent : any;
+
+    if (Array.isArray(src)) {
+        IconComponent = [src[0]];
+    }
+
     return (
-        <>
+        <View style={styles.rightIcon}>
             {
                 props.icon.clickable ? (
                     <>
@@ -29,24 +36,52 @@ const Icon:FC = (props:any) => {
                             ):
                             (
                                 <Pressable onPress={props.icon.onClick}>
-                                    <Image
-                                        style = {styles.inputIcon}
-                                        source={src}
-                                        {...props.icon.attributes}
-                                    />                        
+                                   {
+                                        !IconComponent ? (
+                                            <Image
+                                                style = {styles.inputIcon}
+                                                source={src}
+                                                {...props.icon.attributes}
+                                            />     
+                                        ):
+                                        (
+                                            <>
+                                                {
+                                                    IconComponent.map((extra:any,index:number) => <ExtraForm key={index}>
+                                                        {extra}
+                                                    </ExtraForm> )
+                                                }
+                                            </>
+                                        )
+                                   }                   
                                 </Pressable>
                             )
                         }
                     </>
                 ):(
-                    <Image
-                        style = {styles.inputIcon}
-                        source={src}
-                        {...props.icon.attributes}
-                    />         
+                    <>
+                        {
+                            !IconComponent ? (
+                                <Image
+                                    style = {styles.inputIcon}
+                                    source={src}
+                                    {...props.icon.attributes}
+                                />     
+                            ):
+                            (
+                                <>
+                                    {
+                                        IconComponent.map((extra:any,index:number) => <ExtraForm key={index}>
+                                            {extra}
+                                        </ExtraForm> )
+                                    }
+                                </>
+                            )
+                        }  
+                    </>
                 )
             }        
-        </>
+        </View>
     )
 }
 

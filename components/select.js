@@ -16,17 +16,21 @@ import {
     SelectItem,
     SelectTrigger,
     ChevronDownIcon,
-    View
+    View,
   } from '@gluestack-ui/themed';
 
+import { Image } from "react-native";
+import appStyles from "../styles/appStyles";
 import PropTypes from "prop-types"
 
 const CustomSelect = ({onChange,label="Choose option",values=[],onOpen}) => {
 
     return (
         <View mb="$2">
-            <Label text="Goal" />
-            <Select width="$full" mt="$1" selectedLabel={label} onValueChange={onChange} onOpen={() => onOpen()}>
+            <Label text={label} />
+            <Select width="$full" mt="$1" selectedLabel={label} onValueChange={onChange} onOpen={() => {
+                if (onOpen) onOpen()
+            }}>
                 <SelectTrigger variant="underlined" size="md" paddingHorizontal="$1">
                     <SelectInput placeholder="Select option" color="$secondary500"/>
                     <SelectIcon mr="$3">
@@ -41,7 +45,7 @@ const CustomSelect = ({onChange,label="Choose option",values=[],onOpen}) => {
                     </SelectDragIndicatorWrapper>
                     {
                         values && values.length > 0 ? values.map((goal,index) => {
-                            const {title,id,click} = goal;
+                            const {title,id,click,image} = goal;
                             if (click) {
                                 return (
                                     <SelectItem key={index} label={title} value={id} onPress={() => {
@@ -51,7 +55,19 @@ const CustomSelect = ({onChange,label="Choose option",values=[],onOpen}) => {
                             }
 
                             return (
-                                <SelectItem key={index} label={title} value={id} />
+                                <View key={index} width={"100%"} paddingVertical="$1">
+                                    <SelectItem label={title} value={id} />
+                                    {
+                                        image && (
+                                            <Image
+                                                source={image}
+                                                alt={title}
+                                                style={[appStyles.tinyImg,{position:"absolute",right:10,top:"10%",width:35,height:35}]}
+                                                resizeMode="contain"
+                                            />
+                                        )
+                                    }
+                                </View>
                             )
 
                         }):

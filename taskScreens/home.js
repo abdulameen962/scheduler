@@ -4,8 +4,8 @@ import { userGoals,userProfile,onGoingTasks } from "../redux/actions";
 import { store } from "../redux/store";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { Spinner,View,Text,Pressable,Heading,Image,Button,ButtonText } from "@gluestack-ui/themed";
-import { TouchableOpacity,Dimensions,ScrollView } from "react-native";
+import { Spinner,View,Text,Pressable,Heading,Button,ButtonText } from "@gluestack-ui/themed";
+import { TouchableOpacity,Dimensions,ScrollView,Image } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 // import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { truncateString } from "../helpfulFunc";
@@ -148,7 +148,7 @@ class Home extends React.Component{
 
     render(){
         if (!this.state.profile || !this.state.goals) return (
-            <PageLayout  {...this.props}>
+            <PageLayout  {...this.props} headerShow={true}>
                 <Spinner size="large" />
             </PageLayout>
         );

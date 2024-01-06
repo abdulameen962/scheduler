@@ -38,7 +38,7 @@ class Setting extends React.Component {
 
     render(){
         return (
-            <PageLayout {...this.props}>
+            <PageLayout {...this.props} headerShow={true}>
                 <PopUp
                     header={"Logout"}
                     text={"Are you sure you want to logout?"}

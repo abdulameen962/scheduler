@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useRef,forwardRef,useState, useEffect } from 'react';
+import BottomSheetLayout from '../layouts/bottomSheetLayout';
 import { 
   Text,
   Heading,
@@ -226,7 +227,7 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
   }
 
   const renderFooter = useCallback(
-    props => (
+    (props) => (
       <BottomSheetFooter {...props} bottomInset={18}>
         <View>
           <Pressable>
@@ -245,57 +246,18 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
   const handleChangePrediction = () => {
     
   }
-  // ref
-  // const bottomSheetRef = useRef<BottomSheetModal>(null);
-  // const {dismiss} = useBottomSheetModal();
-
-  // variables
-  const snapPoints = useMemo(() => ['45%','75%',"90%"], []);
-
-  // const handleClosePress = () => bottomSheetRef.current?.close();
-  // const handleExpandPress = () => bottomSheetRef.current?.expand();
-  // const handleCollapsePress = () => bottomSheetRef.current?.collapse();
-  // const snaPindex = (num: number) => bottomSheetRef.current?.snapToIndex(num);
-  // const handlePresentPress = () => bottomSheetRef.current?.present();
-  // const handleDismissPress = () => bottomSheetRef.current?.dismiss();
-
-  // callbacks
-  const handleSheetChanges = useCallback((index: number) => {
-    // console.log('handleSheetChanges', index);
-  }, []);
-
-  const renderBackdrop = useCallback(
-    (props:any) => <BottomSheetBackdrop appearsOnIndex={1} disappearsOnIndex={-1} {...props} opacity={0.5} />,
-    []
-  )
 
 
   // renders
   return (
-        <>
-          <BottomSheetModal
-            ref={ref}
-            index={0}
-            snapPoints={snapPoints}
-            onChange={handleSheetChanges}
-            enablePanDownToClose
-            backgroundStyle={{backgroundColor:'white'}}
-            backdropComponent={renderBackdrop}
-            handleIndicatorStyle={{backgroundColor:'black'}}
-            keyboardBehavior="fillParent"
-            keyboardBlurBehavior='restore'
-            footerComponent={renderFooter}
-          >
-            <BottomSheetScrollView contentContainerStyle={[styles.container]} >
-              <Heading
-                size="lg"
-              >
-                Create New Task
-              </Heading>
-              <Form {...formArr} />
-            </BottomSheetScrollView>
-            </BottomSheetModal>
-        </>
+        <BottomSheetLayout ref={ref} renderFooter={renderFooter} >
+            <Heading
+                  size="lg"
+                >
+                  Create New Task
+            </Heading>
+            <Form {...formArr} />
+        </BottomSheetLayout>
   );
 });
 

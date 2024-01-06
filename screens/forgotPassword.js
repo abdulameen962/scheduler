@@ -7,6 +7,7 @@ import { validEmailInput } from '../helpfulFunc';
 import { connect } from 'react-redux';
 import { sendForgotPasswordOtp } from '../redux/actions';
 import { trim } from '../helpfulFunc';
+import FormFooter from '../components/bottomForm';
 
 const MyLoader = () => <Instagram animate={true} />
 

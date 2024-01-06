@@ -45,5 +45,8 @@ export async function registerBackgroundFetchAsync() {
 // This will cancel any future background fetch calls that match the given name
 // Note: This does NOT need to be in the global scope and CAN be used in your React components!
 export async function unregisterBackgroundFetchAsync() {
-    return await BackgroundFetch.unregisterTaskAsync(BACKGROUND_NOTIFICATION_TASK);
+    const isRegistered = await TaskManager.isTaskRegisteredAsync(BACKGROUND_NOTIFICATION_TASK);
+    // console.log(`Task ${BACKGROUND_NOTIFICATION_TASK} is registered: ${isRegistered}`);
+    if (isRegistered) return await BackgroundFetch.unregisterTaskAsync(BACKGROUND_NOTIFICATION_TASK);
+    return;
 }
