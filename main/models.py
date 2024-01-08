@@ -93,7 +93,14 @@ class Goal(models.Model):
     @property
     def goal_image(self):
         from .helper_functions import convert_to_https
-        return convert_to_https(self.image.url) if self.image else "#"
+        if self.image:
+            if self.image.url:
+                return convert_to_https(self.image.url)
+            
+            else:
+                return self.image
+        
+        return "#"
     
     @property
     def task_num(self):
