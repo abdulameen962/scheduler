@@ -10,6 +10,7 @@ import AntDesign from "react-native-vector-icons/AntDesign"
 import { Dimensions, Text } from 'react-native';
 import CustomPlusButton from '../components/plusButton'
 import { BlurView } from 'expo-blur';
+import { getPreviousPage } from '../nativeHelpers';
 import {
     MD3LightTheme as DefaultTheme,
     Provider as PaperProvider,
@@ -109,9 +110,7 @@ const HomeScreen = props => {
                         tabPress: (e) => {
                             // Prevent default action
                             e.preventDefault();
-                            const {history} = navigation.getState();
-                            const {key} = history[history.length - 1];
-                            const previousState = key.split('-')[0]
+                            const previousState = getPreviousPage(navigation);
                             // Do something with the `navigation` object
                             navigation.navigate(previousState,{
                                 showTask: true

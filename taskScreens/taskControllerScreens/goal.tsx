@@ -15,6 +15,7 @@ import { store } from "../../redux/store";
 import { connect } from 'react-redux';
 import CustomSelect from "../../components/select";
 import CalendarBottom from "../../components/calendarBottom";
+import { getPreviousPage } from "../../nativeHelpers";
 import 
     {
     useBottomSheetModal,  
@@ -159,8 +160,9 @@ const CreateGoal = (props:Props) => {
     }
 
     const submitGoal = () => {
+        const {navigation} = props;
         const result = props.goalCreation(store,{goal_name:name,goal_description:descr,start_time:startDate,deadline:endDate,image,});
-        if (result) props.navigation.navigate("Home",{showTask:true})
+        if (result) props.navigation.navigate(getPreviousPage(navigation),{showTask:true})
     }
 
     let formArr = {

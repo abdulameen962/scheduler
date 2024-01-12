@@ -74,3 +74,15 @@ export const schedulePushNotification = async(header:string,body:string,extraDat
       trigger: { seconds: 1 },
     });
 }
+
+
+/**
+ * Get previous page of a react page from navigation
+ */
+export const getPreviousPage = (navigation:any) => {
+  const {history} = navigation.getState();
+  const {key} = history[history.length - 1];
+  const previousState = key.split('-')[0];
+
+  return previousState;
+}
