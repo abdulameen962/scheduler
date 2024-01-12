@@ -80,11 +80,11 @@ def compare_greater_dates(date1,date2,differenced:int):
         Compares 2 dates whether they have the difference specified
     """
     # date1 = timezone.localtime(date1)
-    date1 = date1.strftime("%m/%d/%Y %I:%M %p")
-    date1 = datetime.strptime(date1,"%m/%d/%Y %I:%M %p")
+    date1 = date1.strftime("%Y-%m-%d %H:%M:%S")
+    date1 = datetime.strptime(date1,"%Y-%m-%d %H:%M:%S")
     # date2 = timezone.localtime(date2)
-    date2 = date2.strftime("%m/%d/%Y %I:%M %p")
-    date2 = datetime.strptime(date2,"%m/%d/%Y %I:%M %p")
+    date2 = date2.strftime("%Y-%m-%d %H:%M:%S")
+    date2 = datetime.strptime(date2,"%Y-%m-%d %H:%M:%S")
     difference = date1 - date2
     difference = difference.total_seconds()
     
