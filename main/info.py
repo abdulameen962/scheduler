@@ -87,7 +87,7 @@ class goal_creation(API_VERIFIED_BASE):
                 return Response({"message":"Start time cannot be greater than deadline"},status=status.HTTP_400_BAD_REQUEST)
             
         except Exception as e:
-            return Response({"message":"Start time and deadline are required"},status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message":f"Start time and deadline are required {e}"},status=status.HTTP_400_BAD_REQUEST)
             
         image = data.get("image",None)
         if goal_name is None or goal_description is None:
