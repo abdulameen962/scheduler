@@ -117,8 +117,8 @@ class Task_creation(API_VERIFIED_BASE):
             if not compare_greater_dates(start_time,deadline,2):
                 return Response({"message":"Start time cannot be greater than deadline"},status=status.HTTP_400_BAD_REQUEST)
             
-            start_time = datetime.strptime(data.get("start_time",None),"%Y-%m-%d %H:%M:%S")
-            deadline = datetime.strptime(data.get("deadline",None),"%Y-%m-%d %H:%M:%S")
+            start_time = datetime.strptime(data.get("start_time",None),"%Y-%m-%d")
+            deadline = datetime.strptime(data.get("deadline",None),"%Y-%m-%d")
             
         except Exception as e:
             
