@@ -87,7 +87,7 @@ def compare_greater_dates(date1,date2,differenced:int):
     date2 = datetime.strptime(date2,"%Y-%m-%d %H:%M:%S")
     difference = date1 - date2
     difference = difference.total_seconds()
-    
+
     #convert to a minute
     difference = difference / 60
     if difference >= int(differenced):
