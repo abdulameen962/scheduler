@@ -65,7 +65,7 @@ const HomeScreen = props => {
                 }}
             >
                 <BottomStack.Screen name="Home" component={Home}
-                    initialParams={{showTask:false}}
+                    // initialParams={{showTask:false}}
                     options={{
                         animationTypeForReplace: 'pop', 
                         // tabBarActiveBackgroundColor:"white",
@@ -78,7 +78,7 @@ const HomeScreen = props => {
                     }}
                 />
                 <BottomStack.Screen name="Summary" 
-                    initialParams={{showTask:false}}
+                    // initialParams={{showTask:false}}
                     options={{
                         animationTypeForReplace: 'pop',
                         // tabBarActiveBackgroundColor:"white",
@@ -91,7 +91,7 @@ const HomeScreen = props => {
                 </BottomStack.Screen>
                 <BottomStack.Screen
                     name='AddTask'
-                    initialParams={{showTask:false}}
+                    // initialParams={{showTask:false}}
                     options={{
                         animationTypeForReplace: 'pop', 
                         // tabBarActiveBackgroundColor:"white",
@@ -122,7 +122,7 @@ const HomeScreen = props => {
                     {(props) => <TaskController {...props} updateState={updateState}  />}
                 </BottomStack.Screen>
                 <BottomStack.Screen name="Notes" 
-                    initialParams={{showTask:false}}
+                    // initialParams={{showTask:false}}
                     options={{
                         animationTypeForReplace: 'pop',
                         // tabBarActiveBackgroundColor:"white",
@@ -134,7 +134,7 @@ const HomeScreen = props => {
                     {(props) => <Setting {...props} updateState={updateState}  />}
                 </BottomStack.Screen>
                 <BottomStack.Screen name="Setting" 
-                    initialParams={{showTask:false}}
+                    // initialParams={{showTask:false}}
                     options={{
                         animationTypeForReplace: 'pop',
                         // tabBarActiveBackgroundColor:"white",

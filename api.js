@@ -29,7 +29,6 @@ const BASE_FUNCTION = async(url,method,fetchBody=null,extraHeaders={},handleChan
             })
         }
         const result = await response.json();
-        // console.log(result);
         if (response.ok) {
             // console.log(result);
             if (handleChange) {
@@ -39,6 +38,7 @@ const BASE_FUNCTION = async(url,method,fetchBody=null,extraHeaders={},handleChan
         }
         
         const {message,detail} = result;
+        console.log(message);
         throw new Error(message?message:detail);
     }
     catch(err){

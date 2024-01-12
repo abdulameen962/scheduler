@@ -67,6 +67,10 @@ const CreateGoal = (props:Props) => {
     },[name,startDate,endDate,descr,image]);
 
     React.useEffect(() => {
+        console.log(props.err);
+    },[props.err])
+
+    React.useEffect(() => {
         const {navigation} = props;
         navigation.setOptions({
             headerLeft: (prop: any) => {
@@ -159,10 +163,12 @@ const CreateGoal = (props:Props) => {
 
     }
 
-    const submitGoal = () => {
+    const submitGoal = async () => {
         const {navigation} = props;
-        const result = props.goalCreation(store,{goal_name:name,goal_description:descr,start_time:startDate,deadline:endDate,image,});
-        if (result) props.navigation.navigate(getPreviousPage(navigation),{showTask:true})
+        if (!disabled) {
+            const result = await props.goalCreation(store,{goal_name:name,goal_description:descr,start_time:startDate,deadline:endDate,image,});
+            if (result) props.navigation.navigate(getPreviousPage(navigation),{showTask:true})  
+        }
     }
 
     let formArr = {

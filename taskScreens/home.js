@@ -114,6 +114,7 @@ class Home extends React.Component{
     }
 
     componentDidUpdate(prevProps,prevState){
+        const props = this.props;
         if (prevProps.profile !== this.props.profile) {
             this.updateProfile();
         }

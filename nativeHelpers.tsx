@@ -81,8 +81,26 @@ export const schedulePushNotification = async(header:string,body:string,extraDat
  */
 export const getPreviousPage = (navigation:any) => {
   const {history} = navigation.getState();
-  const {key} = history[history.length - 1];
-  const previousState = key.split('-')[0];
+  if (history) {
+    const {key} = history[history.length - 1];
+    const previousState = key.split('-')[0];
+  
+    return previousState;
+  }
 
-  return previousState;
+  else {
+    const newHistory = navigation.getParent().getState().history;
+    if (newHistory) {
+      const {key} = newHistory[newHistory.length - 1];
+      const previousState = key.split('-')[0];
+      if (previousState != "AddTask") {
+        return previousState;
+      }
+      else {
+        const {key} = newHistory[newHistory.length - 2];
+        const previousState = key.split('-')[0];
+        return previousState;
+      }
+    }
+  }
 }

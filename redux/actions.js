@@ -269,16 +269,13 @@ export const sendForgotPasswordOtp = (email,store=null,forgotFunc=resetPassword)
 export const goalCreation = (store,goal,goalFunc=createGoal) => async dispatch => {
     try{
         const authCode = await getToken(store,resetAcessToken,logoutUser);
-        await goalFunc(authCode,...goal);
-
+        const {goal_name,goal_description,start_time,deadline,image} = goal;
+        await goalFunc(authCode,goal_name,goal_description,start_time,deadline,image);
         dispatch({type:GOAL_CREATED,payload:"Goal created sucessfully"})
-
         return true;
-        
     }
     catch(error){
         dispatch({type:GOAL_REJECTED,payload:error.message})
-
         return false;
     }
 }

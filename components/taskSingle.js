@@ -8,7 +8,7 @@ const taskSingle = ({item}) => {
     let {goal,labels,prob_completion,title,start_time_date,deadline_date } = item;
     let mainDate = tryParseDateFromString(start_time_date);
     const monthOfYear = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-    const endDate = `${monthOfYear[mainDate.getMonth()]} ${mainDate.getFullYear()}`;
+    const endDate = `${monthOfYear[mainDate.getMonth()]} ${mainDate.getDate()}, ${mainDate.getFullYear()}`;
     start_time_date = `${mainDate.toLocaleTimeString()}`;
     mainDate = tryParseDateFromString(deadline_date);   
     deadline_date = `${tryParseDateFromString(deadline_date).toLocaleTimeString()}`;
