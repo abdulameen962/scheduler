@@ -66,9 +66,9 @@ const CreateGoal = (props:Props) => {
         checkDisabled()
     },[name,startDate,endDate,descr,image]);
 
-    React.useEffect(() => {
-        console.log(props.err);
-    },[props.err])
+    // React.useEffect(() => {
+    //     console.log(props.err);
+    // },[props.err])
 
     React.useEffect(() => {
         const {navigation} = props;
@@ -150,11 +150,11 @@ const CreateGoal = (props:Props) => {
         const key = currentCalendar;
         switch (key) {
             case "startDate":
-                setStartDate(val);
+                setStartDate(`${val} 00:00:00`);
                 break;
 
             case "endDate":
-                setEndDate(val);
+                setEndDate(`${val} 00:00:00`);
                 break;
         
             default:
@@ -167,7 +167,9 @@ const CreateGoal = (props:Props) => {
         const {navigation} = props;
         if (!disabled) {
             const result = await props.goalCreation(store,{goal_name:name,goal_description:descr,start_time:startDate,deadline:endDate,image,});
-            if (result) props.navigation.navigate(getPreviousPage(navigation),{showTask:true})  
+            // console.log(result);
+            props.navigation.navigate(getPreviousPage(navigation),{showTask:true})  
+            // if (result) props.navigation.navigate(getPreviousPage(navigation),{showTask:true})  
         }
     }
 

@@ -67,7 +67,7 @@ const CalendarBottom = React.forwardRef<Ref,Props>((props,ref) => {
             //   testID={testIDs.calendars.FIRST}
               enableSwipeMonths
               current={INITIAL_DATE}
-              minDate={getDate(1)}
+              minDate={getDate(-1)}
               style={styles.calendar}
               onDayPress={onDayPress}
               markedDates={marked}
