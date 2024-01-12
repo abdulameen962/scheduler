@@ -177,6 +177,9 @@ def convert_to_https(link:str=None):
     if link is None:
         return link
     
+    if link.startswith("https"):
+        return link
+    
     new_link = link.replace("http","https")
     
     return new_link
