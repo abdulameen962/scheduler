@@ -24,6 +24,7 @@ import
 interface NavigationProps {
     setOptions: Function,
     goBack: Function,
+    navigate: Function,
 }
 
 interface Props {
@@ -157,6 +158,11 @@ const CreateGoal = (props:Props) => {
 
     }
 
+    const submitGoal = () => {
+        const result = props.goalCreation(store,{goal_name:name,goal_description:descr,start_time:startDate,deadline:endDate,image,});
+        if (result) props.navigation.navigate("Home",{showTask:true})
+    }
+
     let formArr = {
         form : [
             {
@@ -232,7 +238,7 @@ const CreateGoal = (props:Props) => {
         ],
         submit: {
             btnText: "Create Goal",
-            onSubmit:props.goalCreation(store,{goal_name:name,goal_description:descr,start_time:startDate,deadline:endDate,image,}),
+            onSubmit:() => submitGoal(),
             disabled: disabled,
         },
         // boardType: "padding"
