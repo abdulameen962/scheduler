@@ -151,7 +151,7 @@ class Task_creation(API_VERIFIED_BASE):
             task.save()
             
             for label in labels:
-                label = Label.objects.get(name=label)
+                label = Label.objects.get(id=label)
                 task.labels.add(label)
                 
             return Response({"message":"Task created successfully"},status=status.HTTP_200_OK)
