@@ -149,8 +149,8 @@ def fcm_push_notifications(message):
     )
     
     Message(
-    notification=Notification(title="title", body="text", image="url"),
-    topic="Optional topic parameter: Whatever you want",
+        notification=Notification(title="title", body="text", image="url"),
+        topic="Optional topic parameter: Whatever you want",
     )
 
     # You can still use .filter() or any methods that return QuerySet (from the chain)

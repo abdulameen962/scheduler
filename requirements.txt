@@ -21,9 +21,9 @@ django-graphql-jwt==0.3.4
 djangorestframework==3.14.0
 djangorestframework-api-key==2.3.0
 djangorestframework-simplejwt==5.2.2
-# fcm-django==2.0.0
+fcm-django==2.0.0
 # filelock==3.13.1
-# firebase-admin==6.3.0
+firebase-admin==6.3.0
 # flatbuffers==23.5.26
 # fsspec==2023.12.2
 # gast==0.5.4
