@@ -1,4 +1,4 @@
-from .models import User,Userprofile,Notification
+from .models import User
 from allauth.account.models import EmailAddress
 from django.utils import timezone
 from django.conf import settings
@@ -100,6 +100,7 @@ def send_mail_comparison(date_joined,difference_time:int,header:str,html_message
     """
     A function for sending mail by comparing current time with time specified
     """
+    from .models import Notification
     
     if just_created(date_joined,difference_time):
         #send email
@@ -137,7 +138,7 @@ def get_google_login(token:str) -> object:
     return result
 
 def fcm_push_notifications(message):
-    from firebase_admin.messaging import Message
+    from firebase_admin.messaging import Message,Notification
     from fcm_django.models import FCMDevice
 
     message_obj = Message(
@@ -148,15 +149,16 @@ def fcm_push_notifications(message):
     },
     )
     
-    Message(
-        notification=Notification(title="title", body="text", image="url"),
-        topic="Optional topic parameter: Whatever you want",
+    new_message = Message(
+        notification=Notification(title="title", body=f"{message}", image="https://res.cloudinary.com/abdulameen/image/upload/v1703262365/pic1_yge1z0.png"),
+        # topic=message,
     )
 
     # You can still use .filter() or any methods that return QuerySet (from the chain)
     device = FCMDevice.objects.all().first()
     # send_message parameters include: message, dry_run, app
     device.send_message(message_obj)
+    device.send_message(new_message)
     # Boom!
     
 def create_fcm_object(fcm_token:str=None,device_type:str=None,user:User=None):

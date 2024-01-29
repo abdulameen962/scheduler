@@ -286,11 +286,13 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD',"")
 OTP_TIME_LIMIT = os.environ.get('OTP_TIME_LIMIT',300)
 
 # fire base configuration
-from firebase_admin import initialize_app
-FIREBASE_APP = initialize_app()
+from firebase_admin import initialize_app,credentials
+cred = credentials.Certificate(os.path.join(BASE_DIR, 'serviceAccountKey.json'))
+FIREBASE_APP = initialize_app(cred)
 
 FCM_DJANGO_SETTINGS = {
     # default: _('FCM Django')
+    # "DEFAULT_FIREBASE_APP": FIREBASE_MESSAGING_APP,
     "APP_VERBOSE_NAME": "main",
     # true if you want to have only one active device per registered user at a time
     # default: False
