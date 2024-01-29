@@ -113,9 +113,20 @@ class Task_creation(API_VERIFIED_BASE):
         goal_id = data.get("goal_id",None)
         task_name = data.get("task_name",None)
         task_description = data.get("task_description",None)
+        
+        try:
+            goal = Goal.objects.get(id=goal_id,user=user)
+            
+        except Goal.DoesNotExist:
+            
+            return Response({"message":"Goal doesn't exist"},status=status.HTTP_400_BAD_REQUEST)
+            
         try:
             if not compare_greater_dates(start_time,deadline,2):
                 return Response({"message":"Start time cannot be greater than deadline"},status=status.HTTP_400_BAD_REQUEST)
+            
+            if not compare_greater_dates(start_time,goal.start_time,2) or not compare_greater_dates(deadline,goal.deadline,2):
+                return Response({"message":"Start time and deadline must be between goal start and end time"},status=status.HTTP_400_BAD_REQUEST)
             
             start_time = datetime.strptime(data.get("start_time",None),"%Y-%m-%d %H:%M:%S")
             deadline = datetime.strptime(data.get("deadline",None),"%Y-%m-%d %H:%M:%S")
@@ -130,7 +141,6 @@ class Task_creation(API_VERIFIED_BASE):
         
         
         try:
-            goal = Goal.objects.get(id=goal_id,user=user)
             
             task = Task(user=user,goal=goal,task_name=task_name,task_description=task_description)
             task.save()
@@ -141,5 +151,5 @@ class Task_creation(API_VERIFIED_BASE):
                 
             return Response({"message":"Task created successfully"},status=status.HTTP_200_OK)
             
-        except Goal.DoesNotExist or Label.DoesNotExist or Exception as e:
+        except Label.DoesNotExist or Exception as e:
             return Response({"message":f"An error occured {e}"},status=status.HTTP_400_BAD_REQUEST)
