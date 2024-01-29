@@ -91,6 +91,21 @@ export const createGoal = async (authCode,goal_name,goal_description,start_time,
 
 }
 
+export const createTask = async (authCode,goal_id,task_name,task_description,start_time,deadline,labels) => {
+    const url = "create-task/";
+    // new FormData()
+    const method = "POST";
+    const header = {
+        "Authorization":`Bearer ${authCode}`
+    }
+    const body = {
+        goal_id,task_name,task_description,start_time,deadline,labels:[labels]
+    }
+    const result = await BASE_FUNCTION(url,method,body,header)
+    return result;
+
+}
+
 export const logoutApi = async authCode => {
     const url = "users/logout/";
     const method = "POST";

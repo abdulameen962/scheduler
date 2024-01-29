@@ -11,6 +11,7 @@ import {store} from "../redux/store";
 import Label from '../components/label';
 import { userGoals,userLabels } from '../redux/actions';
 import CalendarBottom from "../components/calendarBottom";
+import { trim,tryParseDateFromString } from "../helpfulFunc";
 import 
   // BottomSheet,
     {
@@ -27,6 +28,9 @@ import Select from "../components/select";
 interface Props {
   // children: React.ReactNode;
   navigation: any;
+  err:String;
+  taskCreation:Function,
+  sucess: String,
 }
 
 type Ref = BottomSheetModal;
@@ -41,7 +45,6 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
   const [goal,setGoal] = useState<String>("");
   const [disabled,setDisabled] = useState<boolean>(true);
   const [goals,setGoals] = useState<Object[]>([]);
-  const [gotoGoal,setGotoGoal] = useState<boolean>(false);
   const [label,setLabel] = useState<String>("");
   const [labelContainer,setlabelContainer] = useState<Object[]>([]);
   const [currentCalendar,setCurrentCalendar] = React.useState<calendarKey>(null)
@@ -51,7 +54,22 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
     
     setResult(result);
   }
-  
+  const submitForm = async () => {
+    if (!disabled) {
+      const {taskCreation,navigation} = props;
+      const task = {
+        goal_id: goal,
+        task_name: name,
+        task_description: descr,
+        deadline: endDate,
+        labels: label,
+        start_time: startDate,
+      }
+      const result = await taskCreation(task);
+      if (result) navigation.setParams({showTask:false,refresh:true})
+    }
+  }
+
   useEffect(() => {
     checkDisabled()
   },[goal,name,startDate,endDate,descr,label])
@@ -77,7 +95,6 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
         id: null,
         title: "Create Goal",
         click: () => {
-          setGotoGoal(true);
           const {navigation} = props;
           navigation.navigate("AddTask",{
             screen: "CreateGoal",
@@ -115,7 +132,21 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
   },[])
 
   const checkDisabled = () => {
+    if (trim(name).length > 4 &&
+      tryParseDateFromString(startDate) < tryParseDateFromString(endDate) &&
+      descr != null &&
+      trim(descr).length > 12 &&
+      trim(descr).length <= 500 &&
+      trim(goal).length > 0 &&
+      trim(label).length > 0
+    ) 
+    setDisabled(false);
 
+    else{
+        if (!disabled) {
+            setDisabled(true);
+        }
+    }
   }
 
   type handleFunc = typeof setName | typeof setStartDate | typeof setEndDate | typeof setDescr;
@@ -175,10 +206,6 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
   const showCalendar = (key: calendarKey) => {
       setCurrentCalendar(key);
       handlePresentPress();
-  }
-
-  const submitForm = () => {
-
   }
 
   const submitDate = (val:string) => {
@@ -254,24 +281,31 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
             }
       },
 
-        {
-          Label: <Label text="Description" />,
-          attributes:{
-              autoCapitalize:'none' ,
-              autoComplete:'off' ,
-              multiline: true,
-          },
-          inputStyle: [styles.inputStyle],
-          activeInput: [styles.activeInput],
-          styled: {...styles.styled,minHeight:70},
+      {
+        Label: <Label text="Description" />,
+        attributes:{
+            autoCapitalize:'none' ,
+            autoComplete:'off' ,
+            multiline: true,
+            onChangeText: handleChange("descr"),
         },
+        inputStyle: [styles.inputStyle],
+        activeInput: [styles.activeInput],
+        styled: {...styles.styled,minHeight:70},
+      },
     ],
     topExtras: [
       <Select onChange={handleChange("goal")} label='Choose goal' values={goals} onOpen={() => goalsFunc()} />,
       <Select onChange={handleChange("label")} label='Choose Task label' values={labelContainer} onOpen={() => labelsFunc()} />
     ],
-    boardType: "padding"
-    // error: state.err
+    submit: {
+      btnText: "Create Task",
+      onSubmit:() => submitForm(),
+      disabled: disabled,
+    },
+    boardType: "padding",
+    error: props.err,
+    sucess: props.sucess,
   }
 
   const renderFooter = useCallback(
@@ -294,7 +328,6 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
   const handleChangePrediction = () => {
     
   }
-
 
   // renders
   return (

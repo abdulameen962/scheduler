@@ -152,8 +152,9 @@ class Home extends React.Component{
                     const {refresh} = route.params;
             
                     if (refresh !== undefined && refresh == true) {
-                        this.setState({goals:null})
-                        this.getGoals()
+                        this.setState({goals:null,ongoingTaks:null})
+                        this.getGoals();
+                        this.getOngoingTasks();
                     }
                 }   
             }

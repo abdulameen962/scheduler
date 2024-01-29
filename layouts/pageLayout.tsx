@@ -5,6 +5,9 @@ import styles from "../styles";
 import { StatusBar } from 'expo-status-bar';
 import Alerter from "../components/alerter";
 import AddTask from "../taskScreens/addTask";
+import { store } from "../redux/store";
+import { taskCreation } from "../redux/actions";
+import { connect } from 'react-redux';
 import Animated, { interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset } from "react-native-reanimated";
 import 
     {
@@ -17,6 +20,9 @@ interface Props {
     route: any;
     navigation: any;
     headerShow: boolean;
+    err: String;
+    taskCreation: Function;
+    sucess: String;
 }
 
 const PageLayout = (props: Props) => {
@@ -70,7 +76,12 @@ const PageLayout = (props: Props) => {
     return (
         <>
             <Alerter>
-                <AddTask ref={bottomSheetRef} navigation={props.navigation}/>
+                <AddTask ref={bottomSheetRef} sucess={props.sucess} navigation={props.navigation} taskCreation={
+                    async (task:Object) => {
+                        return await props.taskCreation(store,task);
+                    }
+                    
+                } err={props.err}/>
                 <View style={[styles.containerLayout,styles.greyBack]}>
                     <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
                         {children}
@@ -87,4 +98,10 @@ PageLayout.propTypes = {
     route: PropTypes.object
 }
 
-export default PageLayout
+const mapStateToProps = (state:any,ownProps:any) => ({
+    err: state.user.errMessage || null,
+    success: state.user.successMessage || null,
+    ...ownProps,
+})
+
+export default connect(mapStateToProps,{taskCreation})(PageLayout);

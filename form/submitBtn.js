@@ -56,6 +56,7 @@ class SubmitBtn extends React.Component {
         });
         this.showLoader(true);
         await this.props.submit.onSubmit();
+        this.getSubmitText();
         this.showLoader(false);
     }
 

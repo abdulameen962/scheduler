@@ -15,8 +15,10 @@ import { login,
     createGoal,
     getLabels,
 } from '../api';
+import * as Apis from "../api";
 import { getToken } from '../storeapis';
 import { getRandom } from '../helpfulFunc';
+import {Platform} from "react-native"
 
 // action types
 export const UPDATE_USER = 'UPDATE_USER'
@@ -63,6 +65,7 @@ export const loginUser = (username,password,loginFn=login) => async dispatch => 
     dispatch({type:LOG_IN_SENT,payload:""})
     try{
         const result = await loginFn(username,password);
+        // const result = await loginFn(username,password,Platform.OS);
         const {message} = result;
         const {data} = result;
         const {access_token,refresh_token} = data;
@@ -286,6 +289,21 @@ export const goalCreation = (store,goal,goalFunc=createGoal) => async dispatch =
         const {goal_name,goal_description,start_time,deadline,image} = goal;
         await goalFunc(authCode,goal_name,goal_description,start_time,deadline,image);
         dispatch({type:GOAL_CREATED,payload:"Goal created sucessfully"});
+        return true;
+    }
+    catch(error){
+        dispatch({type:GOAL_REJECTED,payload:error.message})
+        return false;
+    }
+}
+
+export const taskCreation = (store,task,goalFunc=Apis.createTask) => async dispatch => {
+    try{
+        const authCode = await getToken(store,resetAcessToken,logoutUser);
+        const {goal_id,task_name,task_description,deadline,labels,start_time} = task;
+        await goalFunc(authCode,goal_id,task_name,task_description,start_time,deadline,labels);
+        dispatch({type:GOAL_CREATED,payload:"Task created sucessfully"});
+        console.log(result);
         return true;
     }
     catch(error){
