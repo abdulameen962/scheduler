@@ -176,7 +176,6 @@ class App extends React.Component {
     const responseListener = createRef();
     // first check whether we have token already or not
     const tokenFromStorage = store.getState().user.notificationToken;
-    console.log(tokenFromStorage)
     if (!tokenFromStorage) {
       this.registerForPushNotificationsAsync().then(token => {
         store.dispatch(setNotificationToken(token))
