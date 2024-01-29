@@ -133,7 +133,7 @@ class Task_creation(API_VERIFIED_BASE):
             
         except Exception as e:
             
-            return Response({"message":"Start time and deadline are required"},status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message":f"Start time and deadline are required or an error occured {e}"},status=status.HTTP_400_BAD_REQUEST)
         
         labels = data.getlist("labels",None)
         if goal_id is None or task_name is None or task_description is None or start_time is None or deadline is None or labels is None:
