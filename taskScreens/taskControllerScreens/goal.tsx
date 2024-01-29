@@ -66,16 +66,14 @@ const CreateGoal = (props:Props) => {
         checkDisabled()
     },[name,startDate,endDate,descr,image]);
 
-    // React.useEffect(() => {
-    //     console.log(props.err);
-    // },[props.err])
-
     React.useEffect(() => {
         const {navigation} = props;
         navigation.setOptions({
             headerLeft: (prop: any) => {
                 return (
-                    <Pressable onPress={() => navigation.goBack()}>
+                    <Pressable onPress={() => {
+                        navigation.navigate(getPreviousPage(navigation),{showTask:true})  
+                    }}>
                         <Ionicons name="close-outline" color={"rgba(0,0,0,.9)"} size={30} />
                     </Pressable>
                 )
@@ -167,9 +165,7 @@ const CreateGoal = (props:Props) => {
         const {navigation} = props;
         if (!disabled) {
             const result = await props.goalCreation(store,{goal_name:name,goal_description:descr,start_time:startDate,deadline:endDate,image,});
-            // console.log(result);
-            props.navigation.navigate(getPreviousPage(navigation),{showTask:true})  
-            // if (result) props.navigation.navigate(getPreviousPage(navigation),{showTask:true})  
+            if (result) props.navigation.navigate(getPreviousPage(navigation),{showTask:true,refresh:true})  
         }
     }
 

@@ -1,15 +1,43 @@
 import React,{useState} from "react";
-import { Pressable,Text } from "react-native";
+import { Pressable,Text,Modal,ActivityIndicator,View } from "react-native";
 import PropTypes from "prop-types"
 import styles from "./formstyles"
 import Toast from "react-native-toast-message";
 
+const PageLoader = props => {
+    const {loading} = props;
+    if (loading) {
+        return (
+            <Modal 
+                visible={loading}
+                transparent
+                animationType="fade"
+            >
+                <View style={styles.loaderStyles}>
+                    <ActivityIndicator animating={loading} size="large" color={"#0077E6"} />
+                </View>
+            </Modal>
+        )
+    }
+    return null
+}
+
+PageLoader.propTypes = {
+    loading: PropTypes.bool.isRequired,
+}
+
 class SubmitBtn extends React.Component {   
     state = {
-        "name":null
+        name:null,
+        loading: false,
+        disabled:true,
     }
 
-    onPress = () => {
+    showLoader = (loading) => {
+        this.setState({loading,disabled: !loading})
+    }
+
+    onPress = async () => {
         let submitName = "Submitting..."
         if (this.props.submit.submitName) {
             submitName = this.props.submit.submitName;
@@ -17,7 +45,7 @@ class SubmitBtn extends React.Component {
         else if(this.props.submit.btnText){
             submitName = `${this.props.submit.btnText}...`;
         }
-        this.setState({"name":submitName});
+        this.setState({name:submitName});
         Toast.show({
             type: `info`,
             text1:"Request submitted",
@@ -25,12 +53,14 @@ class SubmitBtn extends React.Component {
             position:"top",
             // visibilityTime: 7000
             // topOffset: 30,
-        })
-        this.props.submit.onSubmit();
+        });
+        this.showLoader(true);
+        await this.props.submit.onSubmit();
+        this.showLoader(false);
     }
 
     formChecker = () => {
-        if (this.props.submit.disabled) {
+        if (this.state.disabled) {
             return [styles.submitBtn,styles.inactiveBtn];
         }
         return [styles.submitBtn,styles.activeBtn];
@@ -40,10 +70,12 @@ class SubmitBtn extends React.Component {
         if (prevProps.err != this.props.err) {
             this.getSubmitText();
         }   
+        if (prevProps.submit.disabled !== this.props.submit.disabled) this.setState({disabled:this.props.submit.disabled})
     }
 
     componentDidMount(){
         this.getSubmitText();
+        this.setState({disabled:this.props.submit.disabled})
     }
 
     getSubmitText = () => {
@@ -51,18 +83,21 @@ class SubmitBtn extends React.Component {
         if (this.props.submit.btnText) {
             submitBtnText = this.props.submit.btnText;
         }
-        this.setState({"name":submitBtnText})
+        this.setState({name:submitBtnText})
     }
 
     render(){    
         return (
-            <Pressable style={this.formChecker} onPress={() =>{
-                this.onPress();
-            }} disabled={this.props.submit.disabled}>
-                <Text style={styles.submitBtnText}>
-                    {this.state.name}
-                </Text>
-            </Pressable>
+            <>
+                <Pressable style={this.formChecker} onPress={() =>{
+                    this.onPress();
+                }} disabled={this.state.disabled}>
+                    <Text style={styles.submitBtnText}>
+                        {this.state.name}
+                    </Text>
+                </Pressable>
+                <PageLoader loading={this.state.loading} />
+            </>
         )
     }
 }

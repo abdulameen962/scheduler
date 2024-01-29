@@ -13,6 +13,7 @@ import { login,
     predictWord,
     getCurrentNotifications,
     createGoal,
+    getLabels,
 } from '../api';
 import { getToken } from '../storeapis';
 import { getRandom } from '../helpfulFunc';
@@ -43,6 +44,7 @@ export const SET_NOTIFICATION_TOKEN = "SET_NOTIFICATION_TOKEN"
 export const USER_DETAILS = "USER_DETAILS"
 export const NOT_EMAIL_VERIFIED = "NOT EMAIL VERIFIED"
 export const GOAL_FULFILLED = "Goal completed"
+export const GOAL_CREATED = "Goal created sucessfully"
 export const GOAL_REJECTED = "Goal rejected"
 
 // action creators
@@ -87,10 +89,8 @@ export const loginUser = (username,password,loginFn=login) => async dispatch => 
     }
     catch (error)
     {
-        dispatch({type:LOG_IN_REJECTED,payload:error.message})
+        dispatch({type:LOG_IN_REJECTED,payload:error.message});
     }
-  
-    // return 
 }
 
 export const googleApi = (token,googleFunc=googleEntry) => async dispatch => {
@@ -127,6 +127,8 @@ export const registerUser = (username,email,password1,password2,registerFn=regis
     {
         dispatch({type:REGISTER_REJECTED,payload:error.message})
     }
+
+    return;
 }
 
 export const confirmRegisterOtp = (store,otp,otpFunc=confirmOtp) => async dispatch => {
@@ -144,6 +146,8 @@ export const confirmRegisterOtp = (store,otp,otpFunc=confirmOtp) => async dispat
         // const {message} = messages;
         dispatch({type:OTP_REJECTED,payload:error.message})
     }
+
+    return;
 }
 
 export const resendOtpVerification = (store,resendFunc=resendOtp) => async dispatch => {
@@ -158,6 +162,8 @@ export const resendOtpVerification = (store,resendFunc=resendOtp) => async dispa
         // const {message} = messages;
         dispatch({type:OTP_REJECTED,payload:error.message})
     }
+
+    return;
 }
 
 const getImmediateProfile = async (authName=false,dispatch,store=null,profileFunc=getProfile) => {
@@ -212,6 +218,7 @@ export const userGoals = async (store,num=3,goalFunc=getGoals) => {
         throw new Error(error.message);
         // dispatch({type:OTP_REJECTED,payload:error.message})
     }
+
 }
 
 export const onGoingTasks = async (store,goalFunc=getOngoingTasks) => {
@@ -224,6 +231,8 @@ export const onGoingTasks = async (store,goalFunc=getOngoingTasks) => {
     catch(error){
         console.log(error.message)
     }
+
+    return;
 }
 
 export const wordPredict = async (store,sentence,word=null,predictor=predictWord) => {
@@ -236,6 +245,8 @@ export const wordPredict = async (store,sentence,word=null,predictor=predictWord
     catch(error){
         console.log(error.message)
     }
+
+    return;
 }
 
 export const getNotifications = async (store,notifyFunc=getCurrentNotifications) => {
@@ -248,6 +259,8 @@ export const getNotifications = async (store,notifyFunc=getCurrentNotifications)
     catch(error){
         console.log(error.message)
     }
+
+    return;
 }
 
 export const sendForgotPasswordOtp = (email,store=null,forgotFunc=resetPassword) => async dispatch => {
@@ -264,6 +277,7 @@ export const sendForgotPasswordOtp = (email,store=null,forgotFunc=resetPassword)
         dispatch({type:OTP_REJECTED,payload:error.message});
         return false;
     }
+
 }
 
 export const goalCreation = (store,goal,goalFunc=createGoal) => async dispatch => {
@@ -271,11 +285,12 @@ export const goalCreation = (store,goal,goalFunc=createGoal) => async dispatch =
         const authCode = await getToken(store,resetAcessToken,logoutUser);
         const {goal_name,goal_description,start_time,deadline,image} = goal;
         await goalFunc(authCode,goal_name,goal_description,start_time,deadline,image);
-        dispatch({type:GOAL_CREATED,payload:"Goal created sucessfully"})
+        dispatch({type:GOAL_CREATED,payload:"Goal created sucessfully"});
         return true;
     }
     catch(error){
         dispatch({type:GOAL_REJECTED,payload:error.message})
+        console.log(error.message)
         return false;
     }
 }
@@ -323,6 +338,20 @@ export const logUserOut = (store,logFunc=logoutApi) => async dispatch => {
         // const {message} = messages;
         dispatch({type:OTP_REJECTED,payload:error.message})
     }
+
+    return;
+}
+
+export const userLabels = async (store,labelFunc=getLabels) => {
+    try{
+        const authCode = await getToken(store,resetAcessToken,logoutUser);
+        const result = await labelFunc(authCode);
+        return result;
+    }
+    catch(error){
+        throw new Error(error.message);
+    }
+
 }
 
 /**

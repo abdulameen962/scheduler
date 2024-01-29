@@ -145,6 +145,19 @@ class Home extends React.Component{
                 </Heading>,
             })
         }
+        if (prevProps != this.props) {
+            const {route} = props;
+            if (route) {
+                if (route.params !== undefined ) {
+                    const {refresh} = route.params;
+            
+                    if (refresh !== undefined && refresh == true) {
+                        this.setState({goals:null})
+                        this.getGoals()
+                    }
+                }   
+            }
+        }
     }
 
     render(){

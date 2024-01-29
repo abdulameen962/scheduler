@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useRef,forwardRef,useState, useEffect } from 'react';
 import BottomSheetLayout from '../layouts/bottomSheetLayout';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { 
   Text,
   Heading,
@@ -8,16 +9,15 @@ import { StyleSheet,View,Pressable, ScrollView } from 'react-native';
 import {wordPredict} from "../redux/actions";
 import {store} from "../redux/store";
 import Label from '../components/label';
-import { userGoals } from '../redux/actions';
+import { userGoals,userLabels } from '../redux/actions';
+import CalendarBottom from "../components/calendarBottom";
 import 
   // BottomSheet,
     {
-    BottomSheetBackdrop,  
     BottomSheetModal,
-    BottomSheetScrollView,
     BottomSheetTextInput,
-    BottomSheetFooter
-    // useBottomSheetModal,
+    BottomSheetFooter,
+    useBottomSheetModal,
     } from '@gorhom/bottom-sheet';
 
 import Form from "../form/index";
@@ -40,8 +40,11 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
   const [descr,setDescr] = useState<String>("");
   const [goal,setGoal] = useState<String>("");
   const [disabled,setDisabled] = useState<boolean>(true);
-  const [goals,setGoals] = useState<string[]>([]);
+  const [goals,setGoals] = useState<Object[]>([]);
   const [gotoGoal,setGotoGoal] = useState<boolean>(false);
+  const [label,setLabel] = useState<String>("");
+  const [labelContainer,setlabelContainer] = useState<Object[]>([]);
+  const [currentCalendar,setCurrentCalendar] = React.useState<calendarKey>(null)
 
   const predictWord = async () => {
     const result = await wordPredict(store,word,1);
@@ -51,11 +54,11 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
   
   useEffect(() => {
     checkDisabled()
-  },[goal,name,startDate,endDate,descr])
+  },[goal,name,startDate,endDate,descr,label])
 
   const goalsFunc = useCallback(async () => {
     if (goals.length < 1) {
-      let result;
+      let result:Object[];
       try{
         result = await userGoals(store,50);
       }
@@ -89,13 +92,35 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
     }
   },[]);
 
+
+  const labelsFunc = useCallback(async() => {
+    if (labelContainer.length < 1) {
+      let result:Object[];
+      try{
+        result = await userLabels(store);
+      }
+      catch(error) {
+        result = [
+          {
+            id: null,
+            title: error.message,
+            click: (e) => {
+              e.preventDefault();
+            }
+          }
+        ]
+      }
+      setlabelContainer(result);
+    }
+  },[])
+
   const checkDisabled = () => {
 
   }
 
   type handleFunc = typeof setName | typeof setStartDate | typeof setEndDate | typeof setDescr;
 
-  type handleKey = "name" | "startDate" | "endDate" | "descr" | "goal";
+  type handleKey = "name" | "startDate" | "endDate" | "descr" | "goal" | "label";
 
   type calendarKey = "startDate" | "endDate";
 
@@ -125,6 +150,9 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
 
         break;
 
+      case "label":
+        func = setLabel
+
       default:
         break;
     }
@@ -132,12 +160,42 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
     func(val)
   }
 
-  const showCalendar = (key:calendarKey) => {
+  // ref
+  const bottomSheetRef = React.useRef<BottomSheetModal>(null);
+  const {dismiss} = useBottomSheetModal();
 
+  // // variables
+  const handleClosePress = () => bottomSheetRef.current?.close();
+  const handleExpandPress = () => bottomSheetRef.current?.expand();
+  const handleCollapsePress = () => bottomSheetRef.current?.collapse();
+  const snaPindex = (num: number) => bottomSheetRef.current?.snapToIndex(num);
+  const handlePresentPress = () => bottomSheetRef.current?.present();
+  const handleDismissPress = () => bottomSheetRef.current?.dismiss();
+
+  const showCalendar = (key: calendarKey) => {
+      setCurrentCalendar(key);
+      handlePresentPress();
   }
 
   const submitForm = () => {
 
+  }
+
+  const submitDate = (val:string) => {
+    const key = currentCalendar;
+    dismiss();
+    switch (key) {
+        case "startDate":
+            setStartDate(`${val} 00:00:00`);
+            break;
+
+        case "endDate":
+            setEndDate(`${val} 00:00:00`);
+            break;
+    
+        default:
+            break;
+    }
   }
 
   let formArr = {
@@ -156,45 +214,45 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
             styled: styles.styled,
         },
         {
-            Label: <Label text={"Start Date"} />,
-            attributes:{
-                autoCapitalize:'none' ,
-                autoComplete:'off' ,
-                // secureTextEntry:state.showPassword.show,
-                // onChangeText:handleChange('password')
-            },
-            inputStyle: [styles.inputStyle],
-            activeInput: [styles.activeInput],
-            styled: styles.styled,
-            // rightIcon:{
-            //     clickable: true,
-            //     src: require("../assets/eye-cancel.png"),
-            //     activeSrc: require("../assets/eye-cancel.png"),
-            //     attributes:{},
-            //     onClick: showCalendar("startDate"),
-            //     clickedImg: require("../assets/eye.png"),
-            // }
-        },
-        {
-          Label: <Label text="End Date" />,
+          Label: <Label text="Start Date" />,
           attributes:{
               autoCapitalize:'none' ,
               autoComplete:'off' ,
-              // secureTextEntry:state.showPassword.show,
-              // onChangeText:handleChange('password')
+              value: startDate,
+              editable:false,
           },
           inputStyle: [styles.inputStyle],
           activeInput: [styles.activeInput],
           styled: styles.styled,
-          // rightIcon:{
-          //     clickable: true,
-          //     src: require("../assets/eye-cancel.png"),
-          //     activeSrc: require("../assets/eye-cancel.png"),
-          //     attributes:{},
-          //     onClick: showCalendar("endDate"),
-          //     clickedImg: require("../assets/eye.png"),
-          // }
-        },
+          rightIcon:{
+              clickable: true,
+              src: [<Ionicons name="calendar-outline" color={"rgba(0,0,0,.2)"} size={25} />],
+              activeSrc: [<Ionicons name="calendar-outline" color={"rgba(0,0,0,1)"} size={27} />],
+              attributes:{},
+              onClick: () => showCalendar("startDate"),
+              clickedImg: [<Ionicons name="calendar-outline" color={"rgba(0,0,0,.2)"} size={25} />],
+          }
+      },
+      {
+          Label: <Label text="End Date" />,
+          attributes:{
+              autoCapitalize:'none' ,
+              autoComplete:'off' ,
+              value: endDate,
+              editable:false,
+          },
+          inputStyle: [styles.inputStyle],
+          activeInput: [styles.activeInput],
+          styled: styles.styled,
+            rightIcon:{
+                clickable: true,
+                src: [<Ionicons name="calendar-outline" color={"rgba(0,0,0,.2)"} size={25} />],
+                activeSrc: [<Ionicons name="calendar-outline" color={"rgba(0,0,0,1)"} size={27} />],
+                attributes:{},
+                onClick: () => showCalendar("endDate"),
+                clickedImg: [<Ionicons name="calendar-outline" color={"rgba(0,0,0,1)"} size={27} />],
+            }
+      },
 
         {
           Label: <Label text="Description" />,
@@ -202,25 +260,15 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
               autoCapitalize:'none' ,
               autoComplete:'off' ,
               multiline: true,
-              // secureTextEntry:state.showPassword.show,
-              // onChangeText:handleChange('password')
           },
           inputStyle: [styles.inputStyle],
           activeInput: [styles.activeInput],
           styled: {...styles.styled,minHeight:70},
-          // rightIcon:{
-          //     clickable: true,
-          //     src: require("../assets/eye-cancel.png"),
-          //     activeSrc: require("../assets/eye-cancel.png"),
-          //     attributes:{},
-          //     onClick: showCalendar("endDate"),
-          //     clickedImg: require("../assets/eye.png"),
-          // }
         },
     ],
     topExtras: [
       <Select onChange={handleChange("goal")} label='Choose goal' values={goals} onOpen={() => goalsFunc()} />,
-      <Select onChange={handleChange("goal")} label='Choose Task label' values={goals} onOpen={() => goalsFunc()} />
+      <Select onChange={handleChange("label")} label='Choose Task label' values={labelContainer} onOpen={() => labelsFunc()} />
     ],
     boardType: "padding"
     // error: state.err
@@ -250,7 +298,9 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
 
   // renders
   return (
+      <>
         <BottomSheetLayout ref={ref} renderFooter={renderFooter} >
+            <CalendarBottom ref={bottomSheetRef} onSubmit={submitDate} />
             <Heading
                   size="lg"
                 >
@@ -258,6 +308,7 @@ const AddTask = forwardRef<Ref,Props>((props, ref) => {
             </Heading>
             <Form {...formArr} />
         </BottomSheetLayout>
+      </>
   );
 });
 

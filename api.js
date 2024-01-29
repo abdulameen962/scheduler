@@ -38,7 +38,6 @@ const BASE_FUNCTION = async(url,method,fetchBody=null,extraHeaders={},handleChan
         }
         
         const {message,detail} = result;
-        console.log(message);
         throw new Error(message?message:detail);
     }
     catch(err){
@@ -245,4 +244,14 @@ export const changeNewPassword = async (password,email) => {
     const method = "POST";
     const body = {password,email,}
     return await BASE_FUNCTION(url,method,body);
+}
+
+export const getLabels = async authCode => {
+    const url = "labels/";
+    const method = "GET";
+    const header = {
+        "Authorization":`Bearer ${authCode}`
+    }
+    const result = await BASE_FUNCTION(url,method,null,header,true);
+    return result;
 }

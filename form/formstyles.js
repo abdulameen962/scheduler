@@ -1,6 +1,7 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet,Dimensions } from "react-native";
 import Constants from 'expo-constants';
 
+const {width,height} = Dimensions.get("window")
 const btnColor = "#3E4ADE";
 const greyBackground = "#F4F6F8";
 const styles = StyleSheet.create({
@@ -9,7 +10,7 @@ const styles = StyleSheet.create({
         // borderWidth: 2,
         // borderStyle: "solid",
         // borderColor: greyBackground,
-        marginTop: 15
+        marginTop: 15,
     },
     inputIcon:{
         // width: 20,
@@ -83,6 +84,13 @@ const styles = StyleSheet.create({
     },
     rightIcon:{
 
+    },
+    loaderStyles: {
+        flex:1,
+        backgroundColor:"rgba(0,0,0,.07)",
+        justifyContent:"center",
+        alignItems:"center",
+        flexDirection:"row",
     }
 })
 
