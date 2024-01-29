@@ -113,6 +113,8 @@ class Task_creation(API_VERIFIED_BASE):
         goal_id = data.get("goal_id",None)
         task_name = data.get("task_name",None)
         task_description = data.get("task_description",None)
+        start_time = data.get("start_time",None)
+        deadline = data.get("deadline",None)
         
         try:
             goal = Goal.objects.get(id=goal_id,user=user)

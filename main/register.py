@@ -86,6 +86,10 @@ class RegisterView(CreateAPIView):
 
     def perform_create(self, serializer):
         user = serializer.save(self.request)
+        request = self.request._request
+        data = request.data
+        fcm_token = data.get("fcm_token",None)
+        device_type = data.get("device_type",None)
         if allauth_account_settings.EMAIL_VERIFICATION != \
                 allauth_account_settings.EmailVerificationMethod.MANDATORY:
             if api_settings.USE_JWT:
@@ -97,17 +101,35 @@ class RegisterView(CreateAPIView):
 
         #send registration otp
         otp_manager = Otp_manager(otp_time_limit)
-        otp = otp_manager.generate_otp(self.request)
+        otp = otp_manager.generate_otp(request)
         html_message = render_to_string('main/messages/otp_email.html',{'otp':otp,'username':user.username})
         header = "Verify your account"
 
         #send email to the user
         plain_message = strip_tags(html_message)
         
+        if fcm_token is not None:
+            from fcm_django.models import FCMDevice,DeviceType
+            if device_type.lower() == "android":
+                type_of_device = DeviceType.ANDROID
+                
+            elif device_type.lower() == "ios":
+                type_of_device = DeviceType.IOS
+                
+            else:
+                type_of_device = DeviceType.WEB
+                
+            try:
+                
+                fcm_device = FCMDevice.objects.get_or_create(device_id=fcm_token,registration_id=fcm_token,type=type_of_device,name=user.username,user=user)
+                
+            except Exception:
+                return Response({"message":"Something went wrong,fcm token couldn't be saved"},status=status.HTTP_201_CREATED)
+        
         try:
             send_mail(message=plain_message, from_email=f"Scheduler <{settings.EMAIL_HOST_USER}>",subject=header,recipient_list=[user.email],fail_silently=False,html_message=html_message)
             complete_signup(
-                self.request._request, user,
+                request, user,
                 allauth_account_settings.EMAIL_VERIFICATION,
                 None,
             )
