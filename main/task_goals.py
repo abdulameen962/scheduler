@@ -157,4 +157,4 @@ class Task_creation(API_VERIFIED_BASE):
             return Response({"message":"Task created successfully"},status=status.HTTP_200_OK)
             
         except Label.DoesNotExist or Exception as e:
-            return Response({"message":f"An error occured {e}"},status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message":f"An error occured {e} {labels}"},status=status.HTTP_400_BAD_REQUEST)
