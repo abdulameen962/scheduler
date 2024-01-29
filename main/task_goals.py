@@ -147,7 +147,7 @@ class Task_creation(API_VERIFIED_BASE):
         
         try:
             
-            task = Task(user=user,goal=goal,title=task_name,description=task_description)
+            task = Task(user=user,goal=goal,title=task_name,description=task_description,start_time=start_time,deadline=deadline)
             task.save()
             
             for label in labels:
