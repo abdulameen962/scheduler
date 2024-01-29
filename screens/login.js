@@ -8,6 +8,7 @@ import Form from '../form';
 import FormLayout from '../layouts/formLayout';
 import LoginHeader from '../components/loginHeader';
 import { trim } from '../helpfulFunc';
+import { store } from '../redux/store';
 import GoogleComponent from '../components/googleSignin';
 import FormFooter from '../components/bottomForm';
 
@@ -29,7 +30,7 @@ class Login extends Component{
     }
 
     submitForm = async () => {
-        if (this.state.disabled == false) await this.props.loginUser(trim(this.state.username),trim(this.state.password));
+        if (this.state.disabled == false) await this.props.loginUser(trim(this.state.username),trim(this.state.password),store);
     }
 
     getForm = () => {

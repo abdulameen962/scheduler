@@ -12,6 +12,7 @@ import { trim } from '../helpfulFunc';
 import ContentLoader, { Facebook,Instagram } from 'react-content-loader/native';
 import FormFooter from '../components/bottomForm';
 import GoogleComponent from '../components/googleSignin';
+import { store } from '../redux/store';
 
 const MyLoader = () => <Instagram animate={true} />
 
@@ -78,7 +79,7 @@ class Signup extends Component{
     }
 
     startReg = async () => {
-        if (this.state.disabled == false) this.props.registerUser(trim(this.state.username),trim(this.state.email),trim(this.state.password),trim(this.state.password2));
+        if (this.state.disabled == false) this.props.registerUser(trim(this.state.username),trim(this.state.email),trim(this.state.password),trim(this.state.password2),store);
     }
 
     static getDerivedStateFromProps(nextProps,state){

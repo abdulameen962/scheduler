@@ -61,11 +61,13 @@ export const updateCarousel = update => ({
 })
 
 //asynchronous action creator
-export const loginUser = (username,password,loginFn=login) => async dispatch => {
+export const loginUser = (username,password,store,loginFn=login) => async dispatch => {
     dispatch({type:LOG_IN_SENT,payload:""})
     try{
-        const result = await loginFn(username,password);
-        // const result = await loginFn(username,password,Platform.OS);
+        // get expo notification token
+        let mainStore = store.getState();
+        let token = mainStore.user.notificationToken;
+        const result = await loginFn(username,password,token,Platform.OS);
         const {message} = result;
         const {data} = result;
         const {access_token,refresh_token} = data;
@@ -96,10 +98,13 @@ export const loginUser = (username,password,loginFn=login) => async dispatch => 
     }
 }
 
-export const googleApi = (token,googleFunc=googleEntry) => async dispatch => {
+export const googleApi = (token,store,googleFunc=googleEntry) => async dispatch => {
     dispatch({type:LOG_IN_SENT,payload:""})
     try{
-        const response = await googleFunc(token);
+        // get expo notification token
+        let mainStore = store.getState();
+        let fcm_token = mainStore.user.notificationToken;
+        const response = await googleFunc(token,fcm_token,Platform.OS);
         const {access_token,refresh_token} = response;
         let accessToken = access_token;
         let refreshToken = refresh_token;
@@ -120,10 +125,13 @@ export const googleApi = (token,googleFunc=googleEntry) => async dispatch => {
     }
 }
 
-export const registerUser = (username,email,password1,password2,registerFn=register) => async dispatch => {
+export const registerUser = (username,email,password1,password2,store,registerFn=register) => async dispatch => {
     dispatch({type:REGISTER_SENT,payload:""})
     try {
-        const info = await registerFn(username,email,password1,password2)
+        // get expo notification token
+        let mainStore = store.getState();
+        let token = mainStore.user.notificationToken;
+        const info = await registerFn(username,email,password1,password2,token,Platform.OS)
         dispatch({type:REGISTER_FULFILLED,payload:info})
     }
     catch (error)
@@ -303,7 +311,6 @@ export const taskCreation = (store,task,goalFunc=Apis.createTask) => async dispa
         const {goal_id,task_name,task_description,deadline,labels,start_time} = task;
         await goalFunc(authCode,goal_id,task_name,task_description,start_time,deadline,labels);
         dispatch({type:GOAL_CREATED,payload:"Task created sucessfully"});
-        console.log(result);
         return true;
     }
     catch(error){

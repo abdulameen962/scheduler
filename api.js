@@ -45,22 +45,22 @@ const BASE_FUNCTION = async(url,method,fetchBody=null,extraHeaders={},handleChan
     }
 }
 
-export const login = async (username,password) => {
+export const login = async (username,password,fcm_token,device_type) => {
     const url = "users/login/";
     const method = "POST";
     const body = {
-        username,password
+        username,password,fcm_token,device_type
     }
     const header = {}
     const result = await BASE_FUNCTION(url,method,body,header,true);
     return result;
 }
 
-export const googleEntry = async token => {
+export const googleEntry = async (token,fcm_token,device_type) => {
     const url = "users/google/";
     const method = "POST";
     const body = {
-        token,
+        token,fcm_token,device_type
     }
     const header = {}
     const result = await BASE_FUNCTION(url,method,body,header,true);
@@ -176,7 +176,7 @@ export const getOngoingTasks = async (authCode,command="ongoing",num=5) => {
     return result;
 }
 
-export const register = async (username,email,password1,password2) => {
+export const register = async (username,email,password1,password2,fcm_token,device_type) => {
     try{
         const response = await fetch(`${BASE_URL}users/registration/`,{
             method: 'POST',
@@ -184,7 +184,9 @@ export const register = async (username,email,password1,password2) => {
                 username,
                 email,
                 password1,
-                password2
+                password2,
+                fcm_token,
+                device_type,
             }),
             headers: {
                 'content-type': 'application/json',

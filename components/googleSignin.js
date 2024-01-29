@@ -10,6 +10,7 @@ import { googleApi } from "../redux/actions"
 import { connect } from "react-redux"
 import PropTypes from "prop-types"
 import Toast from "react-native-toast-message"
+import { store } from "../redux/store"
 // console.log(EXPO_PUBLIC_GOOGLE_ANDROID_AUTH)
 // import * as Linking from 'expo-linking';
 // import { A } from '@expo/html-elements';
@@ -54,7 +55,7 @@ const GoogleComponent = props => {
             // visibilityTime: 7000
             // topOffset: 30,
         })
-        const result = await props.googleApi(token);
+        const result = await props.googleApi(token,store);
         if (result && props.sendNotification) {
             let header = "Thanks for signing up";
             let body = "Congrats on signing up,awesome awaits 🙌🎉🙌🎉";

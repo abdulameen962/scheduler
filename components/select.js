@@ -58,7 +58,7 @@ const CustomSelect = ({onChange,label="Choose option",values=[],onOpen}) => {
 
                                         return (
                                             <View key={index} width={"100%"} paddingVertical="$1">
-                                                <SelectItem label={title?title:name} value={id?id:name} />
+                                                <SelectItem label={title?title:name} value={id} />
                                                 {
                                                     image && (
                                                         <Image
