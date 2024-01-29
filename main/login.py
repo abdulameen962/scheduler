@@ -22,6 +22,8 @@ class Login(API_NON_VERIFIED_BASE):
     def post(self, request):
         username = request.data.get("username")
         password = request.data.get("password")
+        fcm_token = request.data.get("fcm_token")
+        device_type = request.data.get("device_type")
 
         user = authenticate(request, username=username, password=password)
         if user is not None and user.login_method == User.LoginMethod.EMAIL:
@@ -38,6 +40,14 @@ class Login(API_NON_VERIFIED_BASE):
             
             #------Login User------#
             login(request, user)
+            if fcm_token is not None and device_type is not None: 
+                from .helper_functions import create_fcm_object
+                try:
+                    
+                    create_fcm_object(fcm_token,device_type,user)
+                    
+                except Exception as e:
+                    return Response({"message":f"Something went wrong,fcm token couldn't be saved {e}"},status=status.HTTP_201_CREATED)
             
             if verified_mail(user):
                 return Response(response_data, status=status.HTTP_200_OK)

@@ -133,6 +133,9 @@ class GoogleLogin(API_NON_VERIFIED_BASE):
     def post(self,request):
         data = request.data
         token = data.get("token",None)
+        fcm_token = request.data.get("fcm_token")
+        device_type = request.data.get("device_type")
+        
         if token is None:
             return Response({"message":"Token is required"},status=status.HTTP_400_BAD_REQUEST)
         
@@ -149,7 +152,15 @@ class GoogleLogin(API_NON_VERIFIED_BASE):
         
         try:
             user = User.objects.get(email=google_details['email'],login_method=User.LoginMethod.GOOGLE)
-
+            if fcm_token is not None and device_type is not None: 
+                from .helper_functions import create_fcm_object
+                try:
+                    
+                    create_fcm_object(fcm_token,device_type,user)
+                    
+                except Exception as e:
+                    return Response({"message":f"Something went wrong,fcm token couldn't be saved {e}"},status=status.HTTP_201_CREATED)
+            
         except User.DoesNotExist:
             try:
                 user = User.objects.create_user(username=google_details['given_name'],email=google_details['email'],login_method=User.LoginMethod.GOOGLE)
