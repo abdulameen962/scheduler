@@ -159,6 +159,27 @@ def fcm_push_notifications(message):
     device.send_message(message_obj)
     # Boom!
     
+def create_fcm_object(fcm_token:str=None,device_type:str=None,user:User=None):
+    if fcm_token is None or device_type is None or user is None:
+        return 
+    
+    from fcm_django.models import FCMDevice,DeviceType
+    if device_type.lower() == "android":
+        type_of_device = DeviceType.ANDROID
+        
+    elif device_type.lower() == "ios":
+        type_of_device = DeviceType.IOS
+        
+    else:
+        type_of_device = DeviceType.WEB
+        
+    try:
+        
+        fcm_device = FCMDevice.objects.get_or_create(device_id=fcm_token,registration_id=fcm_token,type=type_of_device,name=user.username,user=user)
+        
+    except Exception as e:
+        raise Exception(f"An error occured {e}")
+
     
 def confirm_real_color(color:str=None):
     """

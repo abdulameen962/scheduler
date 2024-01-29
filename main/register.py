@@ -108,23 +108,14 @@ class RegisterView(CreateAPIView):
         #send email to the user
         plain_message = strip_tags(html_message)
         
-        if fcm_token is not None:
-            from fcm_django.models import FCMDevice,DeviceType
-            if device_type.lower() == "android":
-                type_of_device = DeviceType.ANDROID
-                
-            elif device_type.lower() == "ios":
-                type_of_device = DeviceType.IOS
-                
-            else:
-                type_of_device = DeviceType.WEB
-                
+        if fcm_token is not None and device_type is not None: 
+            from .helper_functions import create_fcm_object
             try:
                 
-                fcm_device = FCMDevice.objects.get_or_create(device_id=fcm_token,registration_id=fcm_token,type=type_of_device,name=user.username,user=user)
+                create_fcm_object(fcm_token,device_type,user)
                 
-            except Exception:
-                return Response({"message":"Something went wrong,fcm token couldn't be saved"},status=status.HTTP_201_CREATED)
+            except Exception as e:
+                return Response({"message":f"Something went wrong,fcm token couldn't be saved {e}"},status=status.HTTP_201_CREATED)
         
         try:
             send_mail(message=plain_message, from_email=f"Scheduler <{settings.EMAIL_HOST_USER}>",subject=header,recipient_list=[user.email],fail_silently=False,html_message=html_message)
