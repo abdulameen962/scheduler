@@ -129,7 +129,7 @@ class Task_creation(API_VERIFIED_BASE):
                 return Response({"message":"Start time cannot be greater than deadline"},status=status.HTTP_400_BAD_REQUEST)
             
             if not compare_greater_dates(start_time,goal.start_time,2) or not compare_greater_dates(goal.deadline,deadline,2):
-                return Response({"message":"Start time and deadline must be between goal start and end time"},status=status.HTTP_400_BAD_REQUEST)
+                return Response({"message":f"Start time and deadline must be between goal start and end time {compare_greater_dates(start_time,goal.start_time,2)} {compare_greater_dates(goal.deadline,deadline,2)}"},status=status.HTTP_400_BAD_REQUEST)
         
             
         except Exception as e:
