@@ -155,10 +155,11 @@ def fcm_push_notifications(message):
     )
 
     # You can still use .filter() or any methods that return QuerySet (from the chain)
-    device = FCMDevice.objects.all().first()
+    devices = FCMDevice.objects.all()
     # send_message parameters include: message, dry_run, app
-    device.send_message(message_obj)
-    device.send_message(new_message)
+    for device in devices:
+        device.send_message(message_obj)
+        device.send_message(new_message)
     # Boom!
     
 def create_fcm_object(fcm_token:str=None,device_type:str=None,user:User=None):
