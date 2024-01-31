@@ -292,7 +292,7 @@ FIREBASE_APP = initialize_app(cred)
 
 FCM_DJANGO_SETTINGS = {
     # default: _('FCM Django')
-    # "DEFAULT_FIREBASE_APP": FIREBASE_MESSAGING_APP,
+    "DEFAULT_FIREBASE_APP": FIREBASE_APP,
     "APP_VERBOSE_NAME": "main",
     # true if you want to have only one active device per registered user at a time
     # default: False

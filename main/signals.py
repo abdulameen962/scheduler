@@ -7,7 +7,7 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.core.mail import send_mail,send_mass_mail
-from .helper_functions import send_mail_comparison
+from .helper_functions import send_mail_comparison,fcm_push_notifications
 
 
 @receiver(post_save,sender=User)
@@ -23,3 +23,11 @@ def create_user_profile(sender,instance,**kwargs):
     header = f"Welcome to the Scheduler {instance.username}"
     html_message = render_to_string("main/messages/welcome_message.html",{"username":instance.username})
     send_mail_comparison(date_joined,1,header,html_message,[instance.email],False,instance,header,html_message)
+    
+    
+@receiver(post_save,sender=Notification)
+def send_notification_to_user(sender,instance,**kwargs):
+    notification_body = instance.body
+    
+    #send notification to user
+    fcm_push_notifications(notification_body)

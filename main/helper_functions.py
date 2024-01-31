@@ -140,7 +140,9 @@ def get_google_login(token:str) -> object:
 def fcm_push_notifications(message):
     from firebase_admin.messaging import Message,Notification
     from fcm_django.models import FCMDevice
-
+    
+    # FCMDevice.objects.all().handle_topic_subscription(True, topic=message)
+    
     message_obj = Message(
         data={
             "Nick" : "Mario",
@@ -158,9 +160,16 @@ def fcm_push_notifications(message):
     devices = FCMDevice.objects.all()
     # send_message parameters include: message, dry_run, app
     for device in devices:
+        # device.handle_topic_subscription(True, topic=message)
         device.send_message(message_obj)
         device.send_message(new_message)
-    # Boom!
+        # device.send_topic_message(new_message,message)
+
+    # Unsubscribing
+    # FCMDevice.objects.all().handle_topic_subscription(False, topic=message)
+    
+    # for device in devices:
+    #     device.handle_topic_subscription(False, topic=message)
     
 def create_fcm_object(fcm_token:str=None,device_type:str=None,user:User=None):
     if fcm_token is None or device_type is None or user is None:
