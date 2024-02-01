@@ -35,6 +35,9 @@ import {
 
 import registerAllTasks from "./backgroundtasks/handler";
 import { schedulePushNotification } from './nativeHelpers';
+import messaging from "@react-native-firebase/messaging";
+// import Clipboard from '@react-native-clipboard/clipboard';                        
+import {Alert} from "react-native";
 // import GetNav from './layouts/appLayout';
 
 // import {LogBox} from "react-native";
@@ -175,20 +178,12 @@ class App extends React.Component {
     const notificationListener = createRef();
     const responseListener = createRef();
     // first check whether we have token already or not
-    const tokenFromStorage = store.getState().user.notificationToken;
-    if (!tokenFromStorage) {
-      this.registerForPushNotificationsAsync().then(token => {
-        store.dispatch(setNotificationToken(token))
-        this.setState({
-          token
-        })
-      }); 
-    }
-    else{
+    this.registerForPushNotificationsAsync().then(token => {
+      store.dispatch(setNotificationToken(token))
       this.setState({
-        token: tokenFromStorage
+        token
       })
-    }
+    }); 
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       this.setState({notification});
@@ -214,6 +209,48 @@ class App extends React.Component {
     };
   }
 
+  copyToClipboard = (text) => {
+    Clipboard.setString(text);
+  };
+
+  getFCMToken = async () => {
+    try {
+      const tokenFromStorage = store.getState().user.notificationToken;
+      if(!tokenFromStorage){
+        const token = (await Notifications.getDevicePushTokenAsync()).data;
+        console.log(token);
+        store.dispatch(setNotificationToken(token))
+      }
+      // this.copyToClipboard(token)
+
+    } catch (e) {
+      console.log(e)
+    }
+  };
+
+  requestUserPermission = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log("Authorization status:", authStatus);
+    }
+  };
+
+  getRealFcmToken = async () => {
+    if(await this.requestUserPermission()){
+      messaging()
+        .getToken()
+        .then(
+          token =>{
+            Alert.alert(token)
+             console.log(token)
+          }
+        );
+    }
+  }
   
   componentDidMount() {
     store.dispatch(clearMessages());
@@ -221,6 +258,8 @@ class App extends React.Component {
     this.updateState();
     this.startNotification();
     this.onFetchUpdateAsync();
+    this.getFCMToken();
+    this.getRealFcmToken();
   }
 
   onFetchUpdateAsync = async () => {

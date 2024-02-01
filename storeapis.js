@@ -73,7 +73,7 @@ const checkTokenExpired = async token => {
         return true;
     }
     catch(err){
-        console.log(err);
+        console.log(err + "from storeaips page");
         return true;
     }
 }
