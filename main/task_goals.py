@@ -105,7 +105,6 @@ class Filter_task(API_VERIFIED_BASE):
         else:
             return Response({"message":"Command not supported"},status=status.HTTP_400_BAD_REQUEST)
         
-        
 class Task_creation(API_VERIFIED_BASE):
     def post(self,request):
         user = self.request.user
