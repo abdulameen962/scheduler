@@ -35,3 +35,26 @@ def send_notification_to_user(sender,instance,**kwargs):
     
     #send notification to user
     fcm_push_notifications(message=body,title=title,image=image,username=username)
+    
+    
+@receiver(pre_save, sender=Goal)
+def goal_pre_save(sender,instance,**kwargs):
+    tasks = instance.goal_tasks.all()
+    
+    situation = True
+    for task in tasks:
+        if task.is_completed == False:
+            situation = False
+            
+    if situation and instance.is_completed == False:
+        instance.is_completed = True
+        Notification.objects.create(user=instance.user,header="Goal Completed",body=f"You have completed the goal {instance.title}",image=instance.image)
+        
+        
+@receiver(post_save, sender=Task)
+def task_post_save(sender, instance, **kwargs):
+    goal = instance.goal
+    
+    if instance.is_completed and goal.is_completed is False:
+        goal.save()
+        # goal.goal_tasks.filter(id=instance.id).update(is_completed=True)
