@@ -56,9 +56,22 @@ class Notification(models.Model):
     body = models.TextField(_("Body of the notification"),max_length=500)
     creation_time = models.DateTimeField(_("Date of notification creation"),auto_now_add=False,editable=False,default=timezone.now)
     is_read = models.BooleanField(_("Notification seen state"),default=False)
+    image = CloudinaryField("image",null=True,blank=True,default=None)
     
     def __str__(self):
         return f"{self.user.username} has a notification titled {self.header}"
+    
+    @property
+    def notification_image(self):
+        from .helper_functions import convert_to_https
+        if self.image:
+            if self.image.url:
+                return convert_to_https(self.image.url)
+            
+            else:
+                return self.image
+        
+        return "#"
     
     class Meta:
         verbose_name = "Notification"

@@ -31,7 +31,7 @@ def send_notification_to_user(sender,instance,**kwargs):
     username = instance.user.username
     title = instance.header
     body = instance.body
-    image = random.choice(images)
+    image = instance.notification_image if instance.notification_image != "#" else random.choice(images)
     
     #send notification to user
     fcm_push_notifications(message=body,title=title,image=image,username=username)
