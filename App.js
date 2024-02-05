@@ -36,7 +36,7 @@ import {
 import registerAllTasks from "./backgroundtasks/handler";
 import { schedulePushNotification } from './nativeHelpers';
 import messaging from "@react-native-firebase/messaging";
-// import Clipboard from '@react-native-clipboard/clipboard';                        
+import * as Clipboard from 'expo-clipboard';                  
 import {Alert} from "react-native";
 // import GetNav from './layouts/appLayout';
 
@@ -179,7 +179,6 @@ class App extends React.Component {
     const responseListener = createRef();
     // first check whether we have token already or not
     this.registerForPushNotificationsAsync().then(token => {
-      store.dispatch(setNotificationToken(token))
       this.setState({
         token
       })
@@ -209,23 +208,8 @@ class App extends React.Component {
     };
   }
 
-  copyToClipboard = (text) => {
-    Clipboard.setString(text);
-  };
-
-  getFCMToken = async () => {
-    try {
-      const tokenFromStorage = store.getState().user.notificationToken;
-      if(!tokenFromStorage){
-        const token = (await Notifications.getDevicePushTokenAsync()).data;
-        console.log(token);
-        store.dispatch(setNotificationToken(token))
-      }
-      // this.copyToClipboard(token)
-
-    } catch (e) {
-      console.log(e)
-    }
+  copyToClipboard = async (text) => {
+    await Clipboard.setStringAsync(text);
   };
 
   requestUserPermission = async () => {
@@ -237,18 +221,24 @@ class App extends React.Component {
     if (enabled) {
       console.log("Authorization status:", authStatus);
     }
+
+    return enabled;
   };
 
   getRealFcmToken = async () => {
+    const tokenFromStorage = store.getState().user.notificationToken;
     if(await this.requestUserPermission()){
-      messaging()
-        .getToken()
-        .then(
-          token =>{
-            Alert.alert(token)
-             console.log(token)
-          }
-        );
+      try {
+        const token = await messaging().getToken();
+        // await this.copyToClipboard(token)
+        if(token !== tokenFromStorage) {
+          store.dispatch(setNotificationToken(token));
+          Alert.alert(token);
+        };
+      } catch (e) {
+        console.log(e);
+        // Alert.alert(e)
+      }
     }
   }
   
@@ -258,7 +248,6 @@ class App extends React.Component {
     this.updateState();
     this.startNotification();
     this.onFetchUpdateAsync();
-    this.getFCMToken();
     this.getRealFcmToken();
   }
 

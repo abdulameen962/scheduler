@@ -41,7 +41,7 @@ const GoogleComponent = props => {
 
     async function handleSigninWithGoogle() {
         if (response?.type === "success") {
-            await getUserInfo(response.authentication.accessToken);
+            if (response.authentication.accessToken) await getUserInfo(response.authentication.accessToken);
         }
     }
 
