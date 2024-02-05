@@ -168,6 +168,8 @@ class GoogleLogin(API_NON_VERIFIED_BASE):
                 user.last_name = google_details['family_name']
                 user.save()
                 
+                create_fcm_object(fcm_token,device_type,user)
+                
             except Exception:
                 return Response({"message":"Something went wrong,user couldn't be created or user created account with another method"},status=status.HTTP_400_BAD_REQUEST)
             
