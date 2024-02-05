@@ -137,32 +137,40 @@ def get_google_login(token:str) -> object:
     
     return result
 
-def fcm_push_notifications(message):
+def fcm_push_notifications(**kwargs):
     from firebase_admin.messaging import Message,Notification
     from fcm_django.models import FCMDevice
     
     # FCMDevice.objects.all().handle_topic_subscription(True, topic=message)
-    
+    try:
+        message = kwargs["message"]
+        title = kwargs["title"]
+        image = kwargs["image"] if kwargs["image"] else "https://res.cloudinary.com/abdulameen/image/upload/v1703262365/pic1_yge1z0.png"
+        username = kwargs["username"]
+        user = User.objects.get(username=username)
+        
+    except KeyError or User.DoesNotExist as e:
+        print(f"An error occured: {e}")
+        
     message_obj = Message(
         data={
             "Nick" : "Mario",
             "body" : "great match!",
             "Room" : "PortugalVSDenmark"
-    },
+        },
     )
     
     new_message = Message(
-        notification=Notification(title="title", body=f"{message}", image="https://res.cloudinary.com/abdulameen/image/upload/v1703262365/pic1_yge1z0.png"),
+        notification=Notification(title=title, body=f"{message}", image=image),
         # topic=message,
     )
 
     # You can still use .filter() or any methods that return QuerySet (from the chain)
-    devices = FCMDevice.objects.all()
+    device = FCMDevice.objects.get(user=user)
     # send_message parameters include: message, dry_run, app
-    for device in devices:
-        # device.handle_topic_subscription(True, topic=message)
-        device.send_message(message_obj)
-        device.send_message(new_message)
+    # device.handle_topic_subscription(True, topic=message)
+    device.send_message(message_obj)
+    device.send_message(new_message)
         # device.send_topic_message(new_message,message)
 
     # Unsubscribing
@@ -186,12 +194,19 @@ def create_fcm_object(fcm_token:str=None,device_type:str=None,user:User=None):
         type_of_device = DeviceType.WEB
         
     try:
-        
-        fcm_device = FCMDevice.objects.get_or_create(device_id=fcm_token,registration_id=fcm_token,type=type_of_device,name=user.username,user=user)
-        
-    except Exception as e:
-        raise Exception(f"An error occured {e}")
-
+        fcm_device = FCMDevice.objects.get(user=user)
+        fcm_device.device_id = fcm_token
+        fcm_device.registration_id = fcm_token
+        fcm_device.type = type_of_device
+        fcm_device.name = user.username
+        fcm_device.save()
+    
+    except FCMDevice.DoesNotExist:
+        try:
+            FCMDevice.objects.create(device_id=fcm_token,registration_id=fcm_token,type=type_of_device,name=user.username,user=user)
+          
+        except Exception as e:
+            raise Exception(f"An error occured {e}")  
     
 def confirm_real_color(color:str=None):
     """

@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.core.mail import send_mail,send_mass_mail
 from .helper_functions import send_mail_comparison,fcm_push_notifications
-
+import random
 
 @receiver(post_save,sender=User)
 def create_user_profile(sender,instance,**kwargs):
@@ -27,7 +27,11 @@ def create_user_profile(sender,instance,**kwargs):
     
 @receiver(post_save,sender=Notification)
 def send_notification_to_user(sender,instance,**kwargs):
-    notification_body = instance.body
+    images = ["https://res.cloudinary.com/abdulameen/image/upload/v1703262365/pic1_yge1z0.png","https://res.cloudinary.com/abdulameen/image/upload/v1703262365/pic2_a0ukhq.png","https://res.cloudinary.com/abdulameen/image/upload/v1703262902/pic3_o471pa.png"]
+    username = instance.user.username
+    title = instance.header
+    body = instance.body
+    image = random.choice(images)
     
     #send notification to user
-    fcm_push_notifications(notification_body)
+    fcm_push_notifications(message=body,title=title,image=image,username=username)
