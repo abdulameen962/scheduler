@@ -151,7 +151,8 @@ def fcm_push_notifications(**kwargs):
         
     except KeyError or User.DoesNotExist as e:
         print(f"An error occured: {e}")
-        
+        return
+    
     message_obj = Message(
         data={
             "Nick" : "Mario",
