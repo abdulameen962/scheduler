@@ -108,7 +108,7 @@ class Goal(models.Model):
     def goal_image(self):
         from .helper_functions import convert_to_https
         if self.image:
-            if self.image.url:
+            if type(self.image) == object and self.image.url:
                 return convert_to_https(self.image.url)
             
             else:

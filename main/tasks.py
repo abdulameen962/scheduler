@@ -21,18 +21,19 @@ def update_goals(**kwargs):
             elif type_task == "task":
                 goals = Task.objects.select_related("goal").filter(is_completed=False,expired=False)
                 
-            for goal in goals:
-                print(compare_greater_dates(timezone.now(),goal.deadline,0))
-                if compare_greater_dates(timezone.now(),goal.deadline,0):
-                    goal.expired = True
-                    if type_task == "goal":
-                        Notification.objects.create(user=goal.user,header="Goal expired",body=f"Your goal {goal.title} has expired,you can still mark it as complete on the application or revive the goal",image=goal.goal_image)
-                        
-                    else:
-                        Notification.objects.create(user=goal.user,header="Task expired",body=f"Your task {goal.title} has expired,you can still mark it as complete on the application",image=goal.goal.goal_image)
-
-                    goal.save()
-        
+            if len(goals) > 0:
+                for goal in goals:
+                    print(goal)
+                    print(goal.deadline)
+                    if compare_greater_dates(timezone.now(),goal.deadline,0):
+                        goal.expired = True
+                        goal.save()
+                        if type_task == "goal":
+                            Notification.objects.create(user=goal.user,header="Goal expired",body=f"Your goal {goal.title} has expired,you can still mark it as complete on the application or revive the goal",image=goal.goal_image)
+                            
+                        else:
+                            Notification.objects.create(user=goal.user,header="Task expired",body=f"Your task {goal.title} has expired,you can still mark it as complete on the application",image=goal.goal.goal_image)
+            
         raise Exception("Task name not correct")
         
     except Exception as e:
