@@ -233,7 +233,6 @@ class App extends React.Component {
         // await this.copyToClipboard(token)
         if(token !== tokenFromStorage) {
           store.dispatch(setNotificationToken(token));
-          Alert.alert(token);
         };
       } catch (e) {
         console.log(e);

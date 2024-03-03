@@ -9,19 +9,19 @@ export const BACKGROUND_NOTIFICATION_TASK = 'background-notification';
 // 1. Define the task by providing a name and the function that should be executed
 // Note: This needs to be called in the global scope (e.g outside of your React components)
 TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, async () => {
-    const now = Date.now();
+    // const now = Date.now();
     
-    try{
-        const results = await getNotifications(store);
-        for (let i = 0; i < results.length; i++) {
-            const element = results[i];
-            const {body,header} = element;
-            await schedulePushNotification(header,body)
-        }
-    }
-    catch(e){
-        console.log(e);
-    }
+    // try{
+    //     const results = await getNotifications(store);
+    //     for (let i = 0; i < results.length; i++) {
+    //         const element = results[i];
+    //         const {body,header} = element;
+    //         await schedulePushNotification(header,body)
+    //     }
+    // }
+    // catch(e){
+    //     console.log(e);
+    // }
   
     // Be sure to return the successful result type!
     return BackgroundFetch.BackgroundFetchResult.NewData;

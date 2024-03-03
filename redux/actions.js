@@ -351,12 +351,13 @@ export const changePassword = (store,password,changeFunc=changeNewPassword) => a
 
 export const logUserOut = (store,logFunc=logoutApi) => async dispatch => {
     try{
-        const authCode = await getToken(store,resetAcessToken,logoutUser);
-        const result = await logFunc(authCode);
-        if (result) dispatch({
+        dispatch({
             type: LOGOUT_USER,
             payload: {successMessage:`${getRandom()}.${"Logout sucessful"}`,errMessage:null},
         })
+        const authCode = await getToken(store,resetAcessToken,logoutUser);
+        await logFunc(authCode);
+        // if (result) 
     }
     catch(error){
         // const {messages} = error.message[0];
