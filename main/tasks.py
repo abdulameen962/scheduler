@@ -21,9 +21,9 @@ def update_goals(**kwargs):
             elif type_task == "task":
                 goals = Task.objects.select_related("goal").filter(is_completed=False,expired=False)
                 
-            print(goals)
             for goal in goals:
-                if compare_greater_dates(goal.deadline,timezone.now(),0):
+                print(compare_greater_dates(timezone.now(),goal.deadline,0))
+                if compare_greater_dates(timezone.now(),goal.deadline,0):
                     goal.expired = True
                     if type_task == "goal":
                         Notification.objects.create(user=goal.user,header="Goal expired",body=f"Your goal {goal.title} has expired,you can still mark it as complete on the application or revive the goal",image=goal.goal_image)
@@ -48,7 +48,6 @@ def send_regular_notifications():
     users = User.objects.all()
     for user in users:
         user_goals = user.user_goals.filter(expired=False,is_completed=False)
-        print(user_goals)
         if len(user_goals) > 0:
             # send him a push notification
             image_goal = random.choice(user_goals)
