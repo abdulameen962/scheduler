@@ -46,9 +46,9 @@ def goal_pre_save(sender,instance,**kwargs):
         if task.is_completed == False:
             situation = False
             
-    if situation and instance.is_completed == False:
-        instance.is_completed = True
-        Notification.objects.create(user=instance.user,header="Goal Completed",body=f"You have completed the goal {instance.title}",image=instance.goal_image)
+    # if situation and instance.is_completed == False:
+    #     instance.is_completed = True
+    #     Notification.objects.create(user=instance.user,header="Goal Completed",body=f"You have completed the goal {instance.title}",image=instance.goal_image)
         
         
 @receiver(post_save,sender=Goal)
