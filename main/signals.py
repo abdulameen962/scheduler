@@ -51,6 +51,7 @@ def goal_pre_save(sender,instance,**kwargs):
     #     Notification.objects.create(user=instance.user,header="Goal Completed",body=f"You have completed the goal {instance.title}",image=instance.goal_image)
         
         
+        
 @receiver(post_save,sender=Goal)
 def goal_post_save(sender,instance,**kwargs):
     if instance.expired:
