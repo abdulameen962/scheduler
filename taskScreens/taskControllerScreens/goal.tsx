@@ -61,10 +61,17 @@ const CreateGoal = (props:Props) => {
     const [image,setImage] = React.useState<String>(null);
     const [currentCalendar,setCurrentCalendar] = React.useState<calendarKey>(null)
     const [disabled,setDisabled] = React.useState<boolean>(true);
+    const [err,setErr] = React.useState<string>(null);
 
     React.useEffect(() => {
         checkDisabled()
     },[name,startDate,endDate,descr,image]);
+
+    React.useEffect(() => {
+        if (props.err != null) {
+            setErr(props.err);
+        }
+    },[props.err])
 
     React.useEffect(() => {
         const {navigation} = props;
@@ -79,6 +86,7 @@ const CreateGoal = (props:Props) => {
                 )
             }
         })
+        setErr(props.err);
     },[])
     
     const checkDisabled = () => {
@@ -248,7 +256,7 @@ const CreateGoal = (props:Props) => {
             disabled: disabled,
         },
         // boardType: "padding"
-        error: props.err
+        error: err
       }
 
     return (

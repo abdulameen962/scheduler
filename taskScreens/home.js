@@ -110,7 +110,13 @@ class Home extends React.Component{
     }
 
     goToDetails = (id) => {
-
+        this.props.navigation.navigate("AddTask",{
+            screen: "GoalDetail",
+            params:{
+                id: id,
+                // refresh: true
+            }
+        })
     }
 
     componentDidUpdate(prevProps,prevState){
