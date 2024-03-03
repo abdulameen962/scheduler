@@ -1,5 +1,6 @@
 # import tensorflow as tf
 # from transformers import AutoTokenizer, TFBertForMaskedLM
+# import random
 
 # # Pre-trained masked language model
 # MODEL = "bert-base-uncased"
@@ -16,13 +17,13 @@
 #         self.model = TFBertForMaskedLM.from_pretrained(MODEL)
 #         self.tokenizer = AutoTokenizer.from_pretrained(MODEL)
 #         self.words = words
-    
-#     def predict_next_word(self, text):
+        
+#     def get_next_word(self,text:str):
 #         """
 #             Predict the next word of a user
 #         """
 #         # Tokenize input
-#         text = f"{text} {self.tokenizer.mask_token}."
+#         text = f"{text} {self.tokenizer.mask_token}" if text.endswith(".") or text.endswith("?") else f"{text} {self.tokenizer.mask_token}."
 #         inputs = self.tokenizer(text, return_tensors="tf")
 #         mask_token_index = self.get_mask_token_index(self.tokenizer.mask_token_id, inputs)
 #         if mask_token_index is None:
@@ -41,6 +42,20 @@
 #             # result = result.replace(" .", "")
 #             result = result[:-1]
 #             return result
+    
+#     def predict_next_word(self, text):
+#         """
+#             Predict the next word of a user
+#         """
+#         # Tokenize input
+#         text = f"{text}"
+#         num = random.randint(3,7)
+#         for i in range(num):
+#             new_word = self.get_next_word(text)
+#             if new_word != text:
+#                 text = new_word
+            
+#         return text
             
             
 #     def get_mask_token_index(self,mask_token_id, inputs):

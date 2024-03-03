@@ -137,7 +137,7 @@ def get_google_login(token:str) -> object:
     
     return result
 
-def fcm_push_notifications(**kwargs):
+def fcm_push_notifications(**kwargs:object):
     from firebase_admin.messaging import Message,Notification
     from fcm_django.models import FCMDevice
     
@@ -167,12 +167,16 @@ def fcm_push_notifications(**kwargs):
     )
 
     # You can still use .filter() or any methods that return QuerySet (from the chain)
-    device = FCMDevice.objects.get(user=user)
-    # send_message parameters include: message, dry_run, app
-    # device.handle_topic_subscription(True, topic=message)
-    device.send_message(message_obj)
-    device.send_message(new_message)
-        # device.send_topic_message(new_message,message)
+    try:
+        device = FCMDevice.objects.get(user=user)
+        # send_message parameters include: message, dry_run, app
+        # device.handle_topic_subscription(True, topic=message)
+        device.send_message(message_obj)
+        device.send_message(new_message)
+            # device.send_topic_message(new_message,message)
+            
+    except Exception as e:
+        return f"An error occured {e}"
 
     # Unsubscribing
     # FCMDevice.objects.all().handle_topic_subscription(False, topic=message)

@@ -32,7 +32,7 @@ class goal_info(API_VERIFIED_BASE):
         num = data.get("num",None)
         num = num if num is None else int(num)
         is_completed = int(data.get("is_completed",None))
-        goals = Goal.objects.filter(user=user,is_completed=is_completed).order_by("-creation_time") if is_completed is not None else Goal.objects.filter(user=user).order_by("-creation_time")
+        goals = Goal.objects.filter(user=user,is_completed=is_completed,expired=False).order_by("-creation_time") if is_completed is not None else Goal.objects.filter(user=user).order_by("-creation_time")
         goals = goals[:num] if num is not None else goals
         goals = GoalSerializer(goals,many=True).data
         

@@ -93,6 +93,7 @@ class Goal(models.Model):
     deadline = models.DateTimeField(_("Deadline of goal"),auto_now_add=False,default=timezone.now)
     prob_completion = models.FloatField(_("Ai probability of goal attainment"),default=0.5)
     is_completed = models.BooleanField(_("Completion state of goal"),default=False)
+    expired = models.BooleanField(_("Expired state of goal"),default=False)
     
     def __str__(self):
         return f"{self.user.username} has a goal titled {self.title}"
@@ -145,6 +146,7 @@ class Task(models.Model):
     prob_completion = models.FloatField(_("Ai prob of task completion"),default=0.5)
     labels = models.ManyToManyField("main.Label",related_name="task_labels")
     is_completed = models.BooleanField(_("Completion state of task"),default=False)
+    expired = models.BooleanField(_("Expired state of task"),default=False)
     
     def __str__(self):
         return f"{self.user.username} has a task titled {self.title}"

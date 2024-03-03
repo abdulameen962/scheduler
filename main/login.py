@@ -140,6 +140,16 @@ class CheckVerificationToken(API_VERIFIED_BASE):
 class LogoutView(API_VERIFIED_BASE):
     def post(self,request):
         logout(request)
-            
+        from fcm_django.models import FCMDevice
+        user = self.request.user
+        try:
+            devices = FCMDevice.objects.filter(user=user)
+            if len(devices) > 0:
+                for device in devices:
+                    device.delete()
+                    
+        except Exception:
+            pass
+                    
         return Response({"message":"Logout successful"},status=status.HTTP_200_OK)
     

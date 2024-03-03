@@ -23,10 +23,10 @@ class task_api(API_VERIFIED_BASE):
             goal = Goal.objects.get(id=goal_id,user=user)
             
             if num is None:
-                all_tasks = goal.goal_tasks.filter(is_completed=is_completed) if is_completed is not None else goal.goal_tasks.all()
+                all_tasks = goal.goal_tasks.filter(is_completed=is_completed,expired=False) if is_completed is not None else goal.goal_tasks.all()
                 
             else:
-                all_tasks = goal.goal_tasks.filter(is_completed=is_completed) if is_completed is not None else goal.goal_tasks.all()
+                all_tasks = goal.goal_tasks.filter(is_completed=is_completed,expired=False) if is_completed is not None else goal.goal_tasks.all()
                 all_tasks = all_tasks[:num] if num is not None else all_tasks[:num]
                 
             all_tasks = TaskSerializer(all_tasks,many=True).data
@@ -93,7 +93,7 @@ class Filter_task(API_VERIFIED_BASE):
             return Response({"message":"Command and number of tasks are required"},status=status.HTTP_400_BAD_REQUEST)
         
         if command == "ongoing":
-            tasks = Task.objects.filter(user=user,is_completed=False).order_by("-creation_time")[:num]
+            tasks = Task.objects.filter(user=user,is_completed=False,expired=False).order_by("-creation_time")[:num]
             tasks = TaskSerializer(tasks,many=True).data
             return Response(tasks,status=status.HTTP_200_OK)
         

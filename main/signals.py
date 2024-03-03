@@ -48,9 +48,25 @@ def goal_pre_save(sender,instance,**kwargs):
             
     if situation and instance.is_completed == False:
         instance.is_completed = True
-        Notification.objects.create(user=instance.user,header="Goal Completed",body=f"You have completed the goal {instance.title}",image=instance.image)
+        Notification.objects.create(user=instance.user,header="Goal Completed",body=f"You have completed the goal {instance.title}",image=instance.goal_image)
         
         
+@receiver(post_save,sender=Goal)
+def goal_post_save(sender,instance,**kwargs):
+    if instance.expired:
+        # get all tasks under instance that are not expired
+        tasks = instance.goal_tasks.filter(expired=False,is_completed=False)
+        for task in tasks:
+            task.expired = True
+            task.save()
+            
+# @receiver(pre_save,sender=Task)
+# def task_pre_save(sender,instance,**kwargs):
+#     # check whether in the former state,it wasnt expired
+    
+#     if instance.id and instance.expired == False:
+                
+
 @receiver(post_save, sender=Task)
 def task_post_save(sender, instance, **kwargs):
     goal = instance.goal
