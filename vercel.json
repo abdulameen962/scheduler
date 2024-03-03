@@ -20,7 +20,13 @@
             "src": "/(.*)",
             "dest": "scheduler/wsgi.py"
         }
-
+    ],
+    "crons": [
+        {
+          "path": "/cron.sh",
+          "schedule": "0 5 * * *"
+        }
+      
     ]
 
 }
