@@ -21,12 +21,11 @@
             "dest": "scheduler/wsgi.py"
         }
     ],
-    "crons": [
-        {
-          "path": "/cron.sh",
-          "schedule": "*/720 * * * *"
+    "crons": [{
+            "path": "/cron.sh",
+            "schedule": "30 2 * * *"
         }
-      
+
     ]
 
 }
