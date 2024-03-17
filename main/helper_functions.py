@@ -236,3 +236,7 @@ def convert_to_https(link:str=None):
     new_link = link.replace("http","https")
     
     return new_link
+
+
+# def upload():
+#     cloudinary.uploader.upload(request.FILES['file'])

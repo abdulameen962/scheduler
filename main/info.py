@@ -6,6 +6,7 @@ from .models import Goal,Label
 from .serializers import GoalSerializer,LabelSerializer
 from .helper_functions import confirm_real_color,compare_greater_dates
 from datetime import datetime
+from cloudinary.uploader import upload
 # from django.core.paginator import Paginator
 
 # profile api
@@ -94,17 +95,18 @@ class goal_creation(API_VERIFIED_BASE):
             return Response({"message":"Goal name and description are required"},status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            goal = Goal(user=user,title=goal_name,description=goal_description,start_time=start_time,deadline=deadline)
+            image = upload(image,resource_type="image")
+            goal = Goal(user=user,title=goal_name,description=goal_description,start_time=start_time,deadline=deadline,image=image)
             goal.save()
             
         except Exception as e:
             return Response({"message":f"An error occured {e}"},status=status.HTTP_400_BAD_REQUEST)
         
-        try:
-            goal.image = image
-            goal.save()
+        # try:
+        #     goal.image = image
+        #     goal.save()
             
-        except Exception as e:
-            return Response({"message":f"An error occured in image processing,but goal has been created {e}"}, status=status.HTTP_400_BAD_REQUEST)
+        # except Exception as e:
+        #     return Response({"message":f"An error occured in image processing,but goal has been created {e}"}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({"message":"Goal created successfully"},status=status.HTTP_200_OK)
