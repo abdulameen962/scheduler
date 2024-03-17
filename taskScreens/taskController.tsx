@@ -1,6 +1,7 @@
 import React,{FC} from "react";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CreateGoal from "./taskControllerScreens/goal";
+import GoalDetail from "./taskControllerScreens/GoalDetail";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,10 @@ export default function TaskController(props:Props) {
             <Stack.Screen 
                 name="CreateGoal"
                 component={CreateGoal} 
+            />
+            <Stack.Screen
+                name="GoalDetail"
+                component={GoalDetail}
             />
         </Stack.Navigator>
     )

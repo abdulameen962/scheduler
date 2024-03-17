@@ -268,9 +268,12 @@ class Home extends React.Component{
                                             No goals created yet, 
                                         </Text>
                                         <TouchableOpacity onPress={() => {
-                                            this.props.navigation.navigate('Home',{
-                                                showTask: true                                                                                                                                                                                                                                  
-                                            })
+                                            this.props.navigation.navigate("AddTask",{
+                                                screen: "CreateGoal",
+                                                params:{
+                                                  showTask: false
+                                                }
+                                              })
                                         }}>
                                             <Text color="$blue600" size="sm">
                                                 create one now

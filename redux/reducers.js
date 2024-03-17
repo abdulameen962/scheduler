@@ -19,7 +19,8 @@ import {UPDATE_USER,
   SET_NOTIFICATION_TOKEN,
   USER_DETAILS,
   NOT_EMAIL_VERIFIED,
-  GOAL_CREATED
+  GOAL_CREATED,
+  GOAL_REJECTED
 
 } from './actions'
 import { getRandom } from '../helpfulFunc'
@@ -97,7 +98,10 @@ const userReducer = (state = {}, action) => {
         return merge(state,{notificationToken:action.payload})
 
       case GOAL_CREATED:
-        return merge(state,{successMessage:action.payload})
+        return merge(state,{successMessage:action.payload,errMessage:null})
+
+      case GOAL_REJECTED:
+        return merge(state,{errMessage:action.payload,successMessage:null})
   
       default:
           return state

@@ -32,7 +32,8 @@ interface Props {
     navigation: NavigationProps,
     route: {params: {showTask: boolean}},
     goalCreation: Function,
-    err: string | null
+    err: string | null,
+    success: string | null
 }
 
 const imgChoices = [
@@ -62,16 +63,31 @@ const CreateGoal = (props:Props) => {
     const [currentCalendar,setCurrentCalendar] = React.useState<calendarKey>(null)
     const [disabled,setDisabled] = React.useState<boolean>(true);
     const [err,setErr] = React.useState<string>(null);
+    const [sucess,setSucess] = React.useState<string>(null);
 
     React.useEffect(() => {
         checkDisabled()
     },[name,startDate,endDate,descr,image]);
 
     React.useEffect(() => {
-        if (props.err != null) {
-            setErr(props.err);
-        }
+        if (props.err != null && props.err !== err) setErr(props.err);
     },[props.err])
+
+    React.useEffect(() => {
+        if (props.success != null && props.success !== sucess) {
+            setSucess(props.success);
+            setRefresh();
+        };
+    },[props.success]);
+
+    const setRefresh = () => {
+        setName("");
+        setStartDate("");
+        setEndDate("");
+        setDescr("");
+        setImage(null);
+        setErr(null);
+    }
 
     React.useEffect(() => {
         const {navigation} = props;
@@ -79,7 +95,8 @@ const CreateGoal = (props:Props) => {
             headerLeft: (prop: any) => {
                 return (
                     <Pressable onPress={() => {
-                        navigation.navigate(getPreviousPage(navigation),{showTask:true})  
+                        navigation.navigate(getPreviousPage(navigation),{showTask:true});
+                        setRefresh();
                     }}>
                         <Ionicons name="close-outline" color={"rgba(0,0,0,.9)"} size={30} />
                     </Pressable>
@@ -256,7 +273,8 @@ const CreateGoal = (props:Props) => {
             disabled: disabled,
         },
         // boardType: "padding"
-        error: err
+        error: err,
+        sucess,
       }
 
     return (
