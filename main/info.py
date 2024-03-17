@@ -102,8 +102,8 @@ class goal_creation(API_VERIFIED_BASE):
             return Response({"message":f"An error occured {e}"},status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            image = upload(image,resource_type="image")
-            goal.image = image.url
+            # image = upload(image,resource_type="image")
+            goal.image = image
             goal.save()
             
         except Exception as e:
