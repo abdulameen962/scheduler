@@ -94,17 +94,10 @@ class goal_creation(API_VERIFIED_BASE):
             return Response({"message":"Goal name and description are required"},status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            goal = Goal(user=user,title=goal_name,description=goal_description,start_time=start_time,deadline=deadline)
+            goal = Goal(user=user,title=goal_name,description=goal_description)
             goal.save()
             
         except Exception as e:
             return Response({"message":f"An error occured {e}"},status=status.HTTP_400_BAD_REQUEST)
-        
-        try:
-            goal.image = image
-            goal.save()
-            
-        except Exception as e:
-            return Response({"message":f"An error occured in image saving process. {e}"}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         return Response({"message":"Goal created successfully"},status=status.HTTP_200_OK)

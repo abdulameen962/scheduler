@@ -41,15 +41,16 @@ def send_notification_to_user(sender,instance,**kwargs):
 def goal_pre_save(sender,instance,**kwargs):
     tasks = instance.goal_tasks.all()
     
-    situation = True
-    for task in tasks:
-        if task.is_completed == False:
-            situation = False
+    if len(tasks) > 0:
+        situation = True
+        for task in tasks:
+            if task.is_completed == False:
+                situation = False
+                
+        if situation and instance.is_completed == False:
+            instance.is_completed = True
+            Notification.objects.create(user=instance.user,header="Goal Completed",body=f"You have completed the goal {instance.title}",image=instance.goal_image)
             
-    if situation and instance.is_completed == False:
-        instance.is_completed = True
-        Notification.objects.create(user=instance.user,header="Goal Completed",body=f"You have completed the goal {instance.title}",image=instance.goal_image)
-        
         
 @receiver(post_save,sender=Goal)
 def goal_post_save(sender,instance,**kwargs):
