@@ -94,7 +94,7 @@ class goal_creation(API_VERIFIED_BASE):
             return Response({"message":"Goal name and description are required"},status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            goal = Goal(user=user,title=goal_name,description=goal_description)
+            goal = Goal(user=user,title=goal_name,description=goal_description,start_time=start_time,deadline=deadline)
             goal.save()
             
         except Exception as e:
