@@ -40,13 +40,13 @@ const CalendarBottom = React.forwardRef<Ref,Props>((props,ref) => {
         return CalendarUtils.getCalendarDateString(newDate);
     };
     
-    const onDayPress = useCallback((day) => {
+    const onDayPress = useCallback((day:any) => {
         setSelected(day.dateString);
     }, []);
     
     const marked = useMemo(() => {
         return {
-          [getDate(-1)]: {
+          [getDate(0)]: {
             // dotColor: 'red',
             marked: true
           },
@@ -67,7 +67,7 @@ const CalendarBottom = React.forwardRef<Ref,Props>((props,ref) => {
             //   testID={testIDs.calendars.FIRST}
               enableSwipeMonths
               current={INITIAL_DATE}
-              minDate={getDate(-1)}
+              minDate={getDate(0)}
               style={styles.calendar}
               onDayPress={onDayPress}
               markedDates={marked}

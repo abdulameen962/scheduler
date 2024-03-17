@@ -95,8 +95,8 @@ const CreateGoal = (props:Props) => {
             headerLeft: (prop: any) => {
                 return (
                     <Pressable onPress={() => {
-                        navigation.navigate(getPreviousPage(navigation),{showTask:true});
                         setRefresh();
+                        navigation.navigate(getPreviousPage(navigation),{showTask:false,refresh:true});
                     }}>
                         <Ionicons name="close-outline" color={"rgba(0,0,0,.9)"} size={30} />
                     </Pressable>
@@ -202,6 +202,7 @@ const CreateGoal = (props:Props) => {
                     autoCapitalize:'none' ,
                     autoComplete:'off' ,
                     onChangeText: handleChange("name"),
+                    value: name,
                 },
                 inputStyle: [styles.inputStyle],
                 activeInput: [styles.activeInput],
@@ -255,6 +256,7 @@ const CreateGoal = (props:Props) => {
                   autoComplete:'off' ,
                   multiline: true,
                   onChangeText: handleChange("descr"),
+                  value: descr,
               },
               inputStyle: [styles.inputStyle],
               activeInput: [styles.activeInput],
@@ -280,8 +282,8 @@ const CreateGoal = (props:Props) => {
     return (
         <>
             <CalendarBottom ref={bottomSheetRef} onSubmit={submitDate} />
-            <PageLayout {...props} headerShow={true}>
-                <View style={[{width,marginTop:70}]}>
+            <PageLayout {...props} headerShow={true} addPadding={true}>
+                <View style={[{width}]}>
                     <Form {...formArr} />
                 </View>
             </PageLayout>

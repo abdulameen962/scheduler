@@ -24,7 +24,7 @@ const GoalDetail = (props:Props) => {
 
 
     return (
-        <PageLayout {...props} headerShow={true}>
+        <PageLayout {...props} headerShow={true} addPadding={true}>
             <Text>{props.route.params.id} is the one for the goal</Text>
         </PageLayout>
     )

@@ -11,7 +11,7 @@ const persistConfig = {
     key: 'root',
     storage: AsyncStorage,
     whitelist: ['user','userProfile'],
-    blacklist: []
+    blacklist: ['user.errMessage','user.successMessage']
 }
 
 const persistedReducer = persistReducer(persistConfig,reducer)

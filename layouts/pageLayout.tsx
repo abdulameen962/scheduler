@@ -23,6 +23,7 @@ interface Props {
     err: String;
     taskCreation: Function;
     sucess: String;
+    addPadding: boolean;
 }
 
 const PageLayout = (props: Props) => {
@@ -73,6 +74,14 @@ const PageLayout = (props: Props) => {
         }   
     }
 
+    const getStyles = () => {
+        let result = [styles.containerLayout,styles.greyBack]
+        if (props.addPadding) {
+            result.push({marginTop:70})
+        }
+        return result;
+    }
+
     return (
         <>
             <Alerter>
@@ -82,7 +91,7 @@ const PageLayout = (props: Props) => {
                     }
                     
                 } err={props.err}/>
-                <View style={[styles.containerLayout,styles.greyBack]}>
+                <View style={getStyles()}>
                     <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
                         {children}
                         <StatusBar style="auto" />
