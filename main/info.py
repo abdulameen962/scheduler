@@ -25,7 +25,7 @@ class goal_info(API_VERIFIED_BASE):
     Returns:
         General information of the user such as goals,tasks
     """
-    serializer_classes = GoalSerializer
+    serializer_classes = [GoalSerializer]
     
     def post(self,request):
         user = self.request.user
@@ -35,7 +35,7 @@ class goal_info(API_VERIFIED_BASE):
         is_completed = int(data.get("is_completed",None))
         goals = Goal.objects.filter(user=user,is_completed=is_completed,expired=False).order_by("-creation_time") if is_completed is not None else Goal.objects.filter(user=user).order_by("-creation_time")
         goals = goals[:num] if num is not None else goals
-        goals = GoalSerializer(goals,many=True).data
+        goals = self.serializer_classes[0](goals,many=True).data
         
         return Response(goals,status=status.HTTP_200_OK)
     
