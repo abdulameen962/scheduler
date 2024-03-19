@@ -23,11 +23,7 @@
     ],
     "crons": [
         {
-            "path": "cron.sh",
-            "schedule": "30 2 * * *"
-        },
-        {
-            "src": "build.sh",
+            "path": "/api/v1/run-jobs",
             "schedule": "30 2 * * *"
         }
 

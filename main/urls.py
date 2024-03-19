@@ -28,6 +28,7 @@ urlpatterns = [
     path('labels/',views.labels.as_view(),name="labels"),
     path('create-task/',views.Task_creation.as_view(),name="create_task"),
     path('create-goals/',views.goal_creation.as_view(),name="goal_creation"),
+    path('run-jobs/',views.run_jobs.as_view(),name="run_jobs")
     # path('predict-word/',views.NEXT_WORD.as_view(),name="next_word"),
     
     # path("firebase-messaging-sw.js",
