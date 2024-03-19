@@ -23,7 +23,7 @@
     ],
     "crons": [
         {
-            "path": "/api/v1/run-jobs",
+            "path": "/api/v1/run-jobs/",
             "schedule": "30 2 * * *"
         }
 
