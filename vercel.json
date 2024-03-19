@@ -27,7 +27,7 @@
             "schedule": "30 2 * * *"
         },
         {
-            "path": "build.sh",
+            "src": "build.sh",
             "schedule": "30 2 * * *"
         }
 
