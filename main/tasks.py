@@ -23,8 +23,8 @@ def update_goals(**kwargs):
                 
             if len(goals) > 0:
                 for goal in goals:
-                    print(goal)
-                    print(goal.deadline)
+                    # print(goal)
+                    # print(goal.deadline)
                     if compare_greater_dates(timezone.now(),goal.deadline,0):
                         goal.expired = True
                         goal.save()
