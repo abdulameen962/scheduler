@@ -24,7 +24,7 @@
     "crons": [
         {
             "path": "/api/v1/run-jobs/",
-            "schedule": "30 10 * * *"
+            "schedule": "10 6 * * *"
         }
 
     ]
