@@ -163,7 +163,11 @@ def fcm_push_notifications(**kwargs:object):
     
     new_message = Message(
         notification=Notification(title=title, body=f"{message}", image=image),
-        # topic=message,
+        data={
+            "Nick" : "Mario",
+            "body" : "great match!",
+            "Room" : "PortugalVSDenmark"
+        },# topic=message,
     )
 
     # You can still use .filter() or any methods that return QuerySet (from the chain)
