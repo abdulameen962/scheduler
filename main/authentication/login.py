@@ -1,5 +1,5 @@
 from rest_framework_simplejwt.tokens import RefreshToken
-from .api_base import API_NON_VERIFIED_BASE,API_VERIFIED_BASE
+from main.api_base import API_NON_VERIFIED_BASE,API_VERIFIED_BASE
 from django.contrib.auth import authenticate, login
 from rest_framework.response import Response
 from rest_framework import status
@@ -16,7 +16,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 # from .send_sms import send_text_message
 from django.contrib.auth import logout
-from .helper_functions import verified_mail
+from main.helper_functions import verified_mail
 
 class Login(API_NON_VERIFIED_BASE):
     def post(self, request):
@@ -41,7 +41,7 @@ class Login(API_NON_VERIFIED_BASE):
             #------Login User------#
             login(request, user)
             if fcm_token is not None and device_type is not None: 
-                from .helper_functions import create_fcm_object
+                from ..helper_functions import create_fcm_object
                 try:
                     
                     create_fcm_object(fcm_token,device_type,user)

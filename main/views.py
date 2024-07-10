@@ -1,4 +1,4 @@
-from .login import *
+from main.authentication.login import *
 from .register import *
 from .info import *
 from .profile import *
